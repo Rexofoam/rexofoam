@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+/* Custom Font Faces */
+@font-face {
+  font-family: 'MapleStory';
+  src: url('/fonts/Maplestory OTF Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MapleStory';
+  src: url('/fonts/Maplestory OTF Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -10,6 +27,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-maplestory: 'MapleStory', Arial, Helvetica, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +40,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'MapleStory', Arial, Helvetica, sans-serif;
 }

@@ -1,3 +1,57 @@
+# Rexofoam MapleSEA Dashboard
+
+A simple Next.js dashboard for searching and viewing MapleStory SEA character and guild details.
+
+## Getting Started
+
+1. **Clone the repository:**
+
+   ```sh
+   git clone <your-repo-url>
+   ```
+
+   Or, if you already have the repo:
+
+   ```sh
+   git pull origin main
+   ```
+
+2. **Install dependencies:**
+
+   ```sh
+   npm install
+   ```
+
+3. **Start the development server:**
+
+   ```sh
+   npm run dev
+   ```
+
+4. **Open your browser:**
+   Visit [http://localhost:3000](http://localhost:3000) to use the dashboard.
+
+## Features
+
+- Search for MapleStory SEA characters and guilds
+- View detailed character stats, hyper stats, abilities, and equipped items
+- Mobile-first, responsive design
+- "Remember Me" login option
+
+## Tech Stack
+
+- Next.js (App Router)
+- React
+- Tailwind CSS
+
+## API
+
+Uses the official MapleStory SEA Open API. You may need to set your own API key in the code for production use.
+
+## License
+
+MIT
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
