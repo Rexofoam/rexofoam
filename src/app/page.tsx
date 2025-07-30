@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigation } from "@/utils/navigation";
+import Header from "@/components/Header";
 
 export default function BackgroundPage() {
   const [isGuildMode, setIsGuildMode] = useState(false);
@@ -9,7 +10,7 @@ export default function BackgroundPage() {
   const [searchResult, setSearchResult] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
-  const router = useRouter();
+  const navigation = useNavigation();
 
   const toggleMode = () => {
     setIsGuildMode(!isGuildMode);
@@ -59,10 +60,8 @@ export default function BackgroundPage() {
               character_name: inputValue,
               ocid: data.ocid,
             });
-            // Redirect to character details page with OCID
-            router.push(
-              `/character-details?ocid=${encodeURIComponent(data.ocid)}`
-            );
+            // Redirect to character details page with new SEO-friendly URL
+            navigation.goToCharacterDetails(data.ocid, inputValue);
           } else {
             setError("Character not found");
             setSearchResult(null);
@@ -101,14 +100,7 @@ export default function BackgroundPage() {
       <div className="bg-white bg-opacity-90 backdrop-blur-md rounded-2xl p-6 sm:p-12 w-full max-w-sm sm:max-w-md shadow-2xl border border-gray-200">
         <div className="flex flex-col items-center space-y-6 sm:space-y-8">
           {/* Logo */}
-          <div className="flex items-center justify-center">
-            <img
-              src="/images/logo.png"
-              alt="Maplesea Logo"
-              className="max-w-full h-auto object-contain transition-transform duration-200 hover:scale-105"
-              style={{ cursor: "pointer" }}
-            />
-          </div>
+          <Header variant="home" />
 
           {/* Horizontal Divider */}
           <div className="w-full border-t border-gray-300"></div>
