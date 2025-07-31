@@ -20,8 +20,9 @@ export async function generateStaticParams() {
 
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
-  const { ocid } = params;
-  const characterName = searchParams.name as string;
+  const { ocid } = await params;
+  const resolvedSearchParams = await searchParams;
+  const characterName = resolvedSearchParams.name as string;
   
   try {
     // Try to get character data for metadata
@@ -98,7 +99,8 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
 
 // Server component for initial data loading and SEO
 export default async function CharacterPage({ params, searchParams }: PageProps) {
-  const { ocid } = params;
+  const { ocid } = await params;
+  const resolvedSearchParams = await searchParams;
   
   // Validate OCID format (basic validation)
   if (!ocid || ocid.length < 10) {
@@ -116,7 +118,7 @@ export default async function CharacterPage({ params, searchParams }: PageProps)
     return (
       <CharacterDetailsClient 
         ocid={ocid}
-        characterName={searchParams.name as string}
+        characterName={resolvedSearchParams.name as string}
         initialData={initialData}
       />
     );

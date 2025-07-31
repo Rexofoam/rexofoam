@@ -7,7 +7,7 @@ A simple Next.js dashboard for searching and viewing MapleStory SEA character an
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/Rexofoam/rexofoam.git
+   git clone <your-repo-url>
    ```
 
    Or, if you already have the repo:

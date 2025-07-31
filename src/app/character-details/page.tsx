@@ -12,7 +12,7 @@ export default function CharacterDetailsPage() {
   const ocid = URLParams.getCharacterOcid(searchParams);
   const characterName = URLParams.getCharacterName(searchParams);
   const [characterData, setCharacterData] = useState<CharacterData | null>(null);
-  const [loading, setLoading] = useState(true); // Start with loading true
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   // Debug logging
@@ -127,18 +127,17 @@ export default function CharacterDetailsPage() {
         Your browser does not support the video tag.
       </video>
 
-      {/* Loading Overlay - Always on top when loading */}
+      {/* Loading Overlay */}
       {loading && (
-        <div className="fixed inset-0 z-[9999] min-h-screen flex flex-col items-center justify-center bg-red-500 bg-opacity-80">
-          <div className="bg-yellow-400 border-4 border-red-600 rounded-2xl p-8 flex flex-col items-center shadow-2xl">
-            <div className="w-32 h-32 mb-6 bg-blue-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-2xl">LOADING</span>
-            </div>
-            <p className="text-lg font-bold text-black">
-              Loading character data... (Debug Mode)
-            </p>
-            <p className="text-sm text-black mt-2">
-              OCID: {ocid || 'No OCID found'}
+        <div className="fixed inset-0 z-[9999] min-h-screen flex flex-col items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white bg-opacity-95 backdrop-blur-md rounded-2xl p-8 flex flex-col items-center shadow-2xl border-2 border-white">
+            <img
+              src="/images/mushroom-loader.gif"
+              alt="Loading..."
+              className="w-32 h-32 mb-6"
+            />
+            <p className="text-lg font-semibold text-black">
+              Loading character data...
             </p>
           </div>
         </div>
@@ -177,7 +176,7 @@ export default function CharacterDetailsPage() {
                   <p><strong>Class:</strong> {characterData.basic?.character_class}</p>
                   <p><strong>World:</strong> {characterData.basic?.world_name}</p>
                   <p><strong>Guild:</strong> {characterData.basic?.character_guild_name || 'None'}</p>
-                  <p><strong>Last Updated:</strong> {characterData.lastUpdated.toLocaleString()}</p>
+                  <p><strong>Combat Power:</strong> {characterData.stat?.final_stat?.find(stat => stat.stat_name === 'Combat Power')?.stat_value || 'N/A'}</p>
                 </div>
               </div>
 
