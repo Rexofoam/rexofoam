@@ -853,7 +853,14 @@ export function CharacterDetailsClient({
                   <h2 className="text-xl font-semibold mb-2">Symbols</h2>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     {symbolLoading && (
-                      <p className="text-gray-700">Loading symbol data...</p>
+                      <div className="flex flex-col items-center justify-center py-8">
+                        <img
+                          src="/images/mushroom-loader.gif"
+                          alt="Loading symbols..."
+                          className="w-16 h-16 mb-4"
+                        />
+                        <p className="text-gray-700">Loading symbol data...</p>
+                      </div>
                     )}
                     {symbolError && (
                       <p className="text-red-600">{symbolError}</p>
