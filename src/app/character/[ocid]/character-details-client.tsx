@@ -264,6 +264,124 @@ export function CharacterDetailsClient({
             <div className="space-y-6 text-black">
               {activeTab === "overview" && (
                 <>
+                  {/* Combat Power Highlight Section */}
+                  {characterData.stat && (
+                    <div className="mb-6">
+                      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-xl p-6 shadow-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            <div className="bg-white/20 rounded-full p-3">
+                              <svg
+                                className="w-8 h-8 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                                />
+                              </svg>
+                            </div>
+                            <div>
+                              <h2 className="text-2xl font-bold text-white mb-1">
+                                Combat Power
+                              </h2>
+                              <p className="text-blue-100">
+                                Cpmbat power is calculated through main stats
+                                and support stats, ATT/MATT, damage, boss
+                                damage, final damage, and crtical damage.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-4xl font-black text-white mb-1">
+                              {(() => {
+                                const combatPowerValue =
+                                  characterData.stat?.final_stat?.find(
+                                    (stat) => stat.stat_name === "Combat Power"
+                                  )?.stat_value;
+                                if (!combatPowerValue) return "N/A";
+
+                                // Parse as number and format with commas
+                                const numericValue = parseInt(
+                                  combatPowerValue.replace(/,/g, "")
+                                );
+                                return isNaN(numericValue)
+                                  ? combatPowerValue
+                                  : numericValue.toLocaleString();
+                              })()}
+                            </div>
+                            <div className="text-blue-100 text-sm font-medium">
+                              Power Level
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* EXP Progress Bar */}
+                        <div className="mt-4">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-blue-100 text-sm">
+                              EXP Progress
+                            </span>
+                            <span className="text-white text-sm font-semibold">
+                              {characterData.basic?.character_exp_rate || "0"}%
+                              to Next Level
+                            </span>
+                          </div>
+                          <div className="w-full bg-white/20 rounded-full h-3">
+                            <div
+                              className="bg-gradient-to-r from-green-400 to-blue-400 h-3 rounded-full transition-all duration-500 relative overflow-hidden"
+                              style={{
+                                width: `${Math.min(
+                                  100,
+                                  Math.max(
+                                    0,
+                                    parseFloat(
+                                      characterData.basic?.character_exp_rate ||
+                                        "0"
+                                    )
+                                  )
+                                )}%`,
+                              }}
+                            >
+                              {/* Animated shimmer effect */}
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12 animate-pulse"></div>
+                            </div>
+                          </div>
+                          <div className="flex justify-between items-center mt-1 text-xs text-blue-100">
+                            <span>
+                              Current EXP:{" "}
+                              {characterData.basic?.character_exp?.toLocaleString() ||
+                                "0"}
+                            </span>
+                            <span>
+                              Total Required:{" "}
+                              {(() => {
+                                const currentExp = parseInt(
+                                  characterData.basic?.character_exp?.toString() ||
+                                    "0"
+                                );
+                                const expRate = parseFloat(
+                                  characterData.basic?.character_exp_rate || "0"
+                                );
+                                if (expRate > 0) {
+                                  const totalRequired = Math.round(
+                                    (currentExp / expRate) * 100
+                                  );
+                                  return totalRequired.toLocaleString();
+                                }
+                                return "N/A";
+                              })()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Basic Info */}
                   <div>
                     <h2 className="text-xl font-semibold mb-2">
@@ -302,10 +420,8 @@ export function CharacterDetailsClient({
                           {characterData.basic?.character_date_create}
                         </p>
                         <p>
-                          <strong>Combat Power:</strong>{" "}
-                          {characterData.stat?.final_stat?.find(
-                            (stat) => stat.stat_name === "Combat Power"
-                          )?.stat_value || "N/A"}
+                          <strong>EXP Rate:</strong>{" "}
+                          {characterData.basic?.character_exp_rate || "N/A"}%
                         </p>
                       </div>
                     </div>
@@ -886,21 +1002,21 @@ export function CharacterDetailsClient({
                                       Arcane Symbols
                                     </h3>
                                     <div
-                                      className="grid grid-cols-3 gap-4 justify-center mx-auto"
-                                      style={{ maxWidth: "600px" }}
+                                      className="grid grid-cols-3 gap-3 justify-center mx-auto"
+                                      style={{ maxWidth: "480px" }}
                                     >
                                       {arcane.map(
                                         (symbol: any, idx: number) => (
                                           <div
                                             key={symbol.symbol_name + idx}
-                                            className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-3 shadow hover:shadow-lg transition cursor-pointer"
+                                            className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer"
                                           >
                                             {/* Icon + Level badge (top right) */}
                                             <div className="relative mb-2 flex items-center justify-center w-full">
                                               <img
                                                 src={symbol.symbol_icon}
                                                 alt={symbol.symbol_name}
-                                                className="w-14 h-14 object-contain"
+                                                className="w-12 h-12 object-contain"
                                               />
                                               <span className="absolute top-0 right-0 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full border border-white shadow mt-1 mr-1">
                                                 Lv. {symbol.symbol_level}
@@ -975,21 +1091,21 @@ export function CharacterDetailsClient({
                                       Authentic Symbols
                                     </h3>
                                     <div
-                                      className="grid grid-cols-3 gap-4 justify-center mx-auto"
-                                      style={{ maxWidth: "600px" }}
+                                      className="grid grid-cols-3 gap-3 justify-center mx-auto"
+                                      style={{ maxWidth: "480px" }}
                                     >
                                       {authentic.map(
                                         (symbol: any, idx: number) => (
                                           <div
                                             key={symbol.symbol_name + idx}
-                                            className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-3 shadow hover:shadow-lg transition cursor-pointer"
+                                            className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer"
                                           >
                                             {/* Icon + Level badge (top right) */}
                                             <div className="relative mb-2 flex items-center justify-center w-full">
                                               <img
                                                 src={symbol.symbol_icon}
                                                 alt={symbol.symbol_name}
-                                                className="w-14 h-14 object-contain"
+                                                className="w-12 h-12 object-contain"
                                               />
                                               <span className="absolute top-0 right-0 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full border border-white shadow mt-1 mr-1">
                                                 Lv. {symbol.symbol_level}

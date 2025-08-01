@@ -4,7 +4,7 @@
  */
 
 import { makeApiRequest, ENDPOINTS } from '@/config/maplestory-api';
-import { CharacterData, CharacterBasic, CharacterStat, HyperStat, CharacterAbility, ItemEquipment } from '@/types/maplestory-api';
+import { CharacterData, CharacterBasic, CharacterStat, ItemEquipment } from '@/types/maplestory-api';
 
 class CharacterDataService {
   private static instance: CharacterDataService;
@@ -48,12 +48,10 @@ class CharacterDataService {
     }
 
     try {
-      // Fetch all character data in parallel
-      const [basic, stat, hyperStat, ability, itemEquipment] = await Promise.all([
+      // Fetch essential character data in parallel
+      const [basic, stat, itemEquipment] = await Promise.all([
         makeApiRequest(ENDPOINTS.CHARACTER_BASIC, { ocid }),
         makeApiRequest(ENDPOINTS.CHARACTER_STAT, { ocid }),
-        makeApiRequest(ENDPOINTS.CHARACTER_HYPER_STAT, { ocid }),
-        makeApiRequest(ENDPOINTS.CHARACTER_ABILITY, { ocid }),
         makeApiRequest(ENDPOINTS.CHARACTER_ITEM_EQUIPMENT, { ocid }),
       ]);
 
@@ -61,8 +59,8 @@ class CharacterDataService {
         ocid,
         basic: basic as CharacterBasic,
         stat: stat as CharacterStat,
-        hyperStat: hyperStat as HyperStat,
-        ability: ability as CharacterAbility,
+        hyperStat: null,
+        ability: null,
         itemEquipment: itemEquipment as ItemEquipment,
         lastUpdated: new Date(),
         cacheExpiry: new Date(Date.now() + this.CACHE_DURATION),
