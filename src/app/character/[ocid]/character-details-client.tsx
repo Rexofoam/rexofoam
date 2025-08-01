@@ -30,6 +30,9 @@ export function CharacterDetailsClient({
   const [symbolData, setSymbolData] = useState<any>(null);
   const [symbolLoading, setSymbolLoading] = useState(false);
   const [symbolError, setSymbolError] = useState<string>("");
+  const [equipmentData, setEquipmentData] = useState<any>(null);
+  const [equipmentLoading, setEquipmentLoading] = useState(false);
+  const [equipmentError, setEquipmentError] = useState<string>("");
 
   useEffect(() => {
     if (!initialData && ocid) {
@@ -70,6 +73,24 @@ export function CharacterDetailsClient({
       setError("Failed to refresh character data.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadEquipmentData = async () => {
+    setEquipmentError("");
+    setEquipmentLoading(true);
+    try {
+      const response = await fetch(`/api/character/equipment?ocid=${ocid}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch equipment data");
+      }
+      const data = await response.json();
+      setEquipmentData(data);
+    } catch (err: any) {
+      setEquipmentError(err.message || "Failed to fetch equipment data");
+      setEquipmentData(null);
+    } finally {
+      setEquipmentLoading(false);
     }
   };
 
@@ -182,7 +203,12 @@ export function CharacterDetailsClient({
                   Stats
                 </button>
                 <button
-                  onClick={() => setActiveTab("equipment")}
+                  onClick={async () => {
+                    setActiveTab("equipment");
+                    if (!equipmentData) {
+                      await loadEquipmentData();
+                    }
+                  }}
                   className={`px-4 py-2 rounded-md transition-colors ${
                     activeTab === "equipment"
                       ? "bg-white text-blue-600 shadow-sm"
@@ -197,18 +223,13 @@ export function CharacterDetailsClient({
                     setSymbolError("");
                     setSymbolLoading(true);
                     try {
-                      const res = await fetch(
-                        `https://open.api.nexon.com/maplestorysea/v1/character/symbol-equipment?ocid=${ocid}`,
-                        {
-                          headers: {
-                            "x-nxopen-api-key":
-                              "test_ea78af0bb88d495a94b6f66066c720e395fdf4f7b152747fba72a401626e4bfdefe8d04e6d233bd35cf2fabdeb93fb0d",
-                          },
-                        }
+                      const response = await fetch(
+                        `/api/character/symbols?ocid=${ocid}`
                       );
-                      if (!res.ok)
+                      if (!response.ok) {
                         throw new Error("Failed to fetch symbol data");
-                      const data = await res.json();
+                      }
+                      const data = await response.json();
                       setSymbolData(data);
                     } catch (err: any) {
                       setSymbolError(
