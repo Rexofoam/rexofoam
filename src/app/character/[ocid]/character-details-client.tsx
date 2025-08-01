@@ -25,7 +25,7 @@ export function CharacterDetailsClient({
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<
-    "overview" | "stats" | "equipment" | "symbols"
+    "overview" | "stats" | "hypers" | "equipment" | "symbols"
   >("overview");
   const [symbolData, setSymbolData] = useState<any>(null);
   const [symbolLoading, setSymbolLoading] = useState(false);
@@ -33,6 +33,12 @@ export function CharacterDetailsClient({
   const [equipmentData, setEquipmentData] = useState<any>(null);
   const [equipmentLoading, setEquipmentLoading] = useState(false);
   const [equipmentError, setEquipmentError] = useState<string>("");
+  const [hyperPassiveSkills, setHyperPassiveSkills] = useState<any>(null);
+  const [hyperActiveSkills, setHyperActiveSkills] = useState<any>(null);
+  const [hyperStatData, setHyperStatData] = useState<any>(null);
+  const [hyperSkillsLoading, setHyperSkillsLoading] = useState(false);
+  const [hyperSkillsError, setHyperSkillsError] = useState<string>("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!initialData && ocid) {
@@ -91,6 +97,80 @@ export function CharacterDetailsClient({
       setEquipmentData(null);
     } finally {
       setEquipmentLoading(false);
+    }
+  };
+
+  const loadHyperSkills = async () => {
+    setHyperSkillsError("");
+    setHyperSkillsLoading(true);
+    try {
+      // Fetch hyperpassive, hyperactive skills, and hyper stats in parallel
+      const [passiveResponse, activeResponse, hyperStatResponse] =
+        await Promise.all([
+          fetch(
+            `/api/character/hyper-skills?ocid=${ocid}&character_skill_grade=hyperpassive`
+          ),
+          fetch(
+            `/api/character/hyper-skills?ocid=${ocid}&character_skill_grade=hyperactive`
+          ),
+          fetch(
+            `/api/character/hyper-skills?ocid=${ocid}&data_type=hyper-stat`
+          ),
+        ]);
+
+      if (!passiveResponse.ok || !activeResponse.ok || !hyperStatResponse.ok) {
+        throw new Error("Failed to fetch hyper data");
+      }
+
+      const [passiveData, activeData, hyperStatData] = await Promise.all([
+        passiveResponse.json(),
+        activeResponse.json(),
+        hyperStatResponse.json(),
+      ]);
+
+      setHyperPassiveSkills(passiveData);
+      setHyperActiveSkills(activeData);
+      setHyperStatData(hyperStatData);
+    } catch (err: any) {
+      setHyperSkillsError(err.message || "Failed to fetch hyper data");
+      setHyperPassiveSkills(null);
+      setHyperActiveSkills(null);
+      setHyperStatData(null);
+    } finally {
+      setHyperSkillsLoading(false);
+    }
+  };
+
+  // Helper function to handle tab switching
+  const handleTabSwitch = async (
+    tab: "overview" | "stats" | "hypers" | "equipment" | "symbols"
+  ) => {
+    setActiveTab(tab);
+    setMobileMenuOpen(false); // Close mobile menu when tab is selected
+
+    if (
+      tab === "hypers" &&
+      (!hyperPassiveSkills || !hyperActiveSkills || !hyperStatData)
+    ) {
+      await loadHyperSkills();
+    } else if (tab === "equipment" && !equipmentData) {
+      await loadEquipmentData();
+    } else if (tab === "symbols") {
+      setSymbolError("");
+      setSymbolLoading(true);
+      try {
+        const response = await fetch(`/api/character/symbols?ocid=${ocid}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch symbol data");
+        }
+        const data = await response.json();
+        setSymbolData(data);
+      } catch (err: any) {
+        setSymbolError(err.message || "Failed to fetch symbol data");
+        setSymbolData(null);
+      } finally {
+        setSymbolLoading(false);
+      }
     }
   };
 
@@ -181,73 +261,149 @@ export function CharacterDetailsClient({
               </div>
 
               {/* Navigation Tabs */}
-              <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
-                <button
-                  onClick={() => setActiveTab("overview")}
-                  className={`px-4 py-2 rounded-md transition-colors ${
-                    activeTab === "overview"
-                      ? "bg-white text-blue-600 shadow-sm"
-                      : "text-gray-600 hover:text-gray-800"
-                  }`}
-                >
-                  Overview
-                </button>
-                <button
-                  onClick={() => setActiveTab("stats")}
-                  className={`px-4 py-2 rounded-md transition-colors ${
-                    activeTab === "stats"
-                      ? "bg-white text-blue-600 shadow-sm"
-                      : "text-gray-600 hover:text-gray-800"
-                  }`}
-                >
-                  Stats
-                </button>
-                <button
-                  onClick={async () => {
-                    setActiveTab("equipment");
-                    if (!equipmentData) {
-                      await loadEquipmentData();
-                    }
-                  }}
-                  className={`px-4 py-2 rounded-md transition-colors ${
-                    activeTab === "equipment"
-                      ? "bg-white text-blue-600 shadow-sm"
-                      : "text-gray-600 hover:text-gray-800"
-                  }`}
-                >
-                  Equipment
-                </button>
-                <button
-                  onClick={async () => {
-                    setActiveTab("symbols");
-                    setSymbolError("");
-                    setSymbolLoading(true);
-                    try {
-                      const response = await fetch(
-                        `/api/character/symbols?ocid=${ocid}`
-                      );
-                      if (!response.ok) {
-                        throw new Error("Failed to fetch symbol data");
-                      }
-                      const data = await response.json();
-                      setSymbolData(data);
-                    } catch (err: any) {
-                      setSymbolError(
-                        err.message || "Failed to fetch symbol data"
-                      );
-                      setSymbolData(null);
-                    } finally {
-                      setSymbolLoading(false);
-                    }
-                  }}
-                  className={`px-4 py-2 rounded-md transition-colors ${
-                    activeTab === "symbols"
-                      ? "bg-white text-blue-600 shadow-sm"
-                      : "text-gray-600 hover:text-gray-800"
-                  }`}
-                >
-                  Symbols
-                </button>
+              <div className="relative">
+                {/* Desktop Navigation */}
+                <div className="hidden md:flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                  <button
+                    onClick={() => handleTabSwitch("overview")}
+                    className={`px-4 py-2 rounded-md transition-colors ${
+                      activeTab === "overview"
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    Overview
+                  </button>
+                  <button
+                    onClick={() => handleTabSwitch("stats")}
+                    className={`px-4 py-2 rounded-md transition-colors ${
+                      activeTab === "stats"
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    Stats
+                  </button>
+                  <button
+                    onClick={() => handleTabSwitch("hypers")}
+                    className={`px-4 py-2 rounded-md transition-colors ${
+                      activeTab === "hypers"
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    Hyper(s)
+                  </button>
+                  <button
+                    onClick={() => handleTabSwitch("equipment")}
+                    className={`px-4 py-2 rounded-md transition-colors ${
+                      activeTab === "equipment"
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    Equipment
+                  </button>
+                  <button
+                    onClick={() => handleTabSwitch("symbols")}
+                    className={`px-4 py-2 rounded-md transition-colors ${
+                      activeTab === "symbols"
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    Symbols
+                  </button>
+                </div>
+
+                {/* Mobile Navigation */}
+                <div className="md:hidden">
+                  {/* Mobile Header with Hamburger */}
+                  <div className="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
+                    <span className="text-lg font-medium text-blue-600 capitalize">
+                      {activeTab === "hypers" ? "Hyper(s)" : activeTab}
+                    </span>
+                    <button
+                      onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                      className="p-1 text-gray-600 hover:text-gray-800 transition-colors"
+                      aria-label="Toggle navigation menu"
+                    >
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        {mobileMenuOpen ? (
+                          <path d="M6 18L18 6M6 6l12 12" />
+                        ) : (
+                          <path d="M4 6h16M4 12h16M4 18h16" />
+                        )}
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Mobile Menu Overlay */}
+                  {mobileMenuOpen && (
+                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 mt-2">
+                      <div className="py-2">
+                        <button
+                          className={`w-full px-4 py-3 text-left font-medium transition-colors ${
+                            activeTab === "overview"
+                              ? "bg-blue-50 text-blue-600"
+                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                          }`}
+                          onClick={() => handleTabSwitch("overview")}
+                        >
+                          Overview
+                        </button>
+                        <button
+                          className={`w-full px-4 py-3 text-left font-medium transition-colors ${
+                            activeTab === "stats"
+                              ? "bg-blue-50 text-blue-600"
+                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                          }`}
+                          onClick={() => handleTabSwitch("stats")}
+                        >
+                          Stats
+                        </button>
+                        <button
+                          className={`w-full px-4 py-3 text-left font-medium transition-colors ${
+                            activeTab === "hypers"
+                              ? "bg-blue-50 text-blue-600"
+                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                          }`}
+                          onClick={() => handleTabSwitch("hypers")}
+                        >
+                          Hyper(s)
+                        </button>
+                        <button
+                          className={`w-full px-4 py-3 text-left font-medium transition-colors ${
+                            activeTab === "equipment"
+                              ? "bg-blue-50 text-blue-600"
+                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                          }`}
+                          onClick={() => handleTabSwitch("equipment")}
+                        >
+                          Equipment
+                        </button>
+                        <button
+                          className={`w-full px-4 py-3 text-left font-medium transition-colors ${
+                            activeTab === "symbols"
+                              ? "bg-blue-50 text-blue-600"
+                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                          }`}
+                          onClick={() => handleTabSwitch("symbols")}
+                        >
+                          Symbols
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -290,9 +446,9 @@ export function CharacterDetailsClient({
                                 Combat Power
                               </h2>
                               <p className="text-blue-100">
-                                Cpmbat power is calculated through main stats
+                                Combat power is calculated through main stats
                                 and support stats, ATT/MATT, damage, boss
-                                damage, final damage, and crtical damage.
+                                damage, final damage, and critical damage.
                               </p>
                             </div>
                           </div>
@@ -468,6 +624,222 @@ export function CharacterDetailsClient({
                       ))}
                     </div>
                   </div>
+                </div>
+              )}
+
+              {activeTab === "hypers" && (
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Hyper Skills</h2>
+
+                  {hyperSkillsLoading && (
+                    <div className="flex flex-col items-center justify-center py-8">
+                      <img
+                        src="/images/mushroom-loader.gif"
+                        alt="Loading..."
+                        className="w-16 h-16 mb-4"
+                      />
+                      <p className="text-gray-600">Loading hyper skills...</p>
+                    </div>
+                  )}
+
+                  {hyperSkillsError && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                      <p className="text-red-800">Error: {hyperSkillsError}</p>
+                    </div>
+                  )}
+
+                  {!hyperSkillsLoading &&
+                    !hyperSkillsError &&
+                    (hyperPassiveSkills ||
+                      hyperActiveSkills ||
+                      hyperStatData) && (
+                      <div className="space-y-6">
+                        {/* Hyper Passive Skills */}
+                        {hyperPassiveSkills?.character_skill &&
+                          hyperPassiveSkills.character_skill.length > 0 && (
+                            <div>
+                              <h3 className="text-lg font-semibold mb-3 text-purple-700">
+                                Hyper Passive Skills
+                              </h3>
+                              <div className="flex justify-center">
+                                <div className="grid grid-cols-5 gap-3 justify-items-center">
+                                  {hyperPassiveSkills.character_skill.map(
+                                    (skill: any, index: number) => (
+                                      <div
+                                        key={index}
+                                        className="group relative bg-gray-50 border border-gray-200 rounded-md p-2 hover:bg-gray-100 transition-colors w-20 h-20"
+                                        title={skill.skill_name}
+                                      >
+                                        <div className="w-full h-full flex items-center justify-center">
+                                          {skill.skill_icon ? (
+                                            <img
+                                              src={skill.skill_icon}
+                                              alt={skill.skill_name}
+                                              className="w-16 h-16 object-contain"
+                                            />
+                                          ) : (
+                                            <div className="w-16 h-16 bg-purple-200 rounded flex items-center justify-center">
+                                              <span className="text-purple-600 text-sm font-bold">
+                                                {skill.skill_name?.[0] || "?"}
+                                              </span>
+                                            </div>
+                                          )}
+                                        </div>
+
+                                        {/* Tooltip on hover */}
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[9999] whitespace-nowrap max-w-xs">
+                                          <div className="font-semibold">
+                                            {skill.skill_name}
+                                          </div>
+                                          {skill.skill_level && (
+                                            <div className="text-gray-300">
+                                              Level: {skill.skill_level}
+                                            </div>
+                                          )}
+                                          {skill.skill_effect && (
+                                            <div className="text-blue-300 mt-1 whitespace-normal">
+                                              {skill.skill_effect}
+                                            </div>
+                                          )}
+                                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-black"></div>
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                        {/* Hyper Active Skills */}
+                        {hyperActiveSkills?.character_skill &&
+                          hyperActiveSkills.character_skill.length > 0 && (
+                            <div>
+                              <h3 className="text-lg font-semibold mb-3 text-red-700">
+                                Hyper Active Skills
+                              </h3>
+                              <div className="flex justify-center">
+                                <div className="grid grid-cols-5 gap-3 justify-items-center">
+                                  {hyperActiveSkills.character_skill.map(
+                                    (skill: any, index: number) => (
+                                      <div
+                                        key={index}
+                                        className="group relative bg-gray-50 border border-gray-200 rounded-md p-2 hover:bg-gray-100 transition-colors w-20 h-20"
+                                        title={skill.skill_name}
+                                      >
+                                        <div className="w-full h-full flex items-center justify-center">
+                                          {skill.skill_icon ? (
+                                            <img
+                                              src={skill.skill_icon}
+                                              alt={skill.skill_name}
+                                              className="w-16 h-16 object-contain"
+                                            />
+                                          ) : (
+                                            <div className="w-16 h-16 bg-red-200 rounded flex items-center justify-center">
+                                              <span className="text-red-600 text-sm font-bold">
+                                                {skill.skill_name?.[0] || "?"}
+                                              </span>
+                                            </div>
+                                          )}
+                                        </div>
+
+                                        {/* Tooltip on hover */}
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[9999] whitespace-nowrap max-w-xs">
+                                          <div className="font-semibold">
+                                            {skill.skill_name}
+                                          </div>
+                                          {skill.skill_level && (
+                                            <div className="text-gray-300">
+                                              Level: {skill.skill_level}
+                                            </div>
+                                          )}
+                                          {skill.skill_effect && (
+                                            <div className="text-blue-300 mt-1 whitespace-normal">
+                                              {skill.skill_effect}
+                                            </div>
+                                          )}
+                                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-black"></div>
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                        {/* Hyper Stats */}
+                        {hyperStatData?.hyper_stat_preset_1 &&
+                          hyperStatData.hyper_stat_preset_1.length > 0 && (
+                            <div>
+                              <h3 className="text-lg font-semibold mb-3 text-green-700">
+                                Hyper Stats
+                              </h3>
+                              <div className="bg-gray-50 rounded-lg p-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                  {hyperStatData.hyper_stat_preset_1.map(
+                                    (stat: any, index: number) => (
+                                      <div
+                                        key={index}
+                                        className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow"
+                                      >
+                                        <div className="flex items-center justify-between">
+                                          <div className="flex-1">
+                                            <div className="font-semibold text-gray-800">
+                                              {stat.stat_type}
+                                            </div>
+                                            <div className="text-sm text-gray-600">
+                                              Level {stat.stat_level}
+                                            </div>
+                                          </div>
+                                          <div className="text-right">
+                                            <div className="text-sm font-medium text-green-600">
+                                              {stat.stat_increase}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                        {/* No data found */}
+                        {(!hyperPassiveSkills?.character_skill ||
+                          hyperPassiveSkills.character_skill.length === 0) &&
+                          (!hyperActiveSkills?.character_skill ||
+                            hyperActiveSkills.character_skill.length === 0) &&
+                          (!hyperStatData?.hyper_stat_preset_1 ||
+                            hyperStatData.hyper_stat_preset_1.length === 0) && (
+                            <div className="text-center py-8">
+                              <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                                <svg
+                                  className="w-8 h-8 text-gray-500"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                                  />
+                                </svg>
+                              </div>
+                              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                                No Hyper Data Found
+                              </h3>
+                              <p className="text-gray-600">
+                                This character doesn't have any hyper skills or
+                                hyper stats configured yet.
+                              </p>
+                            </div>
+                          )}
+                      </div>
+                    )}
                 </div>
               )}
 
