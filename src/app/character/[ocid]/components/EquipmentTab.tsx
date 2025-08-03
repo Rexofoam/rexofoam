@@ -1,12 +1,23 @@
+import { useState } from "react";
+
 interface EquipmentTabProps {
   characterData: any;
 }
 
 export function EquipmentTab({ characterData }: EquipmentTabProps) {
+  const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
+
+  const handleTooltipToggle = (index: number) => {
+    setActiveTooltip(activeTooltip === index ? null : index);
+  };
+
   return (
-    <div>
+    <div onClick={() => setActiveTooltip(null)}>
       <h2 className="text-xl font-semibold mb-2">Equipment</h2>
       <div className="bg-gray-50 p-4 rounded-lg">
+        <p className="mb-2 text-sm text-blue-600 md:hidden">
+          💡 Tap on equipment items to view details
+        </p>
         <p className="mb-4">
           <strong>Equipment Count:</strong>{" "}
           {characterData.itemEquipment?.item_equipment?.length || 0}
@@ -323,6 +334,9 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
                     ? ` [${item.potential_option_grade}]`
                     : ""
                 }`}
+                onClick={() => handleTooltipToggle(index)}
+                onTouchStart={() => handleTooltipToggle(index)}
+                onClickCapture={(e) => e.stopPropagation()}
               >
                 {item.item_icon ? (
                   <img
@@ -381,8 +395,10 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
                   </div>
                 )}
 
-                {/* Tooltip on hover */}
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 min-w-max">
+                {/* Tooltip on hover and touch */}
+                <div className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black text-white text-xs rounded transition-opacity pointer-events-none z-10 min-w-max ${
+                  activeTooltip === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}>
                   <div className="whitespace-nowrap">
                     <div className="font-semibold">
                       {item.potential_option_grade
