@@ -50,25 +50,42 @@ export default function BackgroundPage() {
           {
             headers: {
               "x-nxopen-api-key":
-                "test_ea78af0bb88d495a94b6f66066c720e395fdf4f7b152747fba72a401626e4bfdefe8d04e6d233bd35cf2fabdeb93fb0d",
+                "live_ea78af0bb88d495a94b6f66066c720e33d4e8a3ef9dad5783bd0c610437d34f2efe8d04e6d233bd35cf2fabdeb93fb0d",
             },
           }
         );
 
         if (response.ok) {
           const data = await response.json();
+          console.log('API Response data:', data);
+          
           if (data.ocid) {
+            console.log('OCID found:', data.ocid);
+            console.log('Character name:', inputValue);
+            
             setSearchResult({
               character_name: inputValue,
               ocid: data.ocid,
             });
+            
+            console.log('About to navigate to character details...');
+            console.log('Navigation function:', navigation.goToCharacterDetails);
+            
             // Redirect to character details page with new SEO-friendly URL
-            navigation.goToCharacterDetails(data.ocid, inputValue);
+            try {
+              navigation.goToCharacterDetails(data.ocid, inputValue);
+              console.log('Navigation call completed');
+            } catch (navError) {
+              console.error('Navigation error:', navError);
+              setError('Navigation failed. Please try again.');
+            }
           } else {
+            console.log('No OCID in response:', data);
             setError("Character not found");
             setSearchResult(null);
           }
         } else {
+          console.error('API response not ok:', response.status, response.statusText);
           setError("Character not found or API error");
           setSearchResult(null);
         }

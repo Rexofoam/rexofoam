@@ -8,11 +8,11 @@ export const MAPLESTORY_API_CONFIG = {
   BASE_URL: 'https://open.api.nexon.com/maplestorysea/v1',
   
   // API Key for authentication
-  API_KEY: 'test_ea78af0bb88d495a94b6f66066c720e395fdf4f7b152747fba72a401626e4bfdefe8d04e6d233bd35cf2fabdeb93fb0d',
+  API_KEY: 'live_ea78af0bb88d495a94b6f66066c720e33d4e8a3ef9dad5783bd0c610437d34f2efe8d04e6d233bd35cf2fabdeb93fb0d',
   
   // Common headers for all requests
   HEADERS: {
-    'x-nxopen-api-key': 'test_ea78af0bb88d495a94b6f66066c720e395fdf4f7b152747fba72a401626e4bfdefe8d04e6d233bd35cf2fabdeb93fb0d',
+    'x-nxopen-api-key': 'live_ea78af0bb88d495a94b6f66066c720e33d4e8a3ef9dad5783bd0c610437d34f2efe8d04e6d233bd35cf2fabdeb93fb0d',
     'Content-Type': 'application/json',
   },
   

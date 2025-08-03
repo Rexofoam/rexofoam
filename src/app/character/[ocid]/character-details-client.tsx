@@ -22,6 +22,11 @@ export function CharacterDetailsClient({
   characterName,
   initialData,
 }: CharacterDetailsClientProps) {
+  console.log("CharacterDetailsClient component mounted");
+  console.log("Props - OCID:", ocid);
+  console.log("Props - Character Name:", characterName);
+  console.log("Props - Initial Data:", initialData);
+
   const router = useRouter();
   const [characterData, setCharacterData] = useState<CharacterData | null>(
     initialData || null
@@ -57,24 +62,36 @@ export function CharacterDetailsClient({
   }, [ocid, initialData]);
 
   const loadCharacterData = async () => {
+    console.log("CharacterDetailsClient.loadCharacterData called");
+    console.log("OCID:", ocid);
+    console.log("Character Name:", characterName);
+
     setLoading(true);
     setError("");
 
     try {
       // Check localStorage first for immediate display
+      console.log("Checking localStorage cache...");
       const cached = characterDataService.getFromLocalStorage(ocid);
       if (cached) {
+        console.log("Found cached data:", cached);
         setCharacterData(cached);
+      } else {
+        console.log("No cached data found");
       }
 
       // Fetch fresh data (will use cache if still valid)
+      console.log("Fetching fresh character data...");
       const data = await characterDataService.fetchCharacterData(ocid);
+      console.log("Character data fetched successfully:", data);
       setCharacterData(data);
     } catch (err) {
       console.error("Error loading character data:", err);
+      console.error("Error details:", err);
       setError("Failed to fetch character details.");
     } finally {
       setLoading(false);
+      console.log("loadCharacterData completed");
     }
   };
 
