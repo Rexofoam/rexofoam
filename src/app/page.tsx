@@ -7,7 +7,14 @@ import Header from "@/components/Header";
 export default function BackgroundPage() {
   const [isGuildMode, setIsGuildMode] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [searchResult, setSearchResult] = useState<any>(null);
+  const [searchResult, setSearchResult] = useState<{
+    character_name?: string;
+    ocid?: string;
+    name?: string;
+    level?: string;
+    members?: string;
+    leader?: string;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const navigation = useNavigation();
@@ -66,7 +73,7 @@ export default function BackgroundPage() {
           setSearchResult(null);
         }
       }
-    } catch (err) {
+    } catch (err: unknown) {
       setError("Failed to search. Please check your connection and try again.");
       setSearchResult(null);
     } finally {
