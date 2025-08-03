@@ -39,6 +39,9 @@ export function CharacterDetailsClient({
   const [hyperSkillsLoading, setHyperSkillsLoading] = useState(false);
   const [hyperSkillsError, setHyperSkillsError] = useState<string>("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [abilityData, setAbilityData] = useState<any>(null);
+  const [abilityLoading, setAbilityLoading] = useState(false);
+  const [abilityError, setAbilityError] = useState<string>("");
 
   useEffect(() => {
     if (!initialData && ocid) {
@@ -141,6 +144,24 @@ export function CharacterDetailsClient({
     }
   };
 
+  const loadAbilityData = async () => {
+    setAbilityError("");
+    setAbilityLoading(true);
+    try {
+      const response = await fetch(`/api/character/ability?ocid=${ocid}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch ability data");
+      }
+      const data = await response.json();
+      setAbilityData(data);
+    } catch (err: any) {
+      setAbilityError(err.message || "Failed to fetch ability data");
+      setAbilityData(null);
+    } finally {
+      setAbilityLoading(false);
+    }
+  };
+
   // Helper function to handle tab switching
   const handleTabSwitch = async (
     tab: "overview" | "stats" | "hypers" | "equipment" | "symbols"
@@ -153,6 +174,8 @@ export function CharacterDetailsClient({
       (!hyperPassiveSkills || !hyperActiveSkills || !hyperStatData)
     ) {
       await loadHyperSkills();
+    } else if (tab === "stats" && !abilityData) {
+      await loadAbilityData();
     } else if (tab === "equipment" && !equipmentData) {
       await loadEquipmentData();
     } else if (tab === "symbols") {
@@ -611,17 +634,156 @@ export function CharacterDetailsClient({
               )}
 
               {activeTab === "stats" && characterData.stat && (
-                <div>
-                  <h2 className="text-xl font-semibold mb-2">
-                    Character Stats
-                  </h2>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      {characterData.stat.final_stat?.map((stat, index) => (
-                        <p key={index}>
-                          <strong>{stat.stat_name}:</strong> {stat.stat_value}
+                <div className="space-y-6">
+                  {/* Ability Info */}
+                  <div>
+                    <h2 className="text-xl font-semibold mb-2">
+                      Inner Ability
+                    </h2>
+
+                    {abilityLoading && (
+                      <div className="flex flex-col items-center justify-center py-8">
+                        <img
+                          src="/images/mushroom-loader.gif"
+                          alt="Loading..."
+                          className="w-16 h-16 mb-4"
+                        />
+                        <p className="text-gray-600">
+                          Loading inner ability...
                         </p>
-                      ))}
+                      </div>
+                    )}
+
+                    {abilityError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                        <p className="text-red-800">Error: {abilityError}</p>
+                      </div>
+                    )}
+
+                    {!abilityLoading &&
+                      !abilityError &&
+                      abilityData?.ability_info && (
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <div className="space-y-3">
+                            {abilityData.ability_info
+                              .sort(
+                                (a: any, b: any) =>
+                                  parseInt(a.ability_no) -
+                                  parseInt(b.ability_no)
+                              )
+                              .map((ability: any, index: number) => {
+                                // Determine colors based on grade
+                                let bgColor = "bg-gray-100";
+                                let borderColor = "border-gray-300";
+                                let textColor = "text-gray-800";
+                                let badgeColor = "bg-gray-500";
+
+                                switch (ability.ability_grade?.toLowerCase()) {
+                                  case "legendary":
+                                    bgColor = "bg-green-50";
+                                    borderColor = "border-green-300";
+                                    textColor = "text-green-800";
+                                    badgeColor = "bg-green-500";
+                                    break;
+                                  case "unique":
+                                    bgColor = "bg-yellow-50";
+                                    borderColor = "border-yellow-300";
+                                    textColor = "text-yellow-800";
+                                    badgeColor = "bg-yellow-500";
+                                    break;
+                                  case "epic":
+                                    bgColor = "bg-purple-50";
+                                    borderColor = "border-purple-300";
+                                    textColor = "text-purple-800";
+                                    badgeColor = "bg-purple-500";
+                                    break;
+                                  case "rare":
+                                    bgColor = "bg-blue-50";
+                                    borderColor = "border-blue-300";
+                                    textColor = "text-blue-800";
+                                    badgeColor = "bg-blue-500";
+                                    break;
+                                  default:
+                                    break;
+                                }
+
+                                return (
+                                  <div
+                                    key={index}
+                                    className={`${bgColor} border-2 ${borderColor} rounded-lg p-4 transition-all hover:shadow-md`}
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex items-center space-x-3">
+                                        <div className="flex items-center space-x-2">
+                                          <span
+                                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${badgeColor}`}
+                                          >
+                                            Line {ability.ability_no}
+                                          </span>
+                                          <span
+                                            className={`px-3 py-1 rounded-full text-xs font-semibold ${badgeColor} text-white`}
+                                          >
+                                            {ability.ability_grade}
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div
+                                        className={`text-lg font-semibold ${textColor}`}
+                                      >
+                                        {ability.ability_value}
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                          </div>
+                        </div>
+                      )}
+
+                    {!abilityLoading &&
+                      !abilityError &&
+                      (!abilityData?.ability_info ||
+                        abilityData.ability_info.length === 0) && (
+                        <div className="text-center py-8">
+                          <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <svg
+                              className="w-8 h-8 text-gray-500"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                              />
+                            </svg>
+                          </div>
+                          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                            No Inner Ability Data
+                          </h3>
+                          <p className="text-gray-600">
+                            This character doesn't have any inner ability
+                            configured yet.
+                          </p>
+                        </div>
+                      )}
+                  </div>
+
+                  {/* Character Stats */}
+                  <div>
+                    <h2 className="text-xl font-semibold mb-2">
+                      Character Stats
+                    </h2>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        {characterData.stat.final_stat?.map((stat, index) => (
+                          <p key={index}>
+                            <strong>{stat.stat_name}:</strong> {stat.stat_value}
+                          </p>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
