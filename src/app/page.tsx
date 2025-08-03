@@ -27,18 +27,13 @@ export default function BackgroundPage() {
 
     try {
       if (isGuildMode) {
-        // For now, keep guild search as mock data
-        const response = await fetch(
-          `/api/guilds?name=${encodeURIComponent(inputValue)}`
+        // Guild search is in development
+        setError(
+          "🚧 Guild search is currently in development. Please check back soon!"
         );
-        const data = await response.json();
-
-        if (data.success) {
-          setSearchResult(data.data);
-        } else {
-          setError(data.message);
-          setSearchResult(null);
-        }
+        setSearchResult(null);
+        setIsLoading(false);
+        return;
       } else {
         // Use real MapleStory SEA API for character search
         const response = await fetch(
@@ -171,8 +166,22 @@ export default function BackgroundPage() {
 
           {/* Results Display */}
           {error && (
-            <div className="w-full p-4 bg-red-100 border border-red-300 rounded-lg">
-              <p className="text-red-700 text-center">{error}</p>
+            <div
+              className={`w-full p-4 border rounded-lg ${
+                error.includes("development")
+                  ? "bg-yellow-100 border-yellow-300"
+                  : "bg-red-100 border-red-300"
+              }`}
+            >
+              <p
+                className={`text-center ${
+                  error.includes("development")
+                    ? "text-yellow-700"
+                    : "text-red-700"
+                }`}
+              >
+                {error}
+              </p>
             </div>
           )}
 

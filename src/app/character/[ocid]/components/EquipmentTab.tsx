@@ -396,9 +396,13 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
                 )}
 
                 {/* Tooltip on hover and touch */}
-                <div className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black text-white text-xs rounded transition-opacity pointer-events-none z-10 min-w-max ${
-                  activeTooltip === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                }`}>
+                <div
+                  className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black text-white text-xs rounded transition-opacity pointer-events-none z-10 min-w-max ${
+                    activeTooltip === index
+                      ? "opacity-100"
+                      : "opacity-0 group-hover:opacity-100"
+                  }`}
+                >
                   <div className="whitespace-nowrap">
                     <div className="font-semibold">
                       {item.potential_option_grade
