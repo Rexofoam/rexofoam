@@ -26,22 +26,11 @@ export class NavigationService {
    * Navigate to character details page with SEO-friendly URL
    */
   goToCharacterDetails(ocid: string, characterName?: string) {
-    console.log('NavigationService.goToCharacterDetails called');
-    console.log('OCID:', ocid);
-    console.log('Character Name:', characterName);
-    console.log('ROUTES.CHARACTER.DETAILS:', ROUTES.CHARACTER.DETAILS);
-    
     const url = ROUTES.CHARACTER.DETAILS.replace('[ocid]', ocid);
-    console.log('URL after OCID replacement:', url);
-    
     const finalUrl = characterName 
       ? `${url}?name=${encodeURIComponent(characterName)}`
       : url;
-    console.log('Final URL:', finalUrl);
-    
-    console.log('About to call router.push...');
     this.router.push(finalUrl);
-    console.log('router.push call completed');
   }
 
   /**

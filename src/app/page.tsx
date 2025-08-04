@@ -57,35 +57,20 @@ export default function BackgroundPage() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('API Response data:', data);
-          
+
           if (data.ocid) {
-            console.log('OCID found:', data.ocid);
-            console.log('Character name:', inputValue);
-            
             setSearchResult({
               character_name: inputValue,
               ocid: data.ocid,
             });
-            
-            console.log('About to navigate to character details...');
-            console.log('Navigation function:', navigation.goToCharacterDetails);
-            
+
             // Redirect to character details page with new SEO-friendly URL
-            try {
-              navigation.goToCharacterDetails(data.ocid, inputValue);
-              console.log('Navigation call completed');
-            } catch (navError) {
-              console.error('Navigation error:', navError);
-              setError('Navigation failed. Please try again.');
-            }
+            navigation.goToCharacterDetails(data.ocid, inputValue);
           } else {
-            console.log('No OCID in response:', data);
             setError("Character not found");
             setSearchResult(null);
           }
         } else {
-          console.error('API response not ok:', response.status, response.statusText);
           setError("Character not found or API error");
           setSearchResult(null);
         }
