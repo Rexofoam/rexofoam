@@ -8,7 +8,17 @@ export default function BackgroundPage() {
   const [isGuildMode, setIsGuildMode] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [worldName, setWorldName] = useState('');
-  const [searchResult, setSearchResult] = useState<any>(null);
+  const [searchResult, setSearchResult] = useState<{
+    character_name?: string;
+    ocid?: string;
+    name?: string;
+    level?: string;
+    members?: string;
+    leader?: string;
+    guild_name?: string;
+    world_name?: string;
+    oguild_id?: string;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const navigation = useNavigation();
@@ -67,18 +77,20 @@ export default function BackgroundPage() {
           {
             headers: {
               "x-nxopen-api-key":
-                "test_ea78af0bb88d495a94b6f66066c720e395fdf4f7b152747fba72a401626e4bfdefe8d04e6d233bd35cf2fabdeb93fb0d",
+                "live_ea78af0bb88d495a94b6f66066c720e33d4e8a3ef9dad5783bd0c610437d34f2efe8d04e6d233bd35cf2fabdeb93fb0d",
             },
           }
         );
 
         if (response.ok) {
           const data = await response.json();
+
           if (data.ocid) {
             setSearchResult({
               character_name: inputValue,
               ocid: data.ocid,
             });
+
             // Redirect to character details page with new SEO-friendly URL
             navigation.goToCharacterDetails(data.ocid, inputValue);
           } else {
@@ -90,7 +102,7 @@ export default function BackgroundPage() {
           setSearchResult(null);
         }
       }
-    } catch (err) {
+    } catch (err: unknown) {
       setError("Failed to search. Please check your connection and try again.");
       setSearchResult(null);
     } finally {
@@ -203,8 +215,22 @@ export default function BackgroundPage() {
 
           {/* Results Display */}
           {error && (
-            <div className="w-full p-4 bg-red-100 border border-red-300 rounded-lg">
-              <p className="text-red-700 text-center">{error}</p>
+            <div
+              className={`w-full p-4 border rounded-lg ${
+                error.includes("development")
+                  ? "bg-yellow-100 border-yellow-300"
+                  : "bg-red-100 border-red-300"
+              }`}
+            >
+              <p
+                className={`text-center ${
+                  error.includes("development")
+                    ? "text-yellow-700"
+                    : "text-red-700"
+                }`}
+              >
+                {error}
+              </p>
             </div>
           )}
 

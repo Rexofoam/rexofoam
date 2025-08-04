@@ -4,7 +4,7 @@
  */
 
 import { makeApiRequest, ENDPOINTS } from '@/config/maplestory-api';
-import { CharacterData, CharacterBasic, CharacterStat, HyperStat, CharacterAbility, ItemEquipment } from '@/types/maplestory-api';
+import { CharacterData, CharacterBasic, CharacterStat, ItemEquipment } from '@/types/maplestory-api';
 
 class CharacterDataService {
   private static instance: CharacterDataService;
@@ -21,32 +21,46 @@ class CharacterDataService {
   }
 
   /**
-   * Fetch and store complete character data
+   * Check if we're running in the browser (not during SSR)
+   */
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
+
+  /**
+   * Fetch complete character data with caching
    */
   async fetchCharacterData(ocid: string): Promise<CharacterData> {
-    try {
-      // Check cache first
-      const cached = this.getFromCache(ocid);
-      if (cached && !this.isCacheExpired(cached)) {
-        return cached;
-      }
+    // Check memory cache first
+    const cached = this.getFromCache(ocid);
+    if (cached && !this.isCacheExpired(cached)) {
+      return cached;
+    }
 
-      // Fetch all data in parallel
-      const [basic, stat, hyperStat, ability, itemEquipment] = await Promise.all([
+    // Check localStorage cache (only in browser)
+    if (this.isBrowser()) {
+      const localCached = this.getFromLocalStorage(ocid);
+      if (localCached && !this.isCacheExpired(localCached)) {
+        // Store back in memory cache
+        this.storeInCache(ocid, localCached);
+        return localCached;
+      }
+    }
+
+    try {
+      // Fetch essential character data in parallel
+      const [basic, stat, itemEquipment] = await Promise.all([
         makeApiRequest(ENDPOINTS.CHARACTER_BASIC, { ocid }),
         makeApiRequest(ENDPOINTS.CHARACTER_STAT, { ocid }),
-        makeApiRequest(ENDPOINTS.CHARACTER_HYPER_STAT, { ocid }),
-        makeApiRequest(ENDPOINTS.CHARACTER_ABILITY, { ocid }),
         makeApiRequest(ENDPOINTS.CHARACTER_ITEM_EQUIPMENT, { ocid }),
       ]);
 
-      // Create character data object
       const characterData: CharacterData = {
         ocid,
         basic: basic as CharacterBasic,
         stat: stat as CharacterStat,
-        hyperStat: hyperStat as HyperStat,
-        ability: ability as CharacterAbility,
+        hyperStat: null,
+        ability: null,
         itemEquipment: itemEquipment as ItemEquipment,
         lastUpdated: new Date(),
         cacheExpiry: new Date(Date.now() + this.CACHE_DURATION),
@@ -89,6 +103,10 @@ class CharacterDataService {
    * Store character data in localStorage for persistence
    */
   private storeInLocalStorage(ocid: string, data: CharacterData): void {
+    if (!this.isBrowser()) {
+      return; // Skip localStorage operations during SSR
+    }
+    
     try {
       const key = `maplestory_character_${ocid}`;
       localStorage.setItem(key, JSON.stringify(data));
@@ -101,6 +119,10 @@ class CharacterDataService {
    * Get character data from localStorage
    */
   getFromLocalStorage(ocid: string): CharacterData | null {
+    if (!this.isBrowser()) {
+      return null; // Return null during SSR
+    }
+    
     try {
       const key = `maplestory_character_${ocid}`;
       const stored = localStorage.getItem(key);
@@ -121,10 +143,15 @@ class CharacterDataService {
   }
 
   /**
-   * Clear cache for a specific character
+   * Clear character from cache and localStorage
    */
   clearCharacterCache(ocid: string): void {
     this.cache.delete(ocid);
+    
+    if (!this.isBrowser()) {
+      return; // Skip localStorage operations during SSR
+    }
+    
     try {
       const key = `maplestory_character_${ocid}`;
       localStorage.removeItem(key);
@@ -138,6 +165,11 @@ class CharacterDataService {
    */
   clearAllCache(): void {
     this.cache.clear();
+    
+    if (!this.isBrowser()) {
+      return; // Skip localStorage operations during SSR
+    }
+    
     try {
       // Clear all maplestory character data from localStorage
       Object.keys(localStorage).forEach(key => {
@@ -154,11 +186,21 @@ class CharacterDataService {
    * Get character basic info only (lighter request)
    */
   async getCharacterBasic(ocid: string): Promise<CharacterBasic> {
-    const cached = this.getFromCache(ocid);
-    if (cached && cached.basic && !this.isCacheExpired(cached)) {
-      return cached.basic;
+    // Check if we have full data in cache first
+    const fullData = this.getFromCache(ocid);
+    if (fullData && !this.isCacheExpired(fullData) && fullData.basic) {
+      return fullData.basic;
     }
 
+    // Check localStorage for full data (only in browser)
+    if (this.isBrowser()) {
+      const localCached = this.getFromLocalStorage(ocid);
+      if (localCached && !this.isCacheExpired(localCached) && localCached.basic) {
+        return localCached.basic;
+      }
+    }
+
+    // Fetch basic data only
     return makeApiRequest(ENDPOINTS.CHARACTER_BASIC, { ocid }) as Promise<CharacterBasic>;
   }
 
@@ -166,7 +208,10 @@ class CharacterDataService {
    * Refresh character data (force fetch from API)
    */
   async refreshCharacterData(ocid: string): Promise<CharacterData> {
+    // Clear existing cache
     this.clearCharacterCache(ocid);
+    
+    // Fetch fresh data
     return this.fetchCharacterData(ocid);
   }
 
@@ -174,6 +219,10 @@ class CharacterDataService {
    * Get all cached character OCIDs
    */
   getCachedCharacterIds(): string[] {
+    if (!this.isBrowser()) {
+      return []; // Return empty array during SSR
+    }
+    
     try {
       const cachedIds: string[] = [];
       Object.keys(localStorage).forEach(key => {
@@ -192,4 +241,3 @@ class CharacterDataService {
 
 // Export singleton instance
 export const characterDataService = CharacterDataService.getInstance();
-export default characterDataService;
