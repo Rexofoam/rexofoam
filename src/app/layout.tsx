@@ -5,6 +5,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Maplesea Character Lookup",
   description: "MapleStory SEA character lookup and stats viewer",
+  icons: {
+    icon: "/tab-logo.ico",
+  },
 };
 
 export default function RootLayout({
