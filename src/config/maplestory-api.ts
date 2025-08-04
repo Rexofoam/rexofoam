@@ -36,6 +36,8 @@ export const MAPLESTORY_API_CONFIG = {
     CHARACTER_HEXAMATRIX: '/character/hexamatrix',
     CHARACTER_HEXAMATRIX_STAT: '/character/hexamatrix-stat',
     CHARACTER_DOJANG: '/character/dojang',
+    GUILD_ID: '/guild/id',
+    GUILD_BASIC: '/guild/basic',
   },
 } as const;
 
@@ -57,7 +59,7 @@ export const createApiUrl = (endpoint: string, params?: Record<string, string>) 
  */
 export const makeApiRequest = async (endpoint: string, params?: Record<string, string>) => {
   const url = createApiUrl(endpoint, params);
-  
+
   const response = await fetch(url, {
     headers: MAPLESTORY_API_CONFIG.HEADERS,
   });

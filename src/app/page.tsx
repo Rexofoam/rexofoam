@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 export default function BackgroundPage() {
   const [isGuildMode, setIsGuildMode] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [worldName, setWorldName] = useState('');
   const [searchResult, setSearchResult] = useState<{
     character_name?: string;
     ocid?: string;
@@ -14,6 +15,9 @@ export default function BackgroundPage() {
     level?: string;
     members?: string;
     leader?: string;
+    guild_name?: string;
+    world_name?: string;
+    oguild_id?: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
@@ -22,6 +26,7 @@ export default function BackgroundPage() {
   const toggleMode = () => {
     setIsGuildMode(!isGuildMode);
     setInputValue("");
+    setWorldName('');
     setSearchResult(null);
     setError("");
   };
@@ -34,13 +39,35 @@ export default function BackgroundPage() {
 
     try {
       if (isGuildMode) {
-        // Guild search is in development
-        setError(
-          "🚧 Guild search is currently in development. Please check back soon!"
+        // Use real MapleStory SEA API for guild search
+        const response = await fetch(
+          `https://open.api.nexon.com/maplestorysea/v1/guild/id?guild_name=${encodeURIComponent(inputValue)}&world_name=${encodeURIComponent(worldName)}`,
+          {
+            headers: {
+              "x-nxopen-api-key":
+                "test_ea78af0bb88d495a94b6f66066c720e395fdf4f7b152747fba72a401626e4bfdefe8d04e6d233bd35cf2fabdeb93fb0d",
+            },
+          }
         );
-        setSearchResult(null);
-        setIsLoading(false);
-        return;
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.oguild_id) {
+            setSearchResult({
+              guild_name: inputValue,
+              world_name: worldName,
+              oguild_id: data.oguild_id,
+            });
+            // Redirect to guild details page with new SEO-friendly URL
+            navigation.goToGuildDetails(data.oguild_id, inputValue, worldName);
+          } else {
+            setError('Guild not found');
+            setSearchResult(null);
+          }
+        } else {
+          setError('Guild not found on API error');
+          setSearchResult(null);
+        }
       } else {
         // Use real MapleStory SEA API for character search
         const response = await fetch(
@@ -131,6 +158,19 @@ export default function BackgroundPage() {
                 className="w-full px-4 py-3 bg-white bg-opacity-80 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-all duration-200 text-gray-800 placeholder-gray-500 text-center hover:scale-105 transform"
                 disabled={isLoading}
               />
+              {/* To be updated with world dropdown */}
+              {isGuildMode && (
+                <input
+                  type="text"
+                  id="searchInput"
+                  value={worldName}
+                  onChange={(e) => setWorldName(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="World Name"
+                  className="w-full px-4 py-3 bg-white bg-opacity-80 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-all duration-200 text-gray-800 placeholder-gray-500 text-center hover:scale-105 transform"
+                  disabled={isLoading}
+                />
+              )}
               <button
                 onClick={handleSearch}
                 disabled={isLoading || !inputValue.trim()}
@@ -202,16 +242,10 @@ export default function BackgroundPage() {
               {isGuildMode ? (
                 <div className="text-green-700 space-y-1">
                   <p>
-                    <strong>Name:</strong> {searchResult.name}
+                    <strong>Guild Name:</strong> {searchResult.guild_name}
                   </p>
                   <p>
-                    <strong>Level:</strong> {searchResult.level}
-                  </p>
-                  <p>
-                    <strong>Members:</strong> {searchResult.members}
-                  </p>
-                  <p>
-                    <strong>Leader:</strong> {searchResult.leader}
+                    <strong>World:</strong> {searchResult.world_name}
                   </p>
                 </div>
               ) : (
