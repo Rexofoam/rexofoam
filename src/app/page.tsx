@@ -23,11 +23,10 @@ export default function BackgroundPage() {
   const [error, setError] = useState<string>("");
   const navigation = useNavigation();
   const worlds = ['Aquila', 'Bootes', 'Cassiopeia', 'Draco'];
-
   const toggleMode = () => {
     setIsGuildMode(!isGuildMode);
     setInputValue("");
-    setWorldName('');
+    setWorldName('Aquila');
     setSearchResult(null);
     setError("");
   };
@@ -175,7 +174,7 @@ export default function BackgroundPage() {
                     disabled={isLoading}
                   >
                     {worlds.map(world => (
-                      <option value={world}>{world}</option>
+                      <option key={world} value={world}>{world}</option>
                     ))}
                   </select>
                 </div>

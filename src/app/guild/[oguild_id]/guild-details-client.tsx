@@ -107,11 +107,11 @@ export function GuildDetailsClient({
                         <div className="mb-6">
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center space-x-4">
-                                    {/* To be updated with guild master image */}
+                                    {/* Guild Master Image */}
                                     {guildData.basic.guild_master_name && (
                                         <img
-                                            // src={guildData.basic.character_image}
-                                            // alt={guildData.basic.character_name}
+                                            src={guildData.guild_master_image}
+                                            alt={guildData.guild_master_image}
                                             className="w-16 h-16 rounded-lg"
                                         />
                                     )}
