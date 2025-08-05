@@ -9,12 +9,14 @@ import { useEffect, useState } from "react";
 interface GuildDetailsClientProps {
     oguild_id: string;
     guildName?: string;
+    world?: string;
     initialData?: GuildData;
 }
 
 export function GuildDetailsClient({
     oguild_id,
     guildName,
+    world,
     initialData,
 }: GuildDetailsClientProps) {
     const [guildData, setGuildData] = useState<GuildData | null>(initialData || null);
@@ -117,13 +119,13 @@ export function GuildDetailsClient({
                                     )}
                                     <div>
                                         <h1 className="text-3xl font-bold text-black">
-                                            {guildData.basic.guild_name}
+                                            {guildName}
                                         </h1>
                                         <p className="text-lg text-gray-600">
                                             Level {guildData.basic.guild_level}
                                         </p>
                                         <p className="text-sm text-gray-500">
-                                            {guildData.basic.world_name} World
+                                            {world} World • {guildData.basic.guild_master_name}'s guild
                                         </p>
                                     </div>
                                 </div>
@@ -190,9 +192,9 @@ export function GuildDetailsClient({
                                         <h2 className="text-xl font-semibold mb-2">Guild Info</h2>
                                         <div className="bg-gray-50 p-4 rounded-lg grid grid-cols-2 gap-4">
                                             <div>
-                                                <p><strong>Guild Name:</strong> {guildData.basic?.guild_name}</p>
+                                                <p><strong>Guild Name:</strong> {guildName}</p>
                                                 <p><strong>Level:</strong> {guildData.basic?.guild_level}</p>
-                                                <p><strong>World:</strong> {guildData.basic?.world_name}</p>
+                                                <p><strong>World:</strong> {world}</p>
                                                 <p><strong>Honor EXP:</strong> {guildData.basic?.guild_fame}</p>
                                             </div>
                                             <div>
