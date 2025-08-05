@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 export default function BackgroundPage() {
   const [isGuildMode, setIsGuildMode] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [worldName, setWorldName] = useState('');
+  const [worldName, setWorldName] = useState('Aquila');
   const [searchResult, setSearchResult] = useState<{
     character_name?: string;
     ocid?: string;
@@ -22,6 +22,7 @@ export default function BackgroundPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const navigation = useNavigation();
+  const worlds = ['Aquila', 'Bootes', 'Cassiopeia', 'Draco'];
 
   const toggleMode = () => {
     setIsGuildMode(!isGuildMode);
@@ -158,18 +159,26 @@ export default function BackgroundPage() {
                 className="w-full px-4 py-3 bg-white bg-opacity-80 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-all duration-200 text-gray-800 placeholder-gray-500 text-center hover:scale-105 transform"
                 disabled={isLoading}
               />
-              {/* To be updated with world dropdown */}
               {isGuildMode && (
-                <input
-                  type="text"
-                  id="searchInput"
-                  value={worldName}
-                  onChange={(e) => setWorldName(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="World Name"
-                  className="w-full px-4 py-3 bg-white bg-opacity-80 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-all duration-200 text-gray-800 placeholder-gray-500 text-center hover:scale-105 transform"
-                  disabled={isLoading}
-                />
+                <div>
+                  <label
+                    htmlFor="worldName"
+                    className="block text-gray-800 text-xl sm:text-2xl font-semibold text-center"
+                  >
+                    Select World
+                  </label>
+                  <select
+                    id="worldName"
+                    className="w-full px-4 py-3 bg-white bg-opacity-80 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-all duration-200 text-gray-800 placeholder-gray-500 text-left hover:scale-105 transform"
+                    value={worldName}
+                    onChange={(e) => setWorldName(e.target.value)}
+                    disabled={isLoading}
+                  >
+                    {worlds.map(world => (
+                      <option value={world}>{world}</option>
+                    ))}
+                  </select>
+                </div>
               )}
               <button
                 onClick={handleSearch}
@@ -216,18 +225,16 @@ export default function BackgroundPage() {
           {/* Results Display */}
           {error && (
             <div
-              className={`w-full p-4 border rounded-lg ${
-                error.includes("development")
-                  ? "bg-yellow-100 border-yellow-300"
-                  : "bg-red-100 border-red-300"
-              }`}
+              className={`w-full p-4 border rounded-lg ${error.includes("development")
+                ? "bg-yellow-100 border-yellow-300"
+                : "bg-red-100 border-red-300"
+                }`}
             >
               <p
-                className={`text-center ${
-                  error.includes("development")
-                    ? "text-yellow-700"
-                    : "text-red-700"
-                }`}
+                className={`text-center ${error.includes("development")
+                  ? "text-yellow-700"
+                  : "text-red-700"
+                  }`}
               >
                 {error}
               </p>
