@@ -5,6 +5,9 @@ import guildDataService from "@/services/guild-data.service";
 import { GuildData } from "@/types/maplestory-api";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { SkillsTab } from "./components/SkillsTab";
+import { NoblesseSkills } from "./components/NoblesseSkills";
+import { InvalidSkillsFallback } from "./components/InvalidSkillsFallback";
 
 interface GuildDetailsClientProps {
     oguild_id: string;
@@ -206,39 +209,43 @@ export function GuildDetailsClient({
                                         </div>
                                     </div>
 
-                                    {/* Quick Stats Preview */}
-                                    {guildData.basic?.guild_skill && (
-                                        <div>
-                                            <h2 className="text-xl font-semibold mb-2">Key Skills</h2>
-                                            <div className="bg-gray-50 p-4 rounded-lg">
-                                                <div className="grid grid-cols-3 gap-4 text-sm">
-                                                    {/* display main 3 gskills */}
+                                    {/* Noblesse Skills Preview */}
+                                    <h2 className="text-xl font-semibold mb-2">Noblesse Skills</h2>
+                                    {(guildData.basic?.guild_noblesse_skill &&
+                                        guildData.basic.guild_noblesse_skill.length > 0) &&
+                                        (
+                                            <div>
+
+                                                <div className="bg-gray-50 p-4 rounded-lg">
+                                                    <NoblesseSkills
+                                                        skillsData={guildData.basic?.guild_noblesse_skill}
+                                                    />
+                                                    <button
+                                                        onClick={() => setActiveTab('skills')}
+                                                        className="mt-5 text-blue-600 hover:text-blue-800 text-sm"
+                                                    >
+                                                        View All Skills →
+                                                    </button>
                                                 </div>
-                                                <button
-                                                    onClick={() => setActiveTab('skills')}
-                                                    className="mt-2 text-blue-600 hover:text-blue-800 text-sm"
-                                                >
-                                                    View All Skills →
-                                                </button>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
+                                    {/* Fallback for invalid noblesse skills*/}
+                                    <InvalidSkillsFallback
+                                        skillsData={guildData.basic?.guild_noblesse_skill ?? []} 
+                                        loading={loading}
+                                        error={error}
+                                        type="noblesse_skill"
+                                    />
                                 </>
                             )}
 
                             {activeTab === 'skills' && guildData.basic?.guild_skill && (
-                                <div>
-                                    <h2 className="text-xl font-semibold mb-2">Guild Skills</h2>
-                                    <div className="bg-gray-50 p-4 rounded-lg">
-                                        <div className="grid grid-cols-2 gap-2 text-sm">
-                                            {guildData.basic?.guild_skill.map((skill, name) => (
-                                                <p key={name}>
-                                                    <strong>{skill.skill_name}:</strong> Level {skill.skill_level}
-                                                </p>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                                <SkillsTab
+                                    regularSkillsData={guildData.basic?.guild_skill}
+                                    noblesseSkillsData={guildData.basic?.guild_noblesse_skill}
+                                    skillsLoading={loading}
+                                    skillsError={error}
+                                />
                             )}
 
                             {activeTab === 'members' && guildData.basic?.guild_member && (
