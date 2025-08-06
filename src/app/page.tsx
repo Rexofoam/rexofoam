@@ -173,8 +173,8 @@ export default function BackgroundPage() {
                     onChange={(e) => setWorldName(e.target.value)}
                     disabled={isLoading}
                   >
-                    {worlds.map(world => (
-                      <option key={world} value={world}>{world}</option>
+                    {worlds.map((world: any, index: number) => (
+                      <option key={index} value={world}>{world}</option>
                     ))}
                   </select>
                 </div>
