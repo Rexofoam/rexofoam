@@ -170,6 +170,7 @@ export interface GuildNoblesseSkill {
 // Combined character data interface
 export interface CharacterData {
   ocid: string;
+  oguild_id: string;
   basic: CharacterBasic | null;
   stat: CharacterStat | null;
   hyperStat: HyperStat | null;

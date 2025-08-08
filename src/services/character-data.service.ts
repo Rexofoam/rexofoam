@@ -11,7 +11,7 @@ class CharacterDataService {
   private cache = new Map<string, CharacterData>();
   private readonly CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-  private constructor() {}
+  private constructor() { }
 
   static getInstance(): CharacterDataService {
     if (!CharacterDataService.instance) {
@@ -54,9 +54,17 @@ class CharacterDataService {
         makeApiRequest(ENDPOINTS.CHARACTER_STAT, { ocid }),
         makeApiRequest(ENDPOINTS.CHARACTER_ITEM_EQUIPMENT, { ocid }),
       ]);
+      // Fetch guild ID
+      let guild = null;
+      if (basic?.character_guild_name && basic?.world_name) {
+        [guild] = await Promise.all([
+          makeApiRequest(ENDPOINTS.GUILD_ID, { guild_name: basic.character_guild_name, world_name: basic.world_name }),
+        ])
+      }
 
       const characterData: CharacterData = {
         ocid,
+        oguild_id: guild?.oguild_id ?? null,
         basic: basic as CharacterBasic,
         stat: stat as CharacterStat,
         hyperStat: null,
@@ -106,7 +114,7 @@ class CharacterDataService {
     if (!this.isBrowser()) {
       return; // Skip localStorage operations during SSR
     }
-    
+
     try {
       const key = `maplestory_character_${ocid}`;
       localStorage.setItem(key, JSON.stringify(data));
@@ -122,7 +130,7 @@ class CharacterDataService {
     if (!this.isBrowser()) {
       return null; // Return null during SSR
     }
-    
+
     try {
       const key = `maplestory_character_${ocid}`;
       const stored = localStorage.getItem(key);
@@ -147,11 +155,11 @@ class CharacterDataService {
    */
   clearCharacterCache(ocid: string): void {
     this.cache.delete(ocid);
-    
+
     if (!this.isBrowser()) {
       return; // Skip localStorage operations during SSR
     }
-    
+
     try {
       const key = `maplestory_character_${ocid}`;
       localStorage.removeItem(key);
@@ -165,11 +173,11 @@ class CharacterDataService {
    */
   clearAllCache(): void {
     this.cache.clear();
-    
+
     if (!this.isBrowser()) {
       return; // Skip localStorage operations during SSR
     }
-    
+
     try {
       // Clear all maplestory character data from localStorage
       Object.keys(localStorage).forEach(key => {
@@ -210,7 +218,7 @@ class CharacterDataService {
   async refreshCharacterData(ocid: string): Promise<CharacterData> {
     // Clear existing cache
     this.clearCharacterCache(ocid);
-    
+
     // Fetch fresh data
     return this.fetchCharacterData(ocid);
   }
@@ -222,7 +230,7 @@ class CharacterDataService {
     if (!this.isBrowser()) {
       return []; // Return empty array during SSR
     }
-    
+
     try {
       const cachedIds: string[] = [];
       Object.keys(localStorage).forEach(key => {

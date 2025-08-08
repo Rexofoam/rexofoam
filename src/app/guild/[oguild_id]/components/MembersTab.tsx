@@ -29,7 +29,7 @@ export function MembersTab({
                 const data = await response.json();
                 navigation.goToCharacterDetails(data.ocid, name)
             } else {
-                toast.error('Failed to load character details.', {
+                toast.error('Character info is not available.', {
                     theme: 'colored',
                 });
             }
