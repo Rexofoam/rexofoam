@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import ToastProvider from "@/components/ToastProvider";
 
 export const metadata: Metadata = {
   title: "Maplesea Character Lookup",
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         {children}
+        <ToastProvider />
         <Analytics />
       </body>
     </html>

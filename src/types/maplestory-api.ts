@@ -183,6 +183,7 @@ export interface CharacterData {
 export interface GuildData {
   oguild_id: string;
   basic: GuildBasic | null;
+  guild_master_ocid: string;
   guild_master_image: string;
   lastUpdated: Date;
   cacheExpiry?: Date;
