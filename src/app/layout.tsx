@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/components/Footer";
 import "./globals.css";
+import ToastProvider from "@/components/ToastProvider";
 
 export const metadata: Metadata = {
   title: "MapleSEA Tracker",
@@ -22,6 +23,7 @@ export default function RootLayout({
         <div className="flex-1">
           {children}
         </div>
+        <ToastProvider />
         <Footer />
         <Analytics />
       </body>
