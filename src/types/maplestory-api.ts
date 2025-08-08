@@ -139,6 +139,34 @@ export interface TitleInfo {
   date_option_expire: string;
 }
 
+export interface GuildBasic {
+  world_name: string;
+  guild_name: string;
+  guild_level: number;
+  guild_fame: number;
+  guild_point: number;
+  guild_master_name: string;
+  guild_member_count: number;
+  guild_member: string[];
+  guild_skill: GuildSkill[];
+  guild_noblesse_skill: GuildNoblesseSkill[];
+}
+export interface GuildSkill {
+  skill_name: string;
+  skill_description: string;
+  skill_level: number;
+  skill_effect: string;
+  skill_icon: string;
+}
+
+export interface GuildNoblesseSkill {
+  skill_name: string;
+  skill_description: string;
+  skill_level: number;
+  skill_effect: string;
+  skill_icon: string;
+}
+
 // Combined character data interface
 export interface CharacterData {
   ocid: string;
@@ -147,6 +175,15 @@ export interface CharacterData {
   hyperStat: HyperStat | null;
   ability: CharacterAbility | null;
   itemEquipment: ItemEquipment | null;
+  lastUpdated: Date;
+  cacheExpiry?: Date;
+}
+
+// Combined guild data interface
+export interface GuildData {
+  oguild_id: string;
+  basic: GuildBasic | null;
+  guild_master_image: string;
   lastUpdated: Date;
   cacheExpiry?: Date;
 }

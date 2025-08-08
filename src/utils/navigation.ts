@@ -62,10 +62,10 @@ export class NavigationService {
   /**
    * Navigate to guild details
    */
-  goToGuildDetails(guildId: string, guildName?: string) {
+  goToGuildDetails(guildId: string, guildName?: string, worldName?: string) {
     const url = ROUTES.GUILD.DETAILS.replace('[guildId]', guildId);
-    const finalUrl = guildName 
-      ? `${url}?name=${encodeURIComponent(guildName)}`
+    const finalUrl = guildName && worldName
+      ? `${url}?name=${encodeURIComponent(guildName)}&world=${encodeURIComponent(worldName)}`
       : url;
     this.router.push(finalUrl);
   }
