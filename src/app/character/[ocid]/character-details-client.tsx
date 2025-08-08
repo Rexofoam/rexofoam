@@ -10,6 +10,7 @@ import { EquipmentTab } from "./components/EquipmentTab";
 import { HyperTab } from "./components/HyperTab";
 import { SymbolsTab } from "./components/SymbolsTab";
 import { LinkSkillsTab } from "./components/LinkSkillsTab";
+import { GrowthTab } from "./components/GrowthTab";
 
 interface CharacterDetailsClientProps {
   ocid: string;
@@ -29,7 +30,13 @@ export function CharacterDetailsClient({
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<
-    "overview" | "stats" | "hypers" | "equipment" | "symbols" | "linkskills"
+    | "overview"
+    | "stats"
+    | "hypers"
+    | "equipment"
+    | "symbols"
+    | "linkskills"
+    | "growth"
   >("overview");
   const [symbolData, setSymbolData] = useState<any>(null);
   const [symbolLoading, setSymbolLoading] = useState(false);
@@ -196,6 +203,7 @@ export function CharacterDetailsClient({
       | "equipment"
       | "symbols"
       | "linkskills"
+      | "growth"
   ) => {
     setActiveTab(tab);
     setMobileMenuOpen(false); // Close mobile menu when tab is selected
@@ -380,6 +388,16 @@ export function CharacterDetailsClient({
                   >
                     Symbols
                   </button>
+                  <button
+                    onClick={() => handleTabSwitch("growth")}
+                    className={`px-4 py-2 rounded-md transition-colors ${
+                      activeTab === "growth"
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-600 hover:text-gray-800"
+                    }`}
+                  >
+                    Growth
+                  </button>
                 </div>
 
                 {/* Mobile Navigation */}
@@ -479,6 +497,16 @@ export function CharacterDetailsClient({
                           onClick={() => handleTabSwitch("symbols")}
                         >
                           Symbols
+                        </button>
+                        <button
+                          className={`w-full px-4 py-3 text-left font-medium transition-colors ${
+                            activeTab === "growth"
+                              ? "bg-blue-50 text-blue-600"
+                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                          }`}
+                          onClick={() => handleTabSwitch("growth")}
+                        >
+                          Growth
                         </button>
                       </div>
                     </div>
@@ -874,6 +902,8 @@ export function CharacterDetailsClient({
                   linkSkillsError={linkSkillsError}
                 />
               )}
+
+              {activeTab === "growth" && <GrowthTab ocid={ocid} />}
             </div>
           )}
 
