@@ -87,10 +87,13 @@ export function GuildDetailsClient({
         );
     }
 
+    // Navigate to character details page of guild master
     const guildMasterCharLink = () => {
-        return (
-            <a href={`/character/${guildData?.guild_master_ocid}?name=${guildData?.basic?.guild_master_name}`} className="text-blue-500">{guildData?.basic?.guild_master_name}</a>
-        )
+        if(guildData?.guild_master_ocid) {
+            const url = `/character/${guildData?.guild_master_ocid}?name=${guildData?.basic?.guild_master_name}`;
+            return <a href={url} className="text-blue-500">{guildData?.basic?.guild_master_name}</a>
+        }
+        return guildData?.basic?.guild_master_name
     }
 
     return (
