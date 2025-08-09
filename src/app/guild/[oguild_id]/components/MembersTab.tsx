@@ -29,7 +29,7 @@ export function MembersTab({
                 const data = await response.json();
                 navigation.goToCharacterDetails(data.ocid, name)
             } else {
-                toast.error('Character info is not available.', {
+                toast.error('Character info is not available due to inactivity.', {
                     theme: 'colored',
                 });
             }
