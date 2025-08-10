@@ -113,26 +113,33 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
 
   const calculateExpGrowth = (): number => {
     if (growthData.length < 2) return 0;
-    const latestExp = growthData[growthData.length - 1].exp;
-    const oldestExp = growthData[0].exp;
-    const latestLevel = growthData[growthData.length - 1].level;
-    const oldestLevel = growthData[0].level;
 
-    // If level increased, we need to account for level ups
-    if (latestLevel > oldestLevel) {
-      // This is a simplified calculation - in reality you'd need the exact exp tables
-      return latestExp + (latestLevel - oldestLevel) * 1000000000; // Rough estimate
+    const oldestData = growthData[0];
+    const latestData = growthData[growthData.length - 1];
+
+    // If levels are the same, just calculate EXP rate difference
+    if (latestData.level === oldestData.level) {
+      return latestData.expRate - oldestData.expRate;
     }
 
-    return latestExp - oldestExp;
+    // If level increased, calculate total progress
+    // From old level's current progress to 100%, plus new level's current progress
+    const oldProgress = oldestData.expRate;
+    const newProgress = latestData.expRate;
+    const levelDifference = latestData.level - oldestData.level;
+
+    // Each level up = 100% EXP, plus remaining progress
+    const totalExpGrowth =
+      (levelDifference - 1) * 100 + (100 - oldProgress) + newProgress;
+
+    return totalExpGrowth;
   };
 
-  const getAverageExpRate = (): number => {
-    if (growthData.length === 0) return 0;
-    const sum = growthData.reduce((acc, data) => acc + data.expRate, 0);
-    return sum / growthData.length;
+  const getAverageExpGrowth = (): number => {
+    const totalGrowth = calculateExpGrowth();
+    const days = growthData.length > 1 ? growthData.length - 1 : 1; // Number of days between first and last
+    return totalGrowth / days;
   };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -228,7 +235,7 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
   return (
     <div className="space-y-6">
       {/* Growth Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
@@ -242,11 +249,11 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold mb-1">Avg EXP Rate</h3>
-              <p className="text-blue-100 text-sm">5-day average</p>
+              <h3 className="text-lg font-semibold mb-1">Daily EXP Growth</h3>
+              <p className="text-blue-100 text-sm">Average per day</p>
             </div>
             <div className="text-3xl font-bold">
-              {getAverageExpRate().toFixed(1)}%
+              {getAverageExpGrowth().toFixed(1)}%
             </div>
           </div>
         </div>
@@ -254,8 +261,20 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
         <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
+              <h3 className="text-lg font-semibold mb-1">Total EXP Growth</h3>
+              <p className="text-purple-100 text-sm">5-day total</p>
+            </div>
+            <div className="text-3xl font-bold">
+              {calculateExpGrowth().toFixed(1)}%
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white">
+          <div className="flex items-center justify-between">
+            <div>
               <h3 className="text-lg font-semibold mb-1">Current Level</h3>
-              <p className="text-purple-100 text-sm">Latest data</p>
+              <p className="text-orange-100 text-sm">Latest data</p>
             </div>
             <div className="text-3xl font-bold">
               {growthData[growthData.length - 1]?.level || 0}
