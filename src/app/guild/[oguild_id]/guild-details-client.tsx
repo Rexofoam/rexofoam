@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { SkillsTab } from "./components/SkillsTab";
 import { NoblesseSkills } from "./components/NoblesseSkills";
 import { InvalidSkillsFallback } from "./components/InvalidSkillsFallback";
+import { MembersTab } from "./components/MembersTab";
 
 interface GuildDetailsClientProps {
     oguild_id: string;
@@ -86,6 +87,15 @@ export function GuildDetailsClient({
         );
     }
 
+    // Navigate to character details page of guild master
+    const guildMasterCharLink = () => {
+        if(guildData?.guild_master_ocid) {
+            const url = `/character/${guildData?.guild_master_ocid}?name=${guildData?.basic?.guild_master_name}`;
+            return <a href={url} className="text-blue-500">{guildData?.basic?.guild_master_name}</a>
+        }
+        return guildData?.basic?.guild_master_name
+    }
+
     return (
         <div className="min-h-screen flex flex-col relative overflow-hidden">
             {/* Video Background */}
@@ -128,7 +138,7 @@ export function GuildDetailsClient({
                                             Level {guildData.basic.guild_level}
                                         </p>
                                         <p className="text-sm text-gray-500">
-                                            {world} World • {guildData.basic.guild_master_name}'s guild
+                                            {world} World • {guildMasterCharLink()}'s guild
                                         </p>
                                     </div>
                                 </div>
@@ -201,7 +211,7 @@ export function GuildDetailsClient({
                                                 <p><strong>Honor EXP:</strong> {guildData.basic?.guild_fame}</p>
                                             </div>
                                             <div>
-                                                <p><strong>Guild Master:</strong> {guildData.basic?.guild_master_name}</p>
+                                                <p><strong>Guild Master:</strong> {guildMasterCharLink()}</p>
                                                 <p><strong>Guild Members:</strong> {guildData.basic?.guild_member_count} / 200</p>
                                                 <p><strong>Guild Points:</strong> {guildData.basic?.guild_point}</p>
                                                 <p><strong>Last Updated:</strong> {guildData.lastUpdated.toLocaleString()}</p>
@@ -231,7 +241,7 @@ export function GuildDetailsClient({
                                         )}
                                     {/* Fallback for invalid noblesse skills*/}
                                     <InvalidSkillsFallback
-                                        skillsData={guildData.basic?.guild_noblesse_skill ?? []} 
+                                        skillsData={guildData.basic?.guild_noblesse_skill ?? []}
                                         loading={loading}
                                         error={error}
                                         type="noblesse_skill"
@@ -249,19 +259,9 @@ export function GuildDetailsClient({
                             )}
 
                             {activeTab === 'members' && guildData.basic?.guild_member && (
-                                <div>
-                                    <h2 className="text-xl font-semibold mb-2">Members</h2>
-                                    <div className="bg-gray-50 p-4 rounded-lg">
-                                        <p className="mb-4"><strong>Member Count:</strong> {guildData.basic?.guild_member_count}</p>
-                                        <div className="space-y-2">
-                                            {guildData.basic?.guild_member.map((member, index) => (
-                                                <div key={index} className="border-b border-gray-200 py-2 last:border-b-0">
-                                                    <p>{member}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                                <MembersTab
+                                    guildData={guildData}
+                                />
                             )}
                         </div>
                     )}

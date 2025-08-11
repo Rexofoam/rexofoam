@@ -264,6 +264,14 @@ export function CharacterDetailsClient({
     );
   }
 
+  // Navigate to guild details page
+  const guildLink = () => {
+    if(characterData?.oguild_id && characterData?.basic?.character_guild_name) {
+      const url = `/guild/${characterData?.oguild_id}?name=${characterData?.basic?.character_guild_name}&world=${characterData?.basic?.world_name}`;
+      return <a href={url} className="text-blue-500">{characterData?.basic?.character_guild_name}</a>
+    }
+  }
+  
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       {/* Video Background */}
@@ -306,8 +314,12 @@ export function CharacterDetailsClient({
                     </p>
                     <p className="text-sm text-gray-500">
                       {characterData.basic.world_name} World
-                      {characterData.basic.character_guild_name &&
-                        ` • ${characterData.basic.character_guild_name}`}
+                      {characterData.basic.character_guild_name && (
+                        <>
+                          {' • '}
+                          {guildLink()}
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -673,7 +685,7 @@ export function CharacterDetailsClient({
                       <div>
                         <p>
                           <strong>Guild:</strong>{" "}
-                          {characterData.basic?.character_guild_name || "None"}
+                          {characterData.basic?.character_guild_name ? guildLink() : "None"}
                         </p>
                         <p>
                           <strong>Gender:</strong>{" "}

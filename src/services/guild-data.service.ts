@@ -31,10 +31,11 @@ class GuildDataService {
             ]);
 
             let charBasic = null;
+            let charId = null;
 
             if (guildBasic?.guild_master_name) {
                 // Step 2: Fetch guild master ocid
-                const [charId] = await Promise.all([
+                [charId] = await Promise.all([
                     makeApiRequest(ENDPOINTS.CHARACTER_ID, { character_name: guildBasic?.guild_master_name }),
                 ]);
 
@@ -50,6 +51,7 @@ class GuildDataService {
             const guildData: GuildData = {
                 oguild_id,
                 basic: guildBasic as GuildBasic,
+                guild_master_ocid: charId?.ocid ?? null,
                 guild_master_image: charBasic?.character_image ?? null,
                 lastUpdated: new Date(),
                 cacheExpiry: new Date(Date.now() + this.CACHE_DURATION),
