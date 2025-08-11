@@ -35,6 +35,24 @@ export default function RootLayout({
             `,
           }}
         />
+
+        {/* Google Analytics (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-F17ZE6HR64"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-F17ZE6HR64');
+            `,
+          }}
+        />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
         {/* Google Tag Manager (noscript) */}
