@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface SymbolsTabProps {
   symbolData: any;
   symbolLoading: boolean;
@@ -9,9 +11,18 @@ export function SymbolsTab({
   symbolLoading,
   symbolError,
 }: SymbolsTabProps) {
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+
+  const handleTooltipToggle = (symbolKey: string) => {
+    setActiveTooltip(activeTooltip === symbolKey ? null : symbolKey);
+  };
+
   return (
-    <div>
+    <div onClick={() => setActiveTooltip(null)}>
       <h2 className="text-xl font-semibold mb-2">Symbols</h2>
+      <p className="mb-2 text-sm text-blue-600 md:hidden px-4 md:px-0">
+        💡 Tap on symbol icons to view details
+      </p>
       <div className="bg-gray-50 p-4 rounded-lg">
         {symbolLoading && (
           <div className="flex flex-col items-center justify-center py-8">
@@ -47,80 +58,97 @@ export function SymbolsTab({
                           className="grid grid-cols-3 gap-3 justify-center mx-auto"
                           style={{ maxWidth: "480px" }}
                         >
-                          {arcane.map((symbol: any, idx: number) => (
-                            <div
-                              key={symbol.symbol_name + idx}
-                              className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer"
-                            >
-                              {/* Icon + Level badge (top right) */}
-                              <div className="relative mb-2 flex items-center justify-center w-full">
-                                <img
-                                  src={symbol.symbol_icon}
-                                  alt={symbol.symbol_name}
-                                  className="w-12 h-12 object-contain"
-                                />
-                                <span className="absolute top-0 right-0 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full border border-white shadow mt-1 mr-1">
-                                  Lv. {symbol.symbol_level}
-                                </span>
-                              </div>
-                              <div className="text-sm font-semibold text-gray-800 text-center">
-                                {symbol.symbol_name}
-                              </div>
-                              {/* Tooltip */}
-                              <div className="absolute z-20 left-1/2 -translate-x-1/2 bottom-full mb-2 w-56 bg-black text-white text-xs rounded-lg px-4 py-3 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity shadow-lg whitespace-normal">
-                                <div className="font-bold text-base mb-1">
-                                  {symbol.symbol_name}
-                                </div>
-                                <div className="mb-1 flex items-center gap-2">
+                          {arcane.map((symbol: any, idx: number) => {
+                            const symbolKey = `arcane-${symbol.symbol_name}-${idx}`;
+                            return (
+                              <div
+                                key={symbol.symbol_name + idx}
+                                className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleTooltipToggle(symbolKey);
+                                }}
+                                onTouchStart={(e) => {
+                                  e.stopPropagation();
+                                  handleTooltipToggle(symbolKey);
+                                }}
+                              >
+                                {/* Icon + Level badge (top right) */}
+                                <div className="relative mb-2 flex items-center justify-center w-full">
                                   <img
                                     src={symbol.symbol_icon}
-                                    alt="icon"
-                                    className="w-6 h-6 inline-block"
+                                    alt={symbol.symbol_name}
+                                    className="w-12 h-12 object-contain"
                                   />
-                                  <span>
-                                    Level:{" "}
-                                    <span className="font-semibold text-yellow-300">
-                                      {symbol.symbol_level}
-                                    </span>
+                                  <span className="absolute top-0 right-0 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full border border-white shadow mt-1 mr-1">
+                                    Lv. {symbol.symbol_level}
                                   </span>
                                 </div>
-                                {/* Show only non-zero STR/DEX/INT/LUK/HP */}
-                                {[
-                                  {
-                                    label: "STR",
-                                    value: symbol.symbol_str,
-                                  },
-                                  {
-                                    label: "DEX",
-                                    value: symbol.symbol_dex,
-                                  },
-                                  {
-                                    label: "INT",
-                                    value: symbol.symbol_int,
-                                  },
-                                  {
-                                    label: "LUK",
-                                    value: symbol.symbol_luk,
-                                  },
-                                  {
-                                    label: "HP",
-                                    value: symbol.symbol_hp,
-                                  },
-                                ].map((stat) =>
-                                  stat.value !== undefined &&
-                                  stat.value !== null &&
-                                  stat.value !== "0" &&
-                                  stat.value !== 0 ? (
-                                    <div key={stat.label}>
-                                      <span className="text-green-200">
-                                        {stat.label}: +{stat.value}
+                                <div className="text-sm font-semibold text-gray-800 text-center hidden md:block">
+                                  {symbol.symbol_name}
+                                </div>
+                                {/* Tooltip */}
+                                <div
+                                  className={`absolute z-20 left-1/2 -translate-x-1/2 bottom-full mb-2 w-56 bg-black text-white text-xs rounded-lg px-4 py-3 transition-opacity shadow-lg whitespace-normal pointer-events-none ${
+                                    activeTooltip === symbolKey
+                                      ? "opacity-100"
+                                      : "opacity-0 group-hover:opacity-100"
+                                  }`}
+                                >
+                                  <div className="font-bold text-base mb-1">
+                                    {symbol.symbol_name}
+                                  </div>
+                                  <div className="mb-1 flex items-center gap-2">
+                                    <img
+                                      src={symbol.symbol_icon}
+                                      alt="icon"
+                                      className="w-6 h-6 inline-block"
+                                    />
+                                    <span>
+                                      Level:{" "}
+                                      <span className="font-semibold text-yellow-300">
+                                        {symbol.symbol_level}
                                       </span>
-                                    </div>
-                                  ) : null
-                                )}
+                                    </span>
+                                  </div>
+                                  {/* Show only non-zero STR/DEX/INT/LUK/HP */}
+                                  {[
+                                    {
+                                      label: "STR",
+                                      value: symbol.symbol_str,
+                                    },
+                                    {
+                                      label: "DEX",
+                                      value: symbol.symbol_dex,
+                                    },
+                                    {
+                                      label: "INT",
+                                      value: symbol.symbol_int,
+                                    },
+                                    {
+                                      label: "LUK",
+                                      value: symbol.symbol_luk,
+                                    },
+                                    {
+                                      label: "HP",
+                                      value: symbol.symbol_hp,
+                                    },
+                                  ].map((stat) =>
+                                    stat.value !== undefined &&
+                                    stat.value !== null &&
+                                    stat.value !== "0" &&
+                                    stat.value !== 0 ? (
+                                      <div key={stat.label}>
+                                        <span className="text-green-200">
+                                          {stat.label}: +{stat.value}
+                                        </span>
+                                      </div>
+                                    ) : null
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -133,80 +161,97 @@ export function SymbolsTab({
                           className="grid grid-cols-3 gap-3 justify-center mx-auto"
                           style={{ maxWidth: "480px" }}
                         >
-                          {authentic.map((symbol: any, idx: number) => (
-                            <div
-                              key={symbol.symbol_name + idx}
-                              className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer"
-                            >
-                              {/* Icon + Level badge (top right) */}
-                              <div className="relative mb-2 flex items-center justify-center w-full">
-                                <img
-                                  src={symbol.symbol_icon}
-                                  alt={symbol.symbol_name}
-                                  className="w-12 h-12 object-contain"
-                                />
-                                <span className="absolute top-0 right-0 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full border border-white shadow mt-1 mr-1">
-                                  Lv. {symbol.symbol_level}
-                                </span>
-                              </div>
-                              <div className="text-sm font-semibold text-gray-800 text-center">
-                                {symbol.symbol_name}
-                              </div>
-                              {/* Tooltip */}
-                              <div className="absolute z-20 left-1/2 -translate-x-1/2 bottom-full mb-2 w-56 bg-black text-white text-xs rounded-lg px-4 py-3 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity shadow-lg whitespace-normal">
-                                <div className="font-bold text-base mb-1">
-                                  {symbol.symbol_name}
-                                </div>
-                                <div className="mb-1 flex items-center gap-2">
+                          {authentic.map((symbol: any, idx: number) => {
+                            const symbolKey = `authentic-${symbol.symbol_name}-${idx}`;
+                            return (
+                              <div
+                                key={symbol.symbol_name + idx}
+                                className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleTooltipToggle(symbolKey);
+                                }}
+                                onTouchStart={(e) => {
+                                  e.stopPropagation();
+                                  handleTooltipToggle(symbolKey);
+                                }}
+                              >
+                                {/* Icon + Level badge (top right) */}
+                                <div className="relative mb-2 flex items-center justify-center w-full">
                                   <img
                                     src={symbol.symbol_icon}
-                                    alt="icon"
-                                    className="w-6 h-6 inline-block"
+                                    alt={symbol.symbol_name}
+                                    className="w-12 h-12 object-contain"
                                   />
-                                  <span>
-                                    Level:{" "}
-                                    <span className="font-semibold text-yellow-300">
-                                      {symbol.symbol_level}
-                                    </span>
+                                  <span className="absolute top-0 right-0 bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full border border-white shadow mt-1 mr-1">
+                                    Lv. {symbol.symbol_level}
                                   </span>
                                 </div>
-                                {/* Show only non-zero STR/DEX/INT/LUK/HP */}
-                                {[
-                                  {
-                                    label: "STR",
-                                    value: symbol.symbol_str,
-                                  },
-                                  {
-                                    label: "DEX",
-                                    value: symbol.symbol_dex,
-                                  },
-                                  {
-                                    label: "INT",
-                                    value: symbol.symbol_int,
-                                  },
-                                  {
-                                    label: "LUK",
-                                    value: symbol.symbol_luk,
-                                  },
-                                  {
-                                    label: "HP",
-                                    value: symbol.symbol_hp,
-                                  },
-                                ].map((stat) =>
-                                  stat.value !== undefined &&
-                                  stat.value !== null &&
-                                  stat.value !== "0" &&
-                                  stat.value !== 0 ? (
-                                    <div key={stat.label}>
-                                      <span className="text-green-200">
-                                        {stat.label}: +{stat.value}
+                                <div className="text-sm font-semibold text-gray-800 text-center hidden md:block">
+                                  {symbol.symbol_name}
+                                </div>
+                                {/* Tooltip */}
+                                <div
+                                  className={`absolute z-20 left-1/2 -translate-x-1/2 bottom-full mb-2 w-56 bg-black text-white text-xs rounded-lg px-4 py-3 transition-opacity shadow-lg whitespace-normal pointer-events-none ${
+                                    activeTooltip === symbolKey
+                                      ? "opacity-100"
+                                      : "opacity-0 group-hover:opacity-100"
+                                  }`}
+                                >
+                                  <div className="font-bold text-base mb-1">
+                                    {symbol.symbol_name}
+                                  </div>
+                                  <div className="mb-1 flex items-center gap-2">
+                                    <img
+                                      src={symbol.symbol_icon}
+                                      alt="icon"
+                                      className="w-6 h-6 inline-block"
+                                    />
+                                    <span>
+                                      Level:{" "}
+                                      <span className="font-semibold text-yellow-300">
+                                        {symbol.symbol_level}
                                       </span>
-                                    </div>
-                                  ) : null
-                                )}
+                                    </span>
+                                  </div>
+                                  {/* Show only non-zero STR/DEX/INT/LUK/HP */}
+                                  {[
+                                    {
+                                      label: "STR",
+                                      value: symbol.symbol_str,
+                                    },
+                                    {
+                                      label: "DEX",
+                                      value: symbol.symbol_dex,
+                                    },
+                                    {
+                                      label: "INT",
+                                      value: symbol.symbol_int,
+                                    },
+                                    {
+                                      label: "LUK",
+                                      value: symbol.symbol_luk,
+                                    },
+                                    {
+                                      label: "HP",
+                                      value: symbol.symbol_hp,
+                                    },
+                                  ].map((stat) =>
+                                    stat.value !== undefined &&
+                                    stat.value !== null &&
+                                    stat.value !== "0" &&
+                                    stat.value !== 0 ? (
+                                      <div key={stat.label}>
+                                        <span className="text-green-200">
+                                          {stat.label}: +{stat.value}
+                                        </span>
+                                      </div>
+                                    ) : null
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}

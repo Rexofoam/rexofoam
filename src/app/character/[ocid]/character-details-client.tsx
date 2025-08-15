@@ -266,12 +266,19 @@ export function CharacterDetailsClient({
 
   // Navigate to guild details page
   const guildLink = () => {
-    if(characterData?.oguild_id && characterData?.basic?.character_guild_name) {
+    if (
+      characterData?.oguild_id &&
+      characterData?.basic?.character_guild_name
+    ) {
       const url = `/guild/${characterData?.oguild_id}?name=${characterData?.basic?.character_guild_name}&world=${characterData?.basic?.world_name}`;
-      return <a href={url} className="text-blue-500">{characterData?.basic?.character_guild_name}</a>
+      return (
+        <a href={url} className="text-blue-500">
+          {characterData?.basic?.character_guild_name}
+        </a>
+      );
     }
-  }
-  
+  };
+
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       {/* Video Background */}
@@ -316,7 +323,7 @@ export function CharacterDetailsClient({
                       {characterData.basic.world_name} World
                       {characterData.basic.character_guild_name && (
                         <>
-                          {' • '}
+                          {" • "}
                           {guildLink()}
                         </>
                       )}
@@ -544,8 +551,8 @@ export function CharacterDetailsClient({
                   {characterData.stat && (
                     <div className="mb-6">
                       <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-xl p-6 shadow-lg">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                          <div className="flex items-center space-x-4 mb-4 md:mb-0">
                             <div className="bg-white/20 rounded-full p-3">
                               <svg
                                 className="w-8 h-8 text-white"
@@ -565,14 +572,14 @@ export function CharacterDetailsClient({
                               <h2 className="text-2xl font-bold text-white mb-1">
                                 Combat Power
                               </h2>
-                              <p className="text-blue-100">
+                              <p className="text-blue-100 hidden md:block">
                                 Combat power is calculated through main stats
                                 and support stats, ATT/MATT, damage, boss
                                 damage, final damage, and critical damage.
                               </p>
                             </div>
                           </div>
-                          <div className="text-right">
+                          <div className="text-center md:text-right">
                             <div className="text-4xl font-black text-white mb-1">
                               {(() => {
                                 const combatPowerValue =
@@ -685,7 +692,9 @@ export function CharacterDetailsClient({
                       <div>
                         <p>
                           <strong>Guild:</strong>{" "}
-                          {characterData.basic?.character_guild_name ? guildLink() : "None"}
+                          {characterData.basic?.character_guild_name
+                            ? guildLink()
+                            : "None"}
                         </p>
                         <p>
                           <strong>Gender:</strong>{" "}

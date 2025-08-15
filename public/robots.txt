@@ -1,0 +1,20 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Block crawling of API routes
+Disallow: /api/
+
+# Block crawling of admin or private routes (if any)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Crawl delay (optional - adjust based on server capacity)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://www.mapleseatracker.com/sitemap.xml
+
+# Additional sitemaps (if you have them)
+# Sitemap: https://www.mapleseatracker.com/sitemap-characters.xml
+# Sitemap: https://www.mapleseatracker.com/sitemap-guilds.xml

@@ -14,17 +14,17 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
   return (
     <div onClick={() => setActiveTooltip(null)}>
       <h2 className="text-xl font-semibold mb-2">Equipment</h2>
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <p className="mb-2 text-sm text-blue-600 md:hidden">
+      <div className="bg-gray-50 py-4 px-0 md:p-4 rounded-lg">
+        <p className="mb-2 text-sm text-blue-600 md:hidden px-4 md:px-0">
           💡 Tap on equipment items to view details
         </p>
-        <p className="mb-4">
+        <p className="mb-4 px-4 md:px-0">
           <strong>Equipment Count:</strong>{" "}
           {characterData.itemEquipment?.item_equipment?.length || 0}
         </p>
 
         {/* Equipment Table - 5 columns x 6 rows */}
-        <div className="grid grid-cols-5 gap-2 max-w-md mx-auto">
+        <div className="grid grid-cols-5 gap-2 max-w-md mx-auto px-4 md:px-0">
           {Array.from({ length: 30 }, (_, index) => {
             let item = null;
 
