@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface LinkSkillsTabProps {
   linkSkillsData: any;
   linkSkillsLoading: boolean;
@@ -9,9 +11,17 @@ export function LinkSkillsTab({
   linkSkillsLoading,
   linkSkillsError,
 }: LinkSkillsTabProps) {
+  const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
+
+  const handleTooltipToggle = (index: number) => {
+    setActiveTooltip(activeTooltip === index ? null : index);
+  };
   return (
-    <div>
+    <div onClick={() => setActiveTooltip(null)}>
       <h2 className="text-xl font-semibold mb-4">Link Skills</h2>
+      <p className="mb-2 text-sm text-blue-600 md:hidden px-4 md:px-0">
+        💡 Tap on link skill icons to view details
+      </p>
 
       {linkSkillsLoading && (
         <div className="flex flex-col items-center justify-center py-8">
@@ -35,32 +45,46 @@ export function LinkSkillsTab({
         linkSkillsData?.character_link_skill && (
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex justify-center">
-              <div className="grid grid-cols-5 gap-3 justify-items-center">
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-3 justify-items-center">
                 {linkSkillsData.character_link_skill.map(
                   (skill: any, index: number) => (
                     <div
                       key={index}
-                      className="group relative bg-white border border-gray-200 rounded-lg p-2 hover:bg-gray-100 transition-colors w-20 h-20 shadow-sm hover:shadow-md"
+                      className="group relative bg-white border border-gray-200 rounded-lg p-1 md:p-2 hover:bg-gray-100 transition-colors w-16 md:w-20 h-16 md:h-20 shadow-sm hover:shadow-md cursor-pointer"
                       title={skill.skill_name}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTooltipToggle(index);
+                      }}
+                      onTouchStart={(e) => {
+                        e.stopPropagation();
+                        handleTooltipToggle(index);
+                      }}
                     >
                       <div className="w-full h-full flex items-center justify-center">
                         {skill.skill_icon ? (
                           <img
                             src={skill.skill_icon}
                             alt={skill.skill_name}
-                            className="w-16 h-16 object-contain"
+                            className="w-10 md:w-16 h-10 md:h-16 object-contain"
                           />
                         ) : (
-                          <div className="w-16 h-16 bg-blue-200 rounded flex items-center justify-center">
-                            <span className="text-blue-600 text-sm font-bold">
+                          <div className="w-10 md:w-16 h-10 md:h-16 bg-blue-200 rounded flex items-center justify-center">
+                            <span className="text-blue-600 text-xs md:text-sm font-bold">
                               {skill.skill_name?.[0] || "?"}
                             </span>
                           </div>
                         )}
                       </div>
 
-                      {/* Tooltip on hover */}
-                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-4 py-3 bg-black text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[9999] max-w-sm w-64">
+                      {/* Tooltip on hover for desktop, on click for mobile */}
+                      <div
+                        className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-4 py-3 bg-black text-white text-sm rounded-lg transition-opacity pointer-events-none z-[9999] max-w-sm w-64 ${
+                          activeTooltip === index
+                            ? "opacity-100"
+                            : "opacity-0 group-hover:opacity-100"
+                        }`}
+                      >
                         <div className="font-semibold mb-1">
                           {skill.skill_name}
                         </div>
