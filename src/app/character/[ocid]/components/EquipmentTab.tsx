@@ -63,21 +63,21 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Hat slot: 2
               const hats =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "HAT"
+                  (item: any) => item.item_equipment_part === "Hat"
                 ) || [];
               item = hats[0] || null;
             } else if (index === 4) {
               // Emblem slot: 4
               const emblems =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "EMBLEM"
+                  (item: any) => item.item_equipment_part === "Emblem"
                 ) || [];
               item = emblems[0] || null;
             } else if (index === 7) {
               // Face Accessory slot: 7
               const faceAccessories =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "FACE ACCESSORY"
+                  (item: any) => item.item_equipment_part === "Face Acc."
                 ) || [];
               item = faceAccessories[0] || null;
             } else if (index === 9) {
@@ -91,36 +91,35 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Eye Accessory slot: 12
               const eyeAccessories =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "EYE ACCESSORY"
+                  (item: any) => item.item_equipment_part === "Eye Acc."
                 ) || [];
               item = eyeAccessories[0] || null;
             } else if (index === 13) {
               // Earring slot: 13
               const earrings =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "EARRING"
+                  (item: any) => item.item_equipment_part === "Earring"
                 ) || [];
               item = earrings[0] || null;
             } else if (index === 14) {
               // Medal slot: 14
               const medals =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "MEDAL"
+                  (item: any) => item.item_equipment_part === "Medal"
                 ) || [];
               item = medals[0] || null;
             } else if (index === 17) {
               // Top slot: 17
               const tops =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "TOP"
+                  (item: any) => item.item_equipment_part === "Top"
                 ) || [];
               item = tops[0] || null;
             } else if (index === 18) {
               // Shoulder Decoration slot: 18
               const shoulderDecorations =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) =>
-                    item.item_equipment_part === "SHOULDER DECORATION"
+                  (item: any) => item.item_equipment_part === "Shoulder"
                 ) || [];
               item = shoulderDecorations[0] || null;
             } else if (index === 19) {
@@ -140,7 +139,7 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Ring slots: 0, 5, 10, 15
               const rings =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "RING"
+                  (item: any) => item.item_equipment_part === "Ring"
                 ) || [];
 
               // Map index to ring position
@@ -155,7 +154,7 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Pendant slots: 6, 11
               const pendants =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "PENDANT"
+                  (item: any) => item.item_equipment_part === "Pendant"
                 ) || [];
 
               // Map index to pendant position
@@ -168,7 +167,7 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Weapon slot: 16
               const weapons =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_slot === "WEAPON"
+                  (item: any) => item.item_equipment_slot === "Weapon"
                 ) || [];
               item = weapons[0] || null;
             } else if (index === 20) {
@@ -182,35 +181,35 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Belt slot: 21
               const belts =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "BELT"
+                  (item: any) => item.item_equipment_part === "Belt"
                 ) || [];
               item = belts[0] || null;
             } else if (index === 22) {
               // Bottom slot: 22
               const bottoms =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "BOTTOM"
+                  (item: any) => item.item_equipment_part === "Bottom"
                 ) || [];
               item = bottoms[0] || null;
             } else if (index === 23) {
               // Glove slot: 23
               const gloves =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "GLOVE"
+                  (item: any) => item.item_equipment_part === "Glove"
                 ) || [];
               item = gloves[0] || null;
             } else if (index === 24) {
               // Cape slot: 24
               const capes =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "CAPE"
+                  (item: any) => item.item_equipment_part === "Cape"
                 ) || [];
               item = capes[0] || null;
             } else if (index === 27) {
               // Shoes slot: 27
               const shoes =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "SHOES"
+                  (item: any) => item.item_equipment_part === "Shoes"
                 ) || [];
               item = shoes[0] || null;
             } else if (index === 29) {
@@ -225,25 +224,25 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               const nonSpecialItems =
                 characterData.itemEquipment?.item_equipment?.filter(
                   (item: any) =>
-                    item.item_equipment_part !== "RING" &&
+                    item.item_equipment_part !== "Ring" &&
                     item.item_equipment_part !== "Pocket Item" &&
-                    item.item_equipment_part !== "PENDANT" &&
-                    item.item_equipment_slot !== "WEAPON" &&
+                    item.item_equipment_part !== "Pendant" &&
+                    item.item_equipment_slot !== "Weapon" &&
                     item.item_equipment_slot !== "Secondary Weapons" &&
-                    item.item_equipment_part !== "BELT" &&
-                    item.item_equipment_part !== "HAT" &&
-                    item.item_equipment_part !== "EMBLEM" &&
-                    item.item_equipment_part !== "FACE ACCESSORY" &&
+                    item.item_equipment_part !== "Belt" &&
+                    item.item_equipment_part !== "Hat" &&
+                    item.item_equipment_part !== "Emblem" &&
+                    item.item_equipment_part !== "Face Acc." &&
                     item.item_equipment_part !== "Badge" &&
-                    item.item_equipment_part !== "EYE ACCESSORY" &&
-                    item.item_equipment_part !== "EARRING" &&
-                    item.item_equipment_part !== "MEDAL" &&
-                    item.item_equipment_part !== "TOP" &&
-                    item.item_equipment_part !== "SHOULDER DECORATION" &&
-                    item.item_equipment_part !== "BOTTOM" &&
-                    item.item_equipment_part !== "GLOVE" &&
-                    item.item_equipment_part !== "CAPE" &&
-                    item.item_equipment_part !== "SHOES" &&
+                    item.item_equipment_part !== "Eye Acc." &&
+                    item.item_equipment_part !== "Earring" &&
+                    item.item_equipment_part !== "Medal" &&
+                    item.item_equipment_part !== "Top" &&
+                    item.item_equipment_part !== "Shoulder Decoration" &&
+                    item.item_equipment_part !== "Bottom" &&
+                    item.item_equipment_part !== "Glove" &&
+                    item.item_equipment_part !== "Cape" &&
+                    item.item_equipment_part !== "Shoes" &&
                     item.item_equipment_part !== "Mechanical Heart"
                 ) || [];
 
