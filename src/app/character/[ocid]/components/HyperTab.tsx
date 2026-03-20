@@ -4,6 +4,7 @@ interface HyperTabProps {
   hyperStatData: any;
   hyperSkillsLoading: boolean;
   hyperSkillsError: string;
+  isDark?: boolean;
 }
 
 export function HyperTab({
@@ -12,6 +13,7 @@ export function HyperTab({
   hyperStatData,
   hyperSkillsLoading,
   hyperSkillsError,
+  isDark = false,
 }: HyperTabProps) {
   return (
     <div>
@@ -24,13 +26,21 @@ export function HyperTab({
             alt="Loading..."
             className="w-16 h-16 mb-4"
           />
-          <p className="text-gray-600">Loading hyper skills...</p>
+          <p className={isDark ? "text-gray-300" : "text-gray-600"}>
+            Loading hyper skills...
+          </p>
         </div>
       )}
 
       {hyperSkillsError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-          <p className="text-red-800">Error: {hyperSkillsError}</p>
+        <div
+          className={`border rounded-lg p-4 mb-4 ${
+            isDark ? "bg-red-950/40 border-red-700" : "bg-red-50 border-red-200"
+          }`}
+        >
+          <p className={isDark ? "text-red-300" : "text-red-800"}>
+            Error: {hyperSkillsError}
+          </p>
         </div>
       )}
 
@@ -51,7 +61,11 @@ export function HyperTab({
                         (skill: any, index: number) => (
                           <div
                             key={index}
-                            className="group relative bg-gray-50 border border-gray-200 rounded-md p-2 hover:bg-gray-100 transition-colors w-20 h-20"
+                            className={`group relative border rounded-md p-2 transition-colors w-20 h-20 ${
+                              isDark
+                                ? "bg-gray-700 border-gray-600 hover:bg-gray-600"
+                                : "bg-gray-50 border-gray-200 hover:bg-gray-100"
+                            }`}
                             title={skill.skill_name}
                           >
                             <div className="w-full h-full flex items-center justify-center">
@@ -88,7 +102,7 @@ export function HyperTab({
                               <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-black"></div>
                             </div>
                           </div>
-                        )
+                        ),
                       )}
                     </div>
                   </div>
@@ -108,7 +122,11 @@ export function HyperTab({
                         (skill: any, index: number) => (
                           <div
                             key={index}
-                            className="group relative bg-gray-50 border border-gray-200 rounded-md p-2 hover:bg-gray-100 transition-colors w-20 h-20"
+                            className={`group relative border rounded-md p-2 transition-colors w-20 h-20 ${
+                              isDark
+                                ? "bg-gray-700 border-gray-600 hover:bg-gray-600"
+                                : "bg-gray-50 border-gray-200 hover:bg-gray-100"
+                            }`}
                             title={skill.skill_name}
                           >
                             <div className="w-full h-full flex items-center justify-center">
@@ -145,7 +163,7 @@ export function HyperTab({
                               <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-black"></div>
                             </div>
                           </div>
-                        )
+                        ),
                       )}
                     </div>
                   </div>
@@ -159,20 +177,36 @@ export function HyperTab({
                   <h3 className="text-lg font-semibold mb-3 text-green-700">
                     Hyper Stats
                   </h3>
-                  <div className="bg-gray-50 rounded-lg p-4">
+                  <div
+                    className={`rounded-lg p-4 ${
+                      isDark ? "bg-gray-800" : "bg-gray-50"
+                    }`}
+                  >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {hyperStatData.hyper_stat_preset_1.map(
                         (stat: any, index: number) => (
                           <div
                             key={index}
-                            className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow"
+                            className={`border rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow ${
+                              isDark
+                                ? "bg-gray-700 border-gray-600"
+                                : "bg-white border-gray-200"
+                            }`}
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex-1">
-                                <div className="font-semibold text-gray-800">
+                                <div
+                                  className={`font-semibold ${
+                                    isDark ? "text-gray-100" : "text-gray-800"
+                                  }`}
+                                >
                                   {stat.stat_type}
                                 </div>
-                                <div className="text-sm text-gray-600">
+                                <div
+                                  className={`text-sm ${
+                                    isDark ? "text-gray-300" : "text-gray-600"
+                                  }`}
+                                >
                                   Level {stat.stat_level}
                                 </div>
                               </div>
@@ -183,7 +217,7 @@ export function HyperTab({
                               </div>
                             </div>
                           </div>
-                        )
+                        ),
                       )}
                     </div>
                   </div>
@@ -198,9 +232,15 @@ export function HyperTab({
               (!hyperStatData?.hyper_stat_preset_1 ||
                 hyperStatData.hyper_stat_preset_1.length === 0) && (
                 <div className="text-center py-8">
-                  <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <div
+                    className={`rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 ${
+                      isDark ? "bg-gray-700" : "bg-gray-100"
+                    }`}
+                  >
                     <svg
-                      className="w-8 h-8 text-gray-500"
+                      className={`w-8 h-8 ${
+                        isDark ? "text-gray-300" : "text-gray-500"
+                      }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -213,10 +253,14 @@ export function HyperTab({
                       />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  <h3
+                    className={`text-lg font-semibold mb-2 ${
+                      isDark ? "text-gray-100" : "text-gray-800"
+                    }`}
+                  >
                     No Hyper Data Found
                   </h3>
-                  <p className="text-gray-600">
+                  <p className={isDark ? "text-gray-300" : "text-gray-600"}>
                     This character doesn't have any hyper skills or hyper stats
                     configured yet.
                   </p>

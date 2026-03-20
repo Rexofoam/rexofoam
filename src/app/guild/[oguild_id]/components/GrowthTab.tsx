@@ -22,6 +22,7 @@ interface GrowthData {
 
 interface GrowthTabProps {
   oguild_id: string;
+  isDark?: boolean;
   currentData: {
     guild_member_count: number;
     guild_level: number;
@@ -30,7 +31,11 @@ interface GrowthTabProps {
   };
 }
 
-export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
+export function GrowthTab({
+  oguild_id,
+  currentData,
+  isDark = false,
+}: GrowthTabProps) {
   const [growthData, setGrowthData] = useState<GrowthData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -57,10 +62,10 @@ export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
           index === 0
             ? "Today"
             : index === 1
-            ? "1 Month Ago"
-            : index === 2
-            ? "2 Months Ago"
-            : "3 Months Ago";
+              ? "1 Month Ago"
+              : index === 2
+                ? "2 Months Ago"
+                : "3 Months Ago";
         try {
           const dateParam = date
             ? `&date=${date.toISOString().split("T")[0]}`
@@ -72,7 +77,7 @@ export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
                 "x-nxopen-api-key":
                   "live_ea78af0bb88d495a94b6f66066c720e33d4e8a3ef9dad5783bd0c610437d34f2efe8d04e6d233bd35cf2fabdeb93fb0d",
               },
-            }
+            },
           );
 
           if (response.ok) {
@@ -100,12 +105,12 @@ export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
 
       const results = await Promise.all(promises);
       const validResults = results.filter(
-        (result) => result !== null
+        (result) => result !== null,
       ) as GrowthData[];
 
       // Sort by actual date (oldest first for better chart display)
       validResults.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
       );
 
       setGrowthData(validResults);
@@ -125,15 +130,23 @@ export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
           alt="Loading..."
           className="w-16 h-16 mb-4"
         />
-        <p className="text-gray-600">Loading guild growth data...</p>
+        <p className={isDark ? "text-gray-300" : "text-gray-600"}>
+          Loading guild growth data...
+        </p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p className="text-red-800">Error: {error}</p>
+      <div
+        className={`border rounded-lg p-4 ${
+          isDark ? "bg-red-950/40 border-red-700" : "bg-red-50 border-red-200"
+        }`}
+      >
+        <p className={isDark ? "text-red-300" : "text-red-800"}>
+          Error: {error}
+        </p>
         <button
           onClick={fetchGrowthData}
           className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
@@ -170,7 +183,11 @@ export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
 
       {/* Growth Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center">
+        <div
+          className={`p-4 rounded-xl shadow-md border text-center ${
+            isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"
+          }`}
+        >
           <div className="text-2xl mb-1">👥</div>
           <div
             className={`text-2xl font-bold ${
@@ -180,9 +197,17 @@ export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
             {memberGrowth >= 0 ? "+" : ""}
             {memberGrowth}
           </div>
-          <div className="text-xs text-gray-500">Member Growth</div>
+          <div
+            className={`text-xs ${isDark ? "text-gray-300" : "text-gray-500"}`}
+          >
+            Member Growth
+          </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center">
+        <div
+          className={`p-4 rounded-xl shadow-md border text-center ${
+            isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"
+          }`}
+        >
           <div className="text-2xl mb-1">⭐</div>
           <div
             className={`text-2xl font-bold ${
@@ -192,45 +217,81 @@ export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
             {levelGrowth >= 0 ? "+" : ""}
             {levelGrowth}
           </div>
-          <div className="text-xs text-gray-500">Level Growth</div>
+          <div
+            className={`text-xs ${isDark ? "text-gray-300" : "text-gray-500"}`}
+          >
+            Level Growth
+          </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center">
+        <div
+          className={`p-4 rounded-xl shadow-md border text-center ${
+            isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"
+          }`}
+        >
           <div className="text-2xl mb-1">📊</div>
           <div className="text-2xl font-bold text-purple-600">
             {currentData.guild_member_count}
           </div>
-          <div className="text-xs text-gray-500">Current Members</div>
+          <div
+            className={`text-xs ${isDark ? "text-gray-300" : "text-gray-500"}`}
+          >
+            Current Members
+          </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow-md border border-gray-100 text-center">
+        <div
+          className={`p-4 rounded-xl shadow-md border text-center ${
+            isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"
+          }`}
+        >
           <div className="text-2xl mb-1">🏆</div>
           <div className="text-2xl font-bold text-indigo-600">
             {currentData.guild_level}
           </div>
-          <div className="text-xs text-gray-500">Current Level</div>
+          <div
+            className={`text-xs ${isDark ? "text-gray-300" : "text-gray-500"}`}
+          >
+            Current Level
+          </div>
         </div>
       </div>
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Member Count Chart */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-          <h3 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+        <div
+          className={`p-6 rounded-2xl shadow-lg border ${
+            isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"
+          }`}
+        >
+          <h3
+            className={`text-xl font-bold mb-4 flex items-center gap-2 ${isDark ? "text-gray-100" : "text-gray-900"}`}
+          >
             <span>👥</span>
             Member Count Over Time
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={growthData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke={isDark ? "#374151" : "#e5e7eb"}
+                />
                 <XAxis
                   dataKey="displayDate"
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 12, fill: isDark ? "#d1d5db" : "#111827" }}
                   angle={-45}
                   textAnchor="end"
                   height={60}
                 />
-                <YAxis />
-                <Tooltip />
+                <YAxis tick={{ fill: isDark ? "#d1d5db" : "#111827" }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: isDark ? "#111827" : "#ffffff",
+                    border: isDark ? "1px solid #4b5563" : "1px solid #e5e7eb",
+                    borderRadius: "8px",
+                    color: isDark ? "#f3f4f6" : "#111827",
+                  }}
+                />
                 <Line
                   type="monotone"
                   dataKey="memberCount"
@@ -244,24 +305,40 @@ export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
         </div>
 
         {/* Guild Level Chart */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-          <h3 className="text-xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+        <div
+          className={`p-6 rounded-2xl shadow-lg border ${
+            isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"
+          }`}
+        >
+          <h3
+            className={`text-xl font-bold mb-4 flex items-center gap-2 ${isDark ? "text-gray-100" : "text-gray-900"}`}
+          >
             <span>⭐</span>
             Guild Level Over Time
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={growthData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke={isDark ? "#374151" : "#e5e7eb"}
+                />
                 <XAxis
                   dataKey="displayDate"
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 12, fill: isDark ? "#d1d5db" : "#111827" }}
                   angle={-45}
                   textAnchor="end"
                   height={60}
                 />
-                <YAxis />
-                <Tooltip />
+                <YAxis tick={{ fill: isDark ? "#d1d5db" : "#111827" }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: isDark ? "#111827" : "#ffffff",
+                    border: isDark ? "1px solid #4b5563" : "1px solid #e5e7eb",
+                    borderRadius: "8px",
+                    color: isDark ? "#f3f4f6" : "#111827",
+                  }}
+                />
                 <Line
                   type="monotone"
                   dataKey="guildLevel"
@@ -276,54 +353,101 @@ export function GrowthTab({ oguild_id, currentData }: GrowthTabProps) {
       </div>
 
       {/* Data Table */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 p-6">
-          <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
+      <div
+        className={`rounded-2xl shadow-lg border overflow-hidden ${
+          isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"
+        }`}
+      >
+        <div
+          className={`border-b p-6 ${
+            isDark
+              ? "bg-gradient-to-r from-gray-800 to-gray-700 border-gray-700"
+              : "bg-gradient-to-r from-gray-50 to-white border-gray-100"
+          }`}
+        >
+          <h3
+            className={`text-xl font-bold flex items-center gap-3 ${isDark ? "text-gray-100" : "text-gray-900"}`}
+          >
             <span className="text-2xl">📋</span>
             Historical Data
           </h3>
-          <p className="text-gray-600 mt-1">
+          <p className={`mt-1 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
             Detailed guild statistics over time
           </p>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className={isDark ? "bg-gray-700" : "bg-gray-50"}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? "text-gray-300" : "text-gray-500"}`}
+                >
                   Period
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? "text-gray-300" : "text-gray-500"}`}
+                >
                   Members
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? "text-gray-300" : "text-gray-500"}`}
+                >
                   Level
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? "text-gray-300" : "text-gray-500"}`}
+                >
                   Points
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${isDark ? "text-gray-300" : "text-gray-500"}`}
+                >
                   Fame
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody
+              className={
+                isDark
+                  ? "bg-gray-800 divide-y divide-gray-700"
+                  : "bg-white divide-y divide-gray-200"
+              }
+            >
               {growthData.map((data, index) => (
-                <tr key={index} className={index === 0 ? "bg-blue-50" : ""}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <tr
+                  key={index}
+                  className={
+                    index === 0
+                      ? isDark
+                        ? "bg-blue-900/30"
+                        : "bg-blue-50"
+                      : ""
+                  }
+                >
+                  <td
+                    className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${isDark ? "text-gray-100" : "text-gray-900"}`}
+                  >
                     {data.displayDate}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td
+                    className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? "text-gray-100" : "text-gray-900"}`}
+                  >
                     {data.memberCount}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td
+                    className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? "text-gray-100" : "text-gray-900"}`}
+                  >
                     {data.guildLevel}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td
+                    className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? "text-gray-100" : "text-gray-900"}`}
+                  >
                     {data.guildPoints.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td
+                    className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? "text-gray-100" : "text-gray-900"}`}
+                  >
                     {data.guildFame.toLocaleString()}
                   </td>
                 </tr>

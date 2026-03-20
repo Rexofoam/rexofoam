@@ -124,6 +124,15 @@ export default function RootLayout({
             }),
           }}
         />
+
+        {/* Google AdSense */}
+        <Script
+          id="adsense-script"
+          strategy="afterInteractive"
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8980624414613307"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
         {/* Google Tag Manager */}
