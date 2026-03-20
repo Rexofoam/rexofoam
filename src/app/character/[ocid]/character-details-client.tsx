@@ -25,7 +25,7 @@ export function CharacterDetailsClient({
 }: CharacterDetailsClientProps) {
   const router = useRouter();
   const [characterData, setCharacterData] = useState<CharacterData | null>(
-    initialData || null
+    initialData || null,
   );
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState("");
@@ -56,12 +56,28 @@ export function CharacterDetailsClient({
   const [linkSkillsData, setLinkSkillsData] = useState<any>(null);
   const [linkSkillsLoading, setLinkSkillsLoading] = useState(false);
   const [linkSkillsError, setLinkSkillsError] = useState<string>("");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  const isDark = theme === "dark";
 
   useEffect(() => {
     if (!initialData && ocid) {
       loadCharacterData();
     }
   }, [ocid, initialData]);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("character-details-theme");
+    if (savedTheme === "light" || savedTheme === "dark") {
+      setTheme(savedTheme);
+      return;
+    }
+
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    setTheme(prefersDark ? "dark" : "light");
+  }, []);
 
   const loadCharacterData = async () => {
     setLoading(true);
@@ -99,6 +115,12 @@ export function CharacterDetailsClient({
     }
   };
 
+  const toggleTheme = () => {
+    const nextTheme = theme === "light" ? "dark" : "light";
+    setTheme(nextTheme);
+    localStorage.setItem("character-details-theme", nextTheme);
+  };
+
   const loadEquipmentData = async () => {
     setEquipmentError("");
     setEquipmentLoading(true);
@@ -125,13 +147,13 @@ export function CharacterDetailsClient({
       const [passiveResponse, activeResponse, hyperStatResponse] =
         await Promise.all([
           fetch(
-            `/api/character/hyper-skills?ocid=${ocid}&character_skill_grade=hyperpassive`
+            `/api/character/hyper-skills?ocid=${ocid}&character_skill_grade=hyperpassive`,
           ),
           fetch(
-            `/api/character/hyper-skills?ocid=${ocid}&character_skill_grade=hyperactive`
+            `/api/character/hyper-skills?ocid=${ocid}&character_skill_grade=hyperactive`,
           ),
           fetch(
-            `/api/character/hyper-skills?ocid=${ocid}&data_type=hyper-stat`
+            `/api/character/hyper-skills?ocid=${ocid}&data_type=hyper-stat`,
           ),
         ]);
 
@@ -203,7 +225,7 @@ export function CharacterDetailsClient({
       | "equipment"
       | "symbols"
       | "linkskills"
-      | "growth"
+      | "growth",
   ) => {
     setActiveTab(tab);
     setMobileMenuOpen(false); // Close mobile menu when tab is selected
@@ -249,14 +271,22 @@ export function CharacterDetailsClient({
 
   if (loading && !characterData) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white bg-opacity-80">
+      <div
+        className={`min-h-screen flex flex-col items-center justify-center ${
+          isDark ? "bg-gray-950/90" : "bg-white bg-opacity-80"
+        }`}
+      >
         <div className="flex flex-col items-center justify-center h-full w-full">
           <img
             src="/images/mushroom-loader.gif"
             alt="Loading..."
             className="w-32 h-32 mb-6"
           />
-          <p className="text-lg font-semibold text-black">
+          <p
+            className={`text-lg font-semibold ${
+              isDark ? "text-gray-100" : "text-black"
+            }`}
+          >
             Loading character data...
           </p>
         </div>
@@ -298,7 +328,13 @@ export function CharacterDetailsClient({
 
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-6xl bg-opacity-90 backdrop-blur-md max-h-[85vh] overflow-y-auto">
+        <div
+          className={`rounded-xl shadow-lg p-8 w-full max-w-6xl backdrop-blur-md max-h-[85vh] overflow-y-auto ${
+            isDark
+              ? "bg-gray-900/90 border border-gray-700"
+              : "bg-white rounded-xl bg-opacity-90"
+          }`}
+        >
           {/* Character Header */}
           {characterData?.basic && (
             <div className="mb-6">
@@ -312,14 +348,26 @@ export function CharacterDetailsClient({
                     />
                   )}
                   <div>
-                    <h1 className="text-3xl font-bold text-black">
+                    <h1
+                      className={`text-3xl font-bold ${
+                        isDark ? "text-gray-100" : "text-black"
+                      }`}
+                    >
                       {characterData.basic.character_name}
                     </h1>
-                    <p className="text-lg text-gray-600">
+                    <p
+                      className={`text-lg ${
+                        isDark ? "text-gray-300" : "text-gray-600"
+                      }`}
+                    >
                       Level {characterData.basic.character_level}{" "}
                       {characterData.basic.character_class}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {characterData.basic.world_name} World
                       {characterData.basic.character_guild_name && (
                         <>
@@ -334,6 +382,17 @@ export function CharacterDetailsClient({
                 {/* Action Buttons */}
                 <div className="flex space-x-2">
                   <button
+                    onClick={toggleTheme}
+                    className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
+                      isDark
+                        ? "bg-yellow-500 hover:bg-yellow-400 text-gray-900"
+                        : "bg-gray-900 hover:bg-black text-white"
+                    }`}
+                    aria-label="Toggle dark and light mode"
+                  >
+                    {isDark ? "Light Mode" : "Dark Mode"}
+                  </button>
+                  <button
                     onClick={handleRefresh}
                     disabled={loading}
                     className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200"
@@ -346,13 +405,21 @@ export function CharacterDetailsClient({
               {/* Navigation Tabs */}
               <div className="relative">
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                <div
+                  className={`hidden md:flex space-x-1 p-1 rounded-lg ${
+                    isDark ? "bg-gray-800" : "bg-gray-100"
+                  }`}
+                >
                   <button
                     onClick={() => handleTabSwitch("overview")}
                     className={`px-4 py-2 rounded-md transition-colors ${
                       activeTab === "overview"
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? isDark
+                          ? "bg-gray-700 text-blue-300 shadow-sm"
+                          : "bg-white text-blue-600 shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
                     }`}
                   >
                     Overview
@@ -361,8 +428,12 @@ export function CharacterDetailsClient({
                     onClick={() => handleTabSwitch("stats")}
                     className={`px-4 py-2 rounded-md transition-colors ${
                       activeTab === "stats"
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? isDark
+                          ? "bg-gray-700 text-blue-300 shadow-sm"
+                          : "bg-white text-blue-600 shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
                     }`}
                   >
                     Stats
@@ -371,8 +442,12 @@ export function CharacterDetailsClient({
                     onClick={() => handleTabSwitch("hypers")}
                     className={`px-4 py-2 rounded-md transition-colors ${
                       activeTab === "hypers"
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? isDark
+                          ? "bg-gray-700 text-blue-300 shadow-sm"
+                          : "bg-white text-blue-600 shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
                     }`}
                   >
                     Hyper(s)
@@ -381,8 +456,12 @@ export function CharacterDetailsClient({
                     onClick={() => handleTabSwitch("equipment")}
                     className={`px-4 py-2 rounded-md transition-colors ${
                       activeTab === "equipment"
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? isDark
+                          ? "bg-gray-700 text-blue-300 shadow-sm"
+                          : "bg-white text-blue-600 shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
                     }`}
                   >
                     Equipment
@@ -391,8 +470,12 @@ export function CharacterDetailsClient({
                     onClick={() => handleTabSwitch("linkskills")}
                     className={`px-4 py-2 rounded-md transition-colors ${
                       activeTab === "linkskills"
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? isDark
+                          ? "bg-gray-700 text-blue-300 shadow-sm"
+                          : "bg-white text-blue-600 shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
                     }`}
                   >
                     Link Skills
@@ -401,8 +484,12 @@ export function CharacterDetailsClient({
                     onClick={() => handleTabSwitch("symbols")}
                     className={`px-4 py-2 rounded-md transition-colors ${
                       activeTab === "symbols"
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? isDark
+                          ? "bg-gray-700 text-blue-300 shadow-sm"
+                          : "bg-white text-blue-600 shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
                     }`}
                   >
                     Symbols
@@ -411,8 +498,12 @@ export function CharacterDetailsClient({
                     onClick={() => handleTabSwitch("growth")}
                     className={`px-4 py-2 rounded-md transition-colors ${
                       activeTab === "growth"
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? isDark
+                          ? "bg-gray-700 text-blue-300 shadow-sm"
+                          : "bg-white text-blue-600 shadow-sm"
+                        : isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
                     }`}
                   >
                     Growth
@@ -422,17 +513,29 @@ export function CharacterDetailsClient({
                 {/* Mobile Navigation */}
                 <div className="md:hidden">
                   {/* Mobile Header with Hamburger */}
-                  <div className="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
-                    <span className="text-lg font-medium text-blue-600 capitalize">
+                  <div
+                    className={`flex items-center justify-between p-3 rounded-lg ${
+                      isDark ? "bg-gray-800" : "bg-gray-100"
+                    }`}
+                  >
+                    <span
+                      className={`text-lg font-medium capitalize ${
+                        isDark ? "text-blue-300" : "text-blue-600"
+                      }`}
+                    >
                       {activeTab === "hypers"
                         ? "Hyper(s)"
                         : activeTab === "linkskills"
-                        ? "Link Skills"
-                        : activeTab}
+                          ? "Link Skills"
+                          : activeTab}
                     </span>
                     <button
                       onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                      className="p-1 text-gray-600 hover:text-gray-800 transition-colors"
+                      className={`p-1 transition-colors ${
+                        isDark
+                          ? "text-gray-300 hover:text-white"
+                          : "text-gray-600 hover:text-gray-800"
+                      }`}
                       aria-label="Toggle navigation menu"
                     >
                       <svg
@@ -455,13 +558,23 @@ export function CharacterDetailsClient({
 
                   {/* Mobile Menu Overlay */}
                   {mobileMenuOpen && (
-                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-50 mt-2">
+                    <div
+                      className={`absolute top-full left-0 right-0 rounded-lg shadow-lg z-50 mt-2 ${
+                        isDark
+                          ? "bg-gray-900 border border-gray-700"
+                          : "bg-white border border-gray-200"
+                      }`}
+                    >
                       <div className="py-2">
                         <button
                           className={`w-full px-4 py-3 text-left font-medium transition-colors ${
                             activeTab === "overview"
-                              ? "bg-blue-50 text-blue-600"
-                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                              ? isDark
+                                ? "bg-blue-900/40 text-blue-200"
+                                : "bg-blue-50 text-blue-600"
+                              : isDark
+                                ? "text-gray-300 hover:text-white hover:bg-gray-800"
+                                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                           }`}
                           onClick={() => handleTabSwitch("overview")}
                         >
@@ -470,8 +583,12 @@ export function CharacterDetailsClient({
                         <button
                           className={`w-full px-4 py-3 text-left font-medium transition-colors ${
                             activeTab === "stats"
-                              ? "bg-blue-50 text-blue-600"
-                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                              ? isDark
+                                ? "bg-blue-900/40 text-blue-200"
+                                : "bg-blue-50 text-blue-600"
+                              : isDark
+                                ? "text-gray-300 hover:text-white hover:bg-gray-800"
+                                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                           }`}
                           onClick={() => handleTabSwitch("stats")}
                         >
@@ -480,8 +597,12 @@ export function CharacterDetailsClient({
                         <button
                           className={`w-full px-4 py-3 text-left font-medium transition-colors ${
                             activeTab === "hypers"
-                              ? "bg-blue-50 text-blue-600"
-                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                              ? isDark
+                                ? "bg-blue-900/40 text-blue-200"
+                                : "bg-blue-50 text-blue-600"
+                              : isDark
+                                ? "text-gray-300 hover:text-white hover:bg-gray-800"
+                                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                           }`}
                           onClick={() => handleTabSwitch("hypers")}
                         >
@@ -490,8 +611,12 @@ export function CharacterDetailsClient({
                         <button
                           className={`w-full px-4 py-3 text-left font-medium transition-colors ${
                             activeTab === "equipment"
-                              ? "bg-blue-50 text-blue-600"
-                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                              ? isDark
+                                ? "bg-blue-900/40 text-blue-200"
+                                : "bg-blue-50 text-blue-600"
+                              : isDark
+                                ? "text-gray-300 hover:text-white hover:bg-gray-800"
+                                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                           }`}
                           onClick={() => handleTabSwitch("equipment")}
                         >
@@ -500,8 +625,12 @@ export function CharacterDetailsClient({
                         <button
                           className={`w-full px-4 py-3 text-left font-medium transition-colors ${
                             activeTab === "linkskills"
-                              ? "bg-blue-50 text-blue-600"
-                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                              ? isDark
+                                ? "bg-blue-900/40 text-blue-200"
+                                : "bg-blue-50 text-blue-600"
+                              : isDark
+                                ? "text-gray-300 hover:text-white hover:bg-gray-800"
+                                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                           }`}
                           onClick={() => handleTabSwitch("linkskills")}
                         >
@@ -510,8 +639,12 @@ export function CharacterDetailsClient({
                         <button
                           className={`w-full px-4 py-3 text-left font-medium transition-colors ${
                             activeTab === "symbols"
-                              ? "bg-blue-50 text-blue-600"
-                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                              ? isDark
+                                ? "bg-blue-900/40 text-blue-200"
+                                : "bg-blue-50 text-blue-600"
+                              : isDark
+                                ? "text-gray-300 hover:text-white hover:bg-gray-800"
+                                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                           }`}
                           onClick={() => handleTabSwitch("symbols")}
                         >
@@ -520,8 +653,12 @@ export function CharacterDetailsClient({
                         <button
                           className={`w-full px-4 py-3 text-left font-medium transition-colors ${
                             activeTab === "growth"
-                              ? "bg-blue-50 text-blue-600"
-                              : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                              ? isDark
+                                ? "bg-blue-900/40 text-blue-200"
+                                : "bg-blue-50 text-blue-600"
+                              : isDark
+                                ? "text-gray-300 hover:text-white hover:bg-gray-800"
+                                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                           }`}
                           onClick={() => handleTabSwitch("growth")}
                         >
@@ -537,14 +674,22 @@ export function CharacterDetailsClient({
 
           {/* Error Display */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div
+              className={`border rounded-lg p-4 mb-6 ${
+                isDark
+                  ? "bg-red-950/40 border-red-700"
+                  : "bg-red-50 border-red-200"
+              }`}
+            >
               <p className="text-red-600">{error}</p>
             </div>
           )}
 
           {/* Content based on active tab */}
           {characterData && (
-            <div className="space-y-6 text-black">
+            <div
+              className={`space-y-6 ${isDark ? "text-gray-100" : "text-black"}`}
+            >
               {activeTab === "overview" && (
                 <>
                   {/* Combat Power Highlight Section */}
@@ -584,13 +729,13 @@ export function CharacterDetailsClient({
                               {(() => {
                                 const combatPowerValue =
                                   characterData.stat?.final_stat?.find(
-                                    (stat) => stat.stat_name === "Combat Power"
+                                    (stat) => stat.stat_name === "Combat Power",
                                   )?.stat_value;
                                 if (!combatPowerValue) return "N/A";
 
                                 // Parse as number and format with commas
                                 const numericValue = parseInt(
-                                  combatPowerValue.replace(/,/g, "")
+                                  combatPowerValue.replace(/,/g, ""),
                                 );
                                 return isNaN(numericValue)
                                   ? combatPowerValue
@@ -624,9 +769,9 @@ export function CharacterDetailsClient({
                                     0,
                                     parseFloat(
                                       characterData.basic?.character_exp_rate ||
-                                        "0"
-                                    )
-                                  )
+                                        "0",
+                                    ),
+                                  ),
                                 )}%`,
                               }}
                             >
@@ -645,14 +790,15 @@ export function CharacterDetailsClient({
                               {(() => {
                                 const currentExp = parseInt(
                                   characterData.basic?.character_exp?.toString() ||
-                                    "0"
+                                    "0",
                                 );
                                 const expRate = parseFloat(
-                                  characterData.basic?.character_exp_rate || "0"
+                                  characterData.basic?.character_exp_rate ||
+                                    "0",
                                 );
                                 if (expRate > 0) {
                                   const totalRequired = Math.round(
-                                    (currentExp / expRate) * 100
+                                    (currentExp / expRate) * 100,
                                   );
                                   return totalRequired.toLocaleString();
                                 }
@@ -670,7 +816,11 @@ export function CharacterDetailsClient({
                     <h2 className="text-xl font-semibold mb-2">
                       Basic Information
                     </h2>
-                    <div className="bg-gray-50 p-4 rounded-lg grid grid-cols-2 gap-4">
+                    <div
+                      className={`p-4 rounded-lg grid grid-cols-2 gap-4 ${
+                        isDark ? "bg-gray-800" : "bg-gray-50"
+                      }`}
+                    >
                       <div>
                         <p>
                           <strong>Character Name:</strong>{" "}
@@ -716,7 +866,11 @@ export function CharacterDetailsClient({
                   {characterData.stat && (
                     <div>
                       <h2 className="text-xl font-semibold mb-2">Key Stats</h2>
-                      <div className="bg-gray-50 p-4 rounded-lg">
+                      <div
+                        className={`p-4 rounded-lg ${
+                          isDark ? "bg-gray-800" : "bg-gray-50"
+                        }`}
+                      >
                         <div className="grid grid-cols-3 gap-4 text-sm">
                           {characterData.stat.final_stat
                             ?.slice(0, 6)
@@ -729,7 +883,11 @@ export function CharacterDetailsClient({
                         </div>
                         <button
                           onClick={() => setActiveTab("stats")}
-                          className="mt-2 text-blue-600 hover:text-blue-800 text-sm"
+                          className={`mt-2 text-sm ${
+                            isDark
+                              ? "text-blue-300 hover:text-blue-200"
+                              : "text-blue-600 hover:text-blue-800"
+                          }`}
                         >
                           View All Stats →
                         </button>
@@ -754,28 +912,42 @@ export function CharacterDetailsClient({
                           alt="Loading..."
                           className="w-16 h-16 mb-4"
                         />
-                        <p className="text-gray-600">
+                        <p
+                          className={isDark ? "text-gray-300" : "text-gray-600"}
+                        >
                           Loading inner ability...
                         </p>
                       </div>
                     )}
 
                     {abilityError && (
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                        <p className="text-red-800">Error: {abilityError}</p>
+                      <div
+                        className={`border rounded-lg p-4 mb-4 ${
+                          isDark
+                            ? "bg-red-950/40 border-red-700"
+                            : "bg-red-50 border-red-200"
+                        }`}
+                      >
+                        <p className={isDark ? "text-red-300" : "text-red-800"}>
+                          Error: {abilityError}
+                        </p>
                       </div>
                     )}
 
                     {!abilityLoading &&
                       !abilityError &&
                       abilityData?.ability_info && (
-                        <div className="bg-gray-50 p-4 rounded-lg">
+                        <div
+                          className={`p-4 rounded-lg ${
+                            isDark ? "bg-gray-800" : "bg-gray-50"
+                          }`}
+                        >
                           <div className="space-y-3">
                             {abilityData.ability_info
                               .sort(
                                 (a: any, b: any) =>
                                   parseInt(a.ability_no) -
-                                  parseInt(b.ability_no)
+                                  parseInt(b.ability_no),
                               )
                               .map((ability: any, index: number) => {
                                 // Determine colors based on grade
@@ -851,9 +1023,15 @@ export function CharacterDetailsClient({
                       (!abilityData?.ability_info ||
                         abilityData.ability_info.length === 0) && (
                         <div className="text-center py-8">
-                          <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                          <div
+                            className={`rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 ${
+                              isDark ? "bg-gray-700" : "bg-gray-100"
+                            }`}
+                          >
                             <svg
-                              className="w-8 h-8 text-gray-500"
+                              className={`w-8 h-8 ${
+                                isDark ? "text-gray-300" : "text-gray-500"
+                              }`}
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -866,10 +1044,18 @@ export function CharacterDetailsClient({
                               />
                             </svg>
                           </div>
-                          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                          <h3
+                            className={`text-lg font-semibold mb-2 ${
+                              isDark ? "text-gray-100" : "text-gray-800"
+                            }`}
+                          >
                             No Inner Ability Data
                           </h3>
-                          <p className="text-gray-600">
+                          <p
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-600"
+                            }
+                          >
                             This character doesn't have any inner ability
                             configured yet.
                           </p>
@@ -882,7 +1068,11 @@ export function CharacterDetailsClient({
                     <h2 className="text-xl font-semibold mb-2">
                       Character Stats
                     </h2>
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div
+                      className={`p-4 rounded-lg ${
+                        isDark ? "bg-gray-800" : "bg-gray-50"
+                      }`}
+                    >
                       <div className="grid grid-cols-2 gap-2 text-sm">
                         {characterData.stat.final_stat?.map((stat, index) => (
                           <p key={index}>
@@ -902,17 +1092,19 @@ export function CharacterDetailsClient({
                   hyperStatData={hyperStatData}
                   hyperSkillsLoading={hyperSkillsLoading}
                   hyperSkillsError={hyperSkillsError}
+                  isDark={isDark}
                 />
               )}
 
               {activeTab === "equipment" && characterData.itemEquipment && (
-                <EquipmentTab characterData={characterData} />
+                <EquipmentTab characterData={characterData} isDark={isDark} />
               )}
               {activeTab === "symbols" && (
                 <SymbolsTab
                   symbolData={symbolData}
                   symbolLoading={symbolLoading}
                   symbolError={symbolError}
+                  isDark={isDark}
                 />
               )}
 
@@ -921,15 +1113,22 @@ export function CharacterDetailsClient({
                   linkSkillsData={linkSkillsData}
                   linkSkillsLoading={linkSkillsLoading}
                   linkSkillsError={linkSkillsError}
+                  isDark={isDark}
                 />
               )}
 
-              {activeTab === "growth" && <GrowthTab ocid={ocid} />}
+              {activeTab === "growth" && (
+                <GrowthTab ocid={ocid} isDark={isDark} />
+              )}
             </div>
           )}
 
           {!error && !characterData && !loading && (
-            <p className="text-center text-black">No character data found.</p>
+            <p
+              className={`text-center ${isDark ? "text-gray-100" : "text-black"}`}
+            >
+              No character data found.
+            </p>
           )}
         </div>
       </div>

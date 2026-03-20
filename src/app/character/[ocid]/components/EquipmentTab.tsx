@@ -2,9 +2,13 @@ import { useState } from "react";
 
 interface EquipmentTabProps {
   characterData: any;
+  isDark?: boolean;
 }
 
-export function EquipmentTab({ characterData }: EquipmentTabProps) {
+export function EquipmentTab({
+  characterData,
+  isDark = false,
+}: EquipmentTabProps) {
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
 
   const handleTooltipToggle = (index: number) => {
@@ -14,7 +18,11 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
   return (
     <div onClick={() => setActiveTooltip(null)}>
       <h2 className="text-xl font-semibold mb-2">Equipment</h2>
-      <div className="bg-gray-50 py-4 px-0 md:p-4 rounded-lg">
+      <div
+        className={`py-4 px-0 md:p-4 rounded-lg ${
+          isDark ? "bg-gray-800" : "bg-gray-50"
+        }`}
+      >
         <p className="mb-2 text-sm text-blue-600 md:hidden px-4 md:px-0">
           💡 Tap on equipment items to view details
         </p>
@@ -63,63 +71,63 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Hat slot: 2
               const hats =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Hat"
+                  (item: any) => item.item_equipment_part === "Hat",
                 ) || [];
               item = hats[0] || null;
             } else if (index === 4) {
               // Emblem slot: 4
               const emblems =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Emblem"
+                  (item: any) => item.item_equipment_part === "Emblem",
                 ) || [];
               item = emblems[0] || null;
             } else if (index === 7) {
               // Face Accessory slot: 7
               const faceAccessories =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Face Acc."
+                  (item: any) => item.item_equipment_part === "Face Acc.",
                 ) || [];
               item = faceAccessories[0] || null;
             } else if (index === 9) {
               // Badge slot: 9
               const badges =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Badge"
+                  (item: any) => item.item_equipment_part === "Badge",
                 ) || [];
               item = badges[0] || null;
             } else if (index === 12) {
               // Eye Accessory slot: 12
               const eyeAccessories =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Eye Acc."
+                  (item: any) => item.item_equipment_part === "Eye Acc.",
                 ) || [];
               item = eyeAccessories[0] || null;
             } else if (index === 13) {
               // Earring slot: 13
               const earrings =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Earring"
+                  (item: any) => item.item_equipment_part === "Earring",
                 ) || [];
               item = earrings[0] || null;
             } else if (index === 14) {
               // Medal slot: 14
               const medals =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Medal"
+                  (item: any) => item.item_equipment_part === "Medal",
                 ) || [];
               item = medals[0] || null;
             } else if (index === 17) {
               // Top slot: 17
               const tops =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Top"
+                  (item: any) => item.item_equipment_part === "Top",
                 ) || [];
               item = tops[0] || null;
             } else if (index === 18) {
               // Shoulder Decoration slot: 18
               const shoulderDecorations =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Shoulder"
+                  (item: any) => item.item_equipment_part === "Shoulder",
                 ) || [];
               item = shoulderDecorations[0] || null;
             } else if (index === 19) {
@@ -127,7 +135,7 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               const secondaryWeapons =
                 characterData.itemEquipment?.item_equipment?.filter(
                   (item: any) =>
-                    item.item_equipment_slot === "Secondary Weapons"
+                    item.item_equipment_slot === "Secondary Weapons",
                 ) || [];
               item = secondaryWeapons[0] || null;
             } else if (
@@ -139,7 +147,7 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Ring slots: 0, 5, 10, 15
               const rings =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Ring"
+                  (item: any) => item.item_equipment_part === "Ring",
                 ) || [];
 
               // Map index to ring position
@@ -154,7 +162,7 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Pendant slots: 6, 11
               const pendants =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Pendant"
+                  (item: any) => item.item_equipment_part === "Pendant",
                 ) || [];
 
               // Map index to pendant position
@@ -167,56 +175,57 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               // Weapon slot: 16
               const weapons =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_slot === "Weapon"
+                  (item: any) => item.item_equipment_slot === "Weapon",
                 ) || [];
               item = weapons[0] || null;
             } else if (index === 20) {
               // Pocket Item slot: 20
               const pocketItems =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Pocket Item"
+                  (item: any) => item.item_equipment_part === "Pocket Item",
                 ) || [];
               item = pocketItems[0] || null;
             } else if (index === 21) {
               // Belt slot: 21
               const belts =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Belt"
+                  (item: any) => item.item_equipment_part === "Belt",
                 ) || [];
               item = belts[0] || null;
             } else if (index === 22) {
               // Bottom slot: 22
               const bottoms =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Bottom"
+                  (item: any) => item.item_equipment_part === "Bottom",
                 ) || [];
               item = bottoms[0] || null;
             } else if (index === 23) {
               // Glove slot: 23
               const gloves =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Glove"
+                  (item: any) => item.item_equipment_part === "Glove",
                 ) || [];
               item = gloves[0] || null;
             } else if (index === 24) {
               // Cape slot: 24
               const capes =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Cape"
+                  (item: any) => item.item_equipment_part === "Cape",
                 ) || [];
               item = capes[0] || null;
             } else if (index === 27) {
               // Shoes slot: 27
               const shoes =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Shoes"
+                  (item: any) => item.item_equipment_part === "Shoes",
                 ) || [];
               item = shoes[0] || null;
             } else if (index === 29) {
               // Mechanical Heart slot: 29
               const mechanicalHearts =
                 characterData.itemEquipment?.item_equipment?.filter(
-                  (item: any) => item.item_equipment_part === "Mechanical Heart"
+                  (item: any) =>
+                    item.item_equipment_part === "Mechanical Heart",
                 ) || [];
               item = mechanicalHearts[0] || null;
             } else {
@@ -243,7 +252,7 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
                     item.item_equipment_part !== "Glove" &&
                     item.item_equipment_part !== "Cape" &&
                     item.item_equipment_part !== "Shoes" &&
-                    item.item_equipment_part !== "Mechanical Heart"
+                    item.item_equipment_part !== "Mechanical Heart",
                 ) || [];
 
               // Calculate adjusted index (subtract special slots and always-empty slots that come before this index)
@@ -287,16 +296,26 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
               return (
                 <div
                   key={index}
-                  className="bg-gray-100 border-2 border-gray-200 rounded-lg p-2 w-16 h-16 flex items-center justify-center"
+                  className={`border-2 rounded-lg p-2 w-16 h-16 flex items-center justify-center ${
+                    isDark
+                      ? "bg-gray-700 border-gray-600"
+                      : "bg-gray-100 border-gray-200"
+                  }`}
                 >
-                  <span className="text-xs text-gray-400">Empty</span>
+                  <span
+                    className={
+                      isDark ? "text-xs text-gray-300" : "text-xs text-gray-400"
+                    }
+                  >
+                    Empty
+                  </span>
                 </div>
               );
             }
 
             // Determine border and background colors based on potential grade
             let borderColor = "border-gray-200"; // default
-            let backgroundColor = "bg-white"; // default
+            let backgroundColor = isDark ? "bg-gray-700" : "bg-white"; // default
 
             if (item.potential_option_grade) {
               switch (item.potential_option_grade.toLowerCase()) {
@@ -318,7 +337,7 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
                   break;
                 default:
                   borderColor = "border-gray-200";
-                  backgroundColor = "bg-white";
+                  backgroundColor = isDark ? "bg-gray-700" : "bg-white";
               }
             }
 
@@ -344,8 +363,20 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
                     className="w-12 h-12 object-contain"
                   />
                 ) : (
-                  <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center">
-                    <span className="text-xs text-gray-400">No Icon</span>
+                  <div
+                    className={`w-12 h-12 rounded flex items-center justify-center ${
+                      isDark ? "bg-gray-600" : "bg-gray-100"
+                    }`}
+                  >
+                    <span
+                      className={
+                        isDark
+                          ? "text-xs text-gray-200"
+                          : "text-xs text-gray-400"
+                      }
+                    >
+                      No Icon
+                    </span>
                   </div>
                 )}
 
@@ -425,7 +456,7 @@ export function EquipmentTab({ characterData }: EquipmentTabProps) {
                                 • {key.replace(/_/g, " ").toUpperCase()}:{" "}
                                 {String(value)}
                               </div>
-                            ) : null
+                            ) : null,
                         )}
                       </div>
                     )}

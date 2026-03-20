@@ -25,19 +25,35 @@ export function GuildDetailsClient({
   initialData,
 }: GuildDetailsClientProps) {
   const [guildData, setGuildData] = useState<GuildData | null>(
-    initialData || null
+    initialData || null,
   );
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<
     "overview" | "skills" | "members" | "growth"
   >("overview");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  const isDark = theme === "dark";
 
   useEffect(() => {
     if (!initialData && oguild_id) {
       loadGuildData();
     }
   }, [oguild_id, initialData]);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("guild-details-theme");
+    if (savedTheme === "light" || savedTheme === "dark") {
+      setTheme(savedTheme);
+      return;
+    }
+
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    setTheme(prefersDark ? "dark" : "light");
+  }, []);
 
   const loadGuildData = async () => {
     setLoading(true);
@@ -75,16 +91,30 @@ export function GuildDetailsClient({
     }
   };
 
+  const toggleTheme = () => {
+    const nextTheme = theme === "light" ? "dark" : "light";
+    setTheme(nextTheme);
+    localStorage.setItem("guild-details-theme", nextTheme);
+  };
+
   if (loading && !guildData) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white bg-opacity-80">
+      <div
+        className={`min-h-screen flex flex-col items-center justify-center ${
+          isDark ? "bg-gray-950/90" : "bg-white bg-opacity-80"
+        }`}
+      >
         <div className="flex flex-col items-center justify-center h-full w-full">
           <img
             src="/images/mushroom-loader.gif"
             alt="Loading..."
             className="w-32 h-32 mb-6"
           />
-          <p className="text-lg font-semibold text-black">
+          <p
+            className={`text-lg font-semibold ${
+              isDark ? "text-gray-100" : "text-black"
+            }`}
+          >
             Loading guild data...
           </p>
         </div>
@@ -124,7 +154,13 @@ export function GuildDetailsClient({
 
       {/* Main Content */}
       <div className="flex-1 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-6xl bg-opacity-90 backdrop-blur-md max-h-[85vh] overflow-y-auto">
+        <div
+          className={`rounded-xl shadow-lg p-8 w-full max-w-6xl backdrop-blur-md max-h-[85vh] overflow-y-auto ${
+            isDark
+              ? "bg-gray-900/90 border border-gray-700"
+              : "bg-white rounded-xl bg-opacity-90"
+          }`}
+        >
           {/* Guild Header */}
           {guildData?.basic && (
             <div className="mb-6">
@@ -139,13 +175,25 @@ export function GuildDetailsClient({
                     />
                   )}
                   <div>
-                    <h1 className="text-3xl font-bold text-black">
+                    <h1
+                      className={`text-3xl font-bold ${
+                        isDark ? "text-gray-100" : "text-black"
+                      }`}
+                    >
                       {guildName}
                     </h1>
-                    <p className="text-lg text-gray-600">
+                    <p
+                      className={`text-lg ${
+                        isDark ? "text-gray-300" : "text-gray-600"
+                      }`}
+                    >
                       Level {guildData.basic.guild_level}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {world} World • {guildMasterCharLink()}'s guild
                     </p>
                   </div>
@@ -153,6 +201,17 @@ export function GuildDetailsClient({
 
                 {/* Action Buttons */}
                 <div className="flex space-x-2">
+                  <button
+                    onClick={toggleTheme}
+                    className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
+                      isDark
+                        ? "bg-yellow-500 hover:bg-yellow-400 text-gray-900"
+                        : "bg-gray-900 hover:bg-black text-white"
+                    }`}
+                    aria-label="Toggle dark and light mode"
+                  >
+                    {isDark ? "Light Mode" : "Dark Mode"}
+                  </button>
                   <button
                     onClick={handleRefresh}
                     disabled={loading}
@@ -164,13 +223,21 @@ export function GuildDetailsClient({
               </div>
 
               {/* Navigation Tabs */}
-              <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+              <div
+                className={`flex space-x-1 p-1 rounded-lg ${
+                  isDark ? "bg-gray-800" : "bg-gray-100"
+                }`}
+              >
                 <button
                   onClick={() => setActiveTab("overview")}
                   className={`px-4 py-2 rounded-md transition-colors ${
                     activeTab === "overview"
-                      ? "bg-white text-blue-600 shadow-sm"
-                      : "text-gray-600 hover:text-gray-800"
+                      ? isDark
+                        ? "bg-gray-700 text-blue-300 shadow-sm"
+                        : "bg-white text-blue-600 shadow-sm"
+                      : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-600 hover:text-gray-800"
                   }`}
                 >
                   Overview
@@ -179,8 +246,12 @@ export function GuildDetailsClient({
                   onClick={() => setActiveTab("skills")}
                   className={`px-4 py-2 rounded-md transition-colors ${
                     activeTab === "skills"
-                      ? "bg-white text-blue-600 shadow-sm"
-                      : "text-gray-600 hover:text-gray-800"
+                      ? isDark
+                        ? "bg-gray-700 text-blue-300 shadow-sm"
+                        : "bg-white text-blue-600 shadow-sm"
+                      : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-600 hover:text-gray-800"
                   }`}
                 >
                   Skills
@@ -189,8 +260,12 @@ export function GuildDetailsClient({
                   onClick={() => setActiveTab("members")}
                   className={`px-4 py-2 rounded-md transition-colors ${
                     activeTab === "members"
-                      ? "bg-white text-blue-600 shadow-sm"
-                      : "text-gray-600 hover:text-gray-800"
+                      ? isDark
+                        ? "bg-gray-700 text-blue-300 shadow-sm"
+                        : "bg-white text-blue-600 shadow-sm"
+                      : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-600 hover:text-gray-800"
                   }`}
                 >
                   Members
@@ -199,8 +274,12 @@ export function GuildDetailsClient({
                   onClick={() => setActiveTab("growth")}
                   className={`px-4 py-2 rounded-md transition-colors ${
                     activeTab === "growth"
-                      ? "bg-white text-blue-600 shadow-sm"
-                      : "text-gray-600 hover:text-gray-800"
+                      ? isDark
+                        ? "bg-gray-700 text-blue-300 shadow-sm"
+                        : "bg-white text-blue-600 shadow-sm"
+                      : isDark
+                        ? "text-gray-300 hover:text-white"
+                        : "text-gray-600 hover:text-gray-800"
                   }`}
                 >
                   Growth
@@ -211,20 +290,32 @@ export function GuildDetailsClient({
 
           {/* Error Display */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div
+              className={`border rounded-lg p-4 mb-6 ${
+                isDark
+                  ? "bg-red-950/40 border-red-700"
+                  : "bg-red-50 border-red-200"
+              }`}
+            >
               <p className="text-red-600">{error}</p>
             </div>
           )}
 
           {/* Content based on active tab */}
           {guildData && (
-            <div className="space-y-6 text-black">
+            <div
+              className={`space-y-6 ${isDark ? "text-gray-100" : "text-black"}`}
+            >
               {activeTab === "overview" && (
                 <>
                   {/* Guild Info */}
                   <div>
                     <h2 className="text-xl font-semibold mb-2">Guild Info</h2>
-                    <div className="bg-gray-50 p-4 rounded-lg grid grid-cols-2 gap-4">
+                    <div
+                      className={`p-4 rounded-lg grid grid-cols-2 gap-4 ${
+                        isDark ? "bg-gray-800" : "bg-gray-50"
+                      }`}
+                    >
                       <div>
                         <p>
                           <strong>Guild Name:</strong> {guildName}
@@ -267,13 +358,22 @@ export function GuildDetailsClient({
                   {guildData.basic?.guild_noblesse_skill &&
                     guildData.basic.guild_noblesse_skill.length > 0 && (
                       <div>
-                        <div className="bg-gray-50 p-4 rounded-lg">
+                        <div
+                          className={`p-4 rounded-lg ${
+                            isDark ? "bg-gray-800" : "bg-gray-50"
+                          }`}
+                        >
                           <NoblesseSkills
                             skillsData={guildData.basic?.guild_noblesse_skill}
+                            isDark={isDark}
                           />
                           <button
                             onClick={() => setActiveTab("skills")}
-                            className="mt-5 text-blue-600 hover:text-blue-800 text-sm"
+                            className={`mt-5 text-sm ${
+                              isDark
+                                ? "text-blue-300 hover:text-blue-200"
+                                : "text-blue-600 hover:text-blue-800"
+                            }`}
                           >
                             View All Skills →
                           </button>
@@ -286,6 +386,7 @@ export function GuildDetailsClient({
                     loading={loading}
                     error={error}
                     type="noblesse_skill"
+                    isDark={isDark}
                   />
                 </>
               )}
@@ -296,16 +397,22 @@ export function GuildDetailsClient({
                   noblesseSkillsData={guildData.basic?.guild_noblesse_skill}
                   skillsLoading={loading}
                   skillsError={error}
+                  isDark={isDark}
                 />
               )}
 
               {activeTab === "members" && guildData.basic?.guild_member && (
-                <MembersTab guildData={guildData} oguild_id={oguild_id} />
+                <MembersTab
+                  guildData={guildData}
+                  oguild_id={oguild_id}
+                  isDark={isDark}
+                />
               )}
 
               {activeTab === "growth" && (
                 <GrowthTab
                   oguild_id={oguild_id}
+                  isDark={isDark}
                   currentData={{
                     guild_member_count:
                       guildData.basic?.guild_member_count || 0,
@@ -319,7 +426,11 @@ export function GuildDetailsClient({
           )}
 
           {!error && !guildData && !loading && (
-            <p className="text-center text-black">No guild data found.</p>
+            <p
+              className={`text-center ${isDark ? "text-gray-100" : "text-black"}`}
+            >
+              No guild data found.
+            </p>
           )}
         </div>
       </div>

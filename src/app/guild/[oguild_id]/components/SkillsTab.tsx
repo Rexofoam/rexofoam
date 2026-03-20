@@ -9,6 +9,7 @@ interface SkillsTabProps {
   noblesseSkillsData: any;
   skillsLoading: boolean;
   skillsError: string;
+  isDark?: boolean;
 }
 
 export function SkillsTab({
@@ -16,6 +17,7 @@ export function SkillsTab({
   noblesseSkillsData,
   skillsLoading,
   skillsError,
+  isDark = false,
 }: SkillsTabProps) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
@@ -37,18 +39,28 @@ export function SkillsTab({
             alt="Loading..."
             className="w-16 h-16 mb-4"
           />
-          <p className="text-gray-600">Loading guild skills...</p>
+          <p className={isDark ? "text-gray-300" : "text-gray-600"}>
+            Loading guild skills...
+          </p>
         </div>
       )}
 
       {skillsError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-          <p className="text-red-800">Error: {skillsError}</p>
+        <div
+          className={`border rounded-lg p-4 mb-4 ${
+            isDark ? "bg-red-950/40 border-red-700" : "bg-red-50 border-red-200"
+          }`}
+        >
+          <p className={isDark ? "text-red-300" : "text-red-800"}>
+            Error: {skillsError}
+          </p>
         </div>
       )}
       {/* Regular Guild Skills */}
       {!skillsLoading && !skillsError && regularSkillsData && (
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div
+          className={`p-4 rounded-lg ${isDark ? "bg-gray-800" : "bg-gray-50"}`}
+        >
           <h3 className="text-lg font-bold mb-2 text-blue-700">
             Regular Guild Skills
           </h3>
@@ -59,7 +71,11 @@ export function SkillsTab({
                 return (
                   <div
                     key={index}
-                    className="group relative bg-white border border-gray-200 rounded-lg p-1 md:p-2 hover:bg-gray-100 transition-colors w-16 md:w-20 h-16 md:h-20 shadow-sm hover:shadow-md cursor-pointer"
+                    className={`group relative border rounded-lg p-1 md:p-2 transition-colors w-16 md:w-20 h-16 md:h-20 shadow-sm hover:shadow-md cursor-pointer ${
+                      isDark
+                        ? "bg-gray-700 border-gray-600 hover:bg-gray-600"
+                        : "bg-white border-gray-200 hover:bg-gray-100"
+                    }`}
                     title={skill.skill_name}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -101,16 +117,19 @@ export function SkillsTab({
         loading={skillsLoading}
         error={skillsError}
         type="guild_skill"
+        isDark={isDark}
       />
 
       {/* Noblesse Guild Skills */}
       {!skillsLoading && !skillsError && noblesseSkillsData && (
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div
+          className={`p-4 rounded-lg ${isDark ? "bg-gray-800" : "bg-gray-50"}`}
+        >
           <h3 className="text-lg font-bold mb-2 text-rose-700">
             Noblesse Guild Skills
           </h3>
           <div className="flex justify-center">
-            <NoblesseSkills skillsData={noblesseSkillsData} />
+            <NoblesseSkills skillsData={noblesseSkillsData} isDark={isDark} />
           </div>
         </div>
       )}
@@ -120,6 +139,7 @@ export function SkillsTab({
         loading={skillsLoading}
         error={skillsError}
         type="noblesse_skill"
+        isDark={isDark}
       />
     </div>
   );

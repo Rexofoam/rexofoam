@@ -14,7 +14,7 @@ export default function Footer() {
             height={20}
             className="rounded"
           />
-          <span>© 2025 MapleSEA Tracker. All rights reserved.</span>
+          <span>© 2026 MapleSEA Tracker. All rights reserved.</span>
         </div>
       </div>
     </footer>

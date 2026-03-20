@@ -6,9 +6,14 @@ import { toast } from "react-toastify";
 interface MembersTabProps {
   guildData: GuildData;
   oguild_id: string;
+  isDark?: boolean;
 }
 
-export function MembersTab({ guildData, oguild_id }: MembersTabProps) {
+export function MembersTab({
+  guildData,
+  oguild_id,
+  isDark = false,
+}: MembersTabProps) {
   const navigation = useNavigation();
   const [previousMembers, setPreviousMembers] = useState<string[]>([]);
   const [newMembers, setNewMembers] = useState<string[]>([]);
@@ -28,7 +33,7 @@ export function MembersTab({ guildData, oguild_id }: MembersTabProps) {
       const oneMonthAgo = new Date(
         today.getFullYear(),
         today.getMonth() - 1,
-        today.getDate()
+        today.getDate(),
       );
       const dateParam = oneMonthAgo.toISOString().split("T")[0];
 
@@ -39,7 +44,7 @@ export function MembersTab({ guildData, oguild_id }: MembersTabProps) {
             "x-nxopen-api-key":
               "live_ea78af0bb88d495a94b6f66066c720e33d4e8a3ef9dad5783bd0c610437d34f2efe8d04e6d233bd35cf2fabdeb93fb0d",
           },
-        }
+        },
       );
 
       if (response.ok) {
@@ -50,7 +55,7 @@ export function MembersTab({ guildData, oguild_id }: MembersTabProps) {
         // Find new members (current members not in previous month)
         const currentMembers = guildData.basic?.guild_member || [];
         const newMembersList = currentMembers.filter(
-          (member) => !prevMembers.includes(member)
+          (member) => !prevMembers.includes(member),
         );
         setNewMembers(newMembersList);
       } else {
@@ -79,7 +84,7 @@ export function MembersTab({ guildData, oguild_id }: MembersTabProps) {
             "x-nxopen-api-key":
               "live_ea78af0bb88d495a94b6f66066c720e33d4e8a3ef9dad5783bd0c610437d34f2efe8d04e6d233bd35cf2fabdeb93fb0d",
           },
-        }
+        },
       );
 
       if (response.ok) {
@@ -147,14 +152,28 @@ export function MembersTab({ guildData, oguild_id }: MembersTabProps) {
 
       {/* Members Grid */}
       <div className="grid gap-6">
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div
+          className={`rounded-2xl shadow-lg border overflow-hidden ${
+            isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"
+          }`}
+        >
           {/* Members List Header */}
-          <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 p-6">
-            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
+          <div
+            className={`border-b p-6 ${
+              isDark
+                ? "bg-gradient-to-r from-gray-800 to-gray-700 border-gray-700"
+                : "bg-gradient-to-r from-gray-50 to-white border-gray-100"
+            }`}
+          >
+            <h3
+              className={`text-xl font-bold flex items-center gap-3 ${
+                isDark ? "text-gray-100" : "text-gray-900"
+              }`}
+            >
               <span className="text-2xl">📋</span>
               All Members
             </h3>
-            <p className="text-gray-600 mt-1">
+            <p className={`mt-1 ${isDark ? "text-gray-300" : "text-gray-600"}`}>
               Click on any member to view their character profile
               {!loading && newMembers.length > 0 && (
                 <span className="text-yellow-600 font-medium">
@@ -174,8 +193,12 @@ export function MembersTab({ guildData, oguild_id }: MembersTabProps) {
                     key={index}
                     className={`group relative p-4 rounded-xl border transition-all duration-300 hover:-translate-y-1 ${
                       isNew
-                        ? "bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-300 hover:border-yellow-400 shadow-lg shadow-yellow-200/50"
-                        : "bg-gradient-to-br from-gray-50 to-white border-gray-200 hover:border-blue-300 hover:shadow-lg"
+                        ? isDark
+                          ? "bg-gradient-to-br from-yellow-900/30 to-amber-900/30 border-yellow-700 hover:border-yellow-500 shadow-lg shadow-yellow-900/20"
+                          : "bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-300 hover:border-yellow-400 shadow-lg shadow-yellow-200/50"
+                        : isDark
+                          ? "bg-gradient-to-br from-gray-800 to-gray-700 border-gray-600 hover:border-blue-400 hover:shadow-lg"
+                          : "bg-gradient-to-br from-gray-50 to-white border-gray-200 hover:border-blue-300 hover:shadow-lg"
                     }`}
                   >
                     {/* Member Avatar Circle */}
@@ -193,7 +216,13 @@ export function MembersTab({ guildData, oguild_id }: MembersTabProps) {
                         <div className="flex items-center gap-2">
                           <h3
                             className={`font-semibold text-lg group-hover:text-blue-600 transition-colors ${
-                              isNew ? "text-amber-900" : "text-gray-900"
+                              isNew
+                                ? isDark
+                                  ? "text-yellow-200"
+                                  : "text-amber-900"
+                                : isDark
+                                  ? "text-gray-100"
+                                  : "text-gray-900"
                             }`}
                           >
                             {member}
@@ -206,7 +235,13 @@ export function MembersTab({ guildData, oguild_id }: MembersTabProps) {
                         </div>
                         <p
                           className={`text-sm ${
-                            isNew ? "text-amber-600" : "text-gray-500"
+                            isNew
+                              ? isDark
+                                ? "text-yellow-300"
+                                : "text-amber-600"
+                              : isDark
+                                ? "text-gray-300"
+                                : "text-gray-500"
                           }`}
                         >
                           Guild Member #{index + 1}

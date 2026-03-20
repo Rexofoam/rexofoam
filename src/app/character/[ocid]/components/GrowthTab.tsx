@@ -21,9 +21,10 @@ interface GrowthData {
 
 interface GrowthTabProps {
   ocid: string;
+  isDark?: boolean;
 }
 
-export function GrowthTab({ ocid }: GrowthTabProps) {
+export function GrowthTab({ ocid, isDark = false }: GrowthTabProps) {
   const [growthData, setGrowthData] = useState<GrowthData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
@@ -75,7 +76,7 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
           date,
           level: parseInt(data.character_level) || 0,
           exp: parseInt(
-            data.character_exp?.toString().replace(/,/g, "") || "0"
+            data.character_exp?.toString().replace(/,/g, "") || "0",
           ),
           expRate: parseFloat(data.character_exp_rate) || 0,
         };
@@ -140,6 +141,17 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
     const days = growthData.length > 1 ? growthData.length - 1 : 1; // Number of days between first and last
     return totalGrowth / days;
   };
+
+  const chartGridColor = isDark ? "#374151" : "#f0f0f0";
+  const chartAxisColor = isDark ? "#d1d5db" : "#666";
+  const chartTooltipStyle = {
+    backgroundColor: isDark ? "#111827" : "#fff",
+    border: isDark ? "1px solid #4b5563" : "1px solid #e5e7eb",
+    borderRadius: "8px",
+    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+    color: isDark ? "#f3f4f6" : "#111827",
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -164,7 +176,11 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
               d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          <span className="text-lg text-gray-600">Loading growth data...</span>
+          <span
+            className={`text-lg ${isDark ? "text-gray-300" : "text-gray-600"}`}
+          >
+            Loading growth data...
+          </span>
         </div>
       </div>
     );
@@ -173,10 +189,22 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
   if (error) {
     return (
       <div className="text-center py-12">
-        <div className="bg-red-100 border border-red-300 rounded-lg p-6 max-w-md mx-auto">
-          <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-red-200 rounded-full">
+        <div
+          className={`border rounded-lg p-6 max-w-md mx-auto ${
+            isDark
+              ? "bg-red-950/40 border-red-700"
+              : "bg-red-100 border-red-300"
+          }`}
+        >
+          <div
+            className={`flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full ${
+              isDark ? "bg-red-900/60" : "bg-red-200"
+            }`}
+          >
             <svg
-              className="w-6 h-6 text-red-600"
+              className={
+                isDark ? "w-6 h-6 text-red-300" : "w-6 h-6 text-red-600"
+              }
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -189,10 +217,18 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
               />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-red-800 mb-2">
+          <h3
+            className={
+              isDark
+                ? "text-lg font-semibold text-red-200 mb-2"
+                : "text-lg font-semibold text-red-800 mb-2"
+            }
+          >
             Failed to Load Growth Data
           </h3>
-          <p className="text-red-600 mb-4">{error}</p>
+          <p className={isDark ? "text-red-300 mb-4" : "text-red-600 mb-4"}>
+            {error}
+          </p>
           <button
             onClick={loadGrowthData}
             className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
@@ -207,9 +243,13 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
   if (growthData.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+        <div
+          className={`rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 ${
+            isDark ? "bg-gray-700" : "bg-gray-100"
+          }`}
+        >
           <svg
-            className="w-8 h-8 text-gray-500"
+            className={`w-8 h-8 ${isDark ? "text-gray-300" : "text-gray-500"}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -222,10 +262,12 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">
+        <h3
+          className={`text-lg font-semibold mb-2 ${isDark ? "text-gray-100" : "text-gray-800"}`}
+        >
           No Growth Data Available
         </h3>
-        <p className="text-gray-600">
+        <p className={isDark ? "text-gray-300" : "text-gray-600"}>
           Unable to retrieve character growth data for the past 5 days.
         </p>
       </div>
@@ -284,21 +326,31 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
       </div>
 
       {/* Level Growth Chart */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+      <div
+        className={`rounded-xl p-6 shadow-sm border ${
+          isDark ? "bg-gray-800 border-gray-700" : "bg-white"
+        }`}
+      >
+        <h3
+          className={`text-xl font-semibold mb-4 ${isDark ? "text-gray-100" : "text-gray-800"}`}
+        >
           Level Progression
         </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={growthData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
               <XAxis
                 dataKey="date"
                 tickFormatter={formatDateDisplay}
-                stroke="#666"
+                stroke={chartAxisColor}
                 fontSize={12}
               />
-              <YAxis stroke="#666" fontSize={12} tickFormatter={formatNumber} />
+              <YAxis
+                stroke={chartAxisColor}
+                fontSize={12}
+                tickFormatter={formatNumber}
+              />
               <Tooltip
                 labelFormatter={(value) =>
                   `Date: ${formatDateDisplay(value as string)}`
@@ -307,12 +359,7 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
                   name === "level" ? value : formatNumber(value),
                   name === "level" ? "Level" : "Level",
                 ]}
-                contentStyle={{
-                  backgroundColor: "#fff",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                }}
+                contentStyle={chartTooltipStyle}
               />
               <Legend />
               <Line
@@ -330,22 +377,28 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
       </div>
 
       {/* EXP Rate Chart */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+      <div
+        className={`rounded-xl p-6 shadow-sm border ${
+          isDark ? "bg-gray-800 border-gray-700" : "bg-white"
+        }`}
+      >
+        <h3
+          className={`text-xl font-semibold mb-4 ${isDark ? "text-gray-100" : "text-gray-800"}`}
+        >
           EXP Rate Progression
         </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={growthData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
               <XAxis
                 dataKey="date"
                 tickFormatter={formatDateDisplay}
-                stroke="#666"
+                stroke={chartAxisColor}
                 fontSize={12}
               />
               <YAxis
-                stroke="#666"
+                stroke={chartAxisColor}
                 fontSize={12}
                 domain={[0, 100]}
                 tickFormatter={(value) => `${value}%`}
@@ -355,12 +408,7 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
                   `Date: ${formatDateDisplay(value as string)}`
                 }
                 formatter={(value: any) => [`${value}%`, "EXP Rate"]}
-                contentStyle={{
-                  backgroundColor: "#fff",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                }}
+                contentStyle={chartTooltipStyle}
               />
               <Legend />
               <Line
@@ -378,44 +426,77 @@ export function GrowthTab({ ocid }: GrowthTabProps) {
       </div>
 
       {/* Data Table */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+      <div
+        className={`rounded-xl p-6 shadow-sm border ${
+          isDark ? "bg-gray-800 border-gray-700" : "bg-white"
+        }`}
+      >
+        <h3
+          className={`text-xl font-semibold mb-4 ${isDark ? "text-gray-100" : "text-gray-800"}`}
+        >
           Daily Progress Data
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b bg-gray-50">
-                <th className="text-left p-3 font-semibold text-gray-700">
+              <tr
+                className={`border-b ${isDark ? "bg-gray-700 border-gray-600" : "bg-gray-50"}`}
+              >
+                <th
+                  className={`text-left p-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-700"}`}
+                >
                   Date
                 </th>
-                <th className="text-left p-3 font-semibold text-gray-700">
+                <th
+                  className={`text-left p-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-700"}`}
+                >
                   Level
                 </th>
-                <th className="text-left p-3 font-semibold text-gray-700">
+                <th
+                  className={`text-left p-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-700"}`}
+                >
                   Experience
                 </th>
-                <th className="text-left p-3 font-semibold text-gray-700">
+                <th
+                  className={`text-left p-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-700"}`}
+                >
                   EXP Rate
                 </th>
               </tr>
             </thead>
             <tbody>
               {growthData.map((data, index) => (
-                <tr key={data.date} className="border-b hover:bg-gray-50">
-                  <td className="p-3 text-gray-800">
+                <tr
+                  key={data.date}
+                  className={`border-b ${
+                    isDark
+                      ? "border-gray-700 hover:bg-gray-700/60"
+                      : "hover:bg-gray-50"
+                  }`}
+                >
+                  <td
+                    className={`p-3 ${isDark ? "text-gray-100" : "text-gray-800"}`}
+                  >
                     {formatDateDisplay(data.date)}
                   </td>
-                  <td className="p-3 text-gray-800 font-medium">
+                  <td
+                    className={`p-3 font-medium ${isDark ? "text-gray-100" : "text-gray-800"}`}
+                  >
                     {data.level}
                   </td>
-                  <td className="p-3 text-gray-800">
+                  <td
+                    className={`p-3 ${isDark ? "text-gray-100" : "text-gray-800"}`}
+                  >
                     {formatNumber(data.exp)}
                   </td>
-                  <td className="p-3 text-gray-800">
+                  <td
+                    className={`p-3 ${isDark ? "text-gray-100" : "text-gray-800"}`}
+                  >
                     <div className="flex items-center space-x-2">
                       <span>{data.expRate.toFixed(1)}%</span>
-                      <div className="w-20 bg-gray-200 rounded-full h-2">
+                      <div
+                        className={`w-20 rounded-full h-2 ${isDark ? "bg-gray-600" : "bg-gray-200"}`}
+                      >
                         <div
                           className="bg-blue-500 h-2 rounded-full"
                           style={{ width: `${Math.min(100, data.expRate)}%` }}

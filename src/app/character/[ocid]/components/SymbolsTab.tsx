@@ -4,12 +4,14 @@ interface SymbolsTabProps {
   symbolData: any;
   symbolLoading: boolean;
   symbolError: string;
+  isDark?: boolean;
 }
 
 export function SymbolsTab({
   symbolData,
   symbolLoading,
   symbolError,
+  isDark = false,
 }: SymbolsTabProps) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
@@ -23,7 +25,9 @@ export function SymbolsTab({
       <p className="mb-2 text-sm text-blue-600 md:hidden px-4 md:px-0">
         💡 Tap on symbol icons to view details
       </p>
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div
+        className={`p-4 rounded-lg ${isDark ? "bg-gray-800" : "bg-gray-50"}`}
+      >
         {symbolLoading && (
           <div className="flex flex-col items-center justify-center py-8">
             <img
@@ -31,7 +35,9 @@ export function SymbolsTab({
               alt="Loading symbols..."
               className="w-16 h-16 mb-4"
             />
-            <p className="text-gray-700">Loading symbol data...</p>
+            <p className={isDark ? "text-gray-300" : "text-gray-700"}>
+              Loading symbol data...
+            </p>
           </div>
         )}
         {symbolError && <p className="text-red-600">{symbolError}</p>}
@@ -42,10 +48,10 @@ export function SymbolsTab({
               {/* Group Arcane Symbol */}
               {(() => {
                 const arcane = symbolData.symbol.filter((s: any) =>
-                  s.symbol_name.includes("Arcane Symbol")
+                  s.symbol_name.includes("Arcane Symbol"),
                 );
                 const authentic = symbolData.symbol.filter((s: any) =>
-                  s.symbol_name.includes("Authentic Symbol")
+                  s.symbol_name.includes("Authentic Symbol"),
                 );
                 return (
                   <>
@@ -63,7 +69,11 @@ export function SymbolsTab({
                             return (
                               <div
                                 key={symbol.symbol_name + idx}
-                                className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer"
+                                className={`relative group flex flex-col items-center justify-center border rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer ${
+                                  isDark
+                                    ? "bg-gray-700 border-gray-600"
+                                    : "bg-white border-gray-200"
+                                }`}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleTooltipToggle(symbolKey);
@@ -84,7 +94,11 @@ export function SymbolsTab({
                                     Lv. {symbol.symbol_level}
                                   </span>
                                 </div>
-                                <div className="text-sm font-semibold text-gray-800 text-center hidden md:block">
+                                <div
+                                  className={`text-sm font-semibold text-center hidden md:block ${
+                                    isDark ? "text-gray-100" : "text-gray-800"
+                                  }`}
+                                >
                                   {symbol.symbol_name}
                                 </div>
                                 {/* Tooltip */}
@@ -143,7 +157,7 @@ export function SymbolsTab({
                                           {stat.label}: +{stat.value}
                                         </span>
                                       </div>
-                                    ) : null
+                                    ) : null,
                                   )}
                                 </div>
                               </div>
@@ -166,7 +180,11 @@ export function SymbolsTab({
                             return (
                               <div
                                 key={symbol.symbol_name + idx}
-                                className="relative group flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer"
+                                className={`relative group flex flex-col items-center justify-center border rounded-lg p-2 shadow hover:shadow-lg transition cursor-pointer ${
+                                  isDark
+                                    ? "bg-gray-700 border-gray-600"
+                                    : "bg-white border-gray-200"
+                                }`}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleTooltipToggle(symbolKey);
@@ -187,7 +205,11 @@ export function SymbolsTab({
                                     Lv. {symbol.symbol_level}
                                   </span>
                                 </div>
-                                <div className="text-sm font-semibold text-gray-800 text-center hidden md:block">
+                                <div
+                                  className={`text-sm font-semibold text-center hidden md:block ${
+                                    isDark ? "text-gray-100" : "text-gray-800"
+                                  }`}
+                                >
                                   {symbol.symbol_name}
                                 </div>
                                 {/* Tooltip */}
@@ -246,7 +268,7 @@ export function SymbolsTab({
                                           {stat.label}: +{stat.value}
                                         </span>
                                       </div>
-                                    ) : null
+                                    ) : null,
                                   )}
                                 </div>
                               </div>
@@ -263,12 +285,12 @@ export function SymbolsTab({
         {symbolData &&
           (!Array.isArray(symbolData.symbol) ||
             symbolData.symbol.length === 0) && (
-            <p className="text-gray-700">
+            <p className={isDark ? "text-gray-300" : "text-gray-700"}>
               No symbols found for this character.
             </p>
           )}
         {!symbolLoading && !symbolError && !symbolData && (
-          <p className="text-gray-700">
+          <p className={isDark ? "text-gray-300" : "text-gray-700"}>
             Symbol progression and details will appear here.
           </p>
         )}

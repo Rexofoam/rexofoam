@@ -3,9 +3,13 @@ import { SkillsTooltip } from "@/components/SkillsTooltip";
 
 interface NoblesseSkillsProps {
   skillsData: any;
+  isDark?: boolean;
 }
 
-export function NoblesseSkills({ skillsData }: NoblesseSkillsProps) {
+export function NoblesseSkills({
+  skillsData,
+  isDark = false,
+}: NoblesseSkillsProps) {
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
   const handleTooltipToggle = (skillKey: string) => {
@@ -21,7 +25,11 @@ export function NoblesseSkills({ skillsData }: NoblesseSkillsProps) {
             return (
               <div
                 key={index}
-                className="group relative bg-gray-400 border border-gray-300 rounded-lg p-1 md:p-2 hover:bg-gray-300 transition-colors w-16 md:w-20 h-20 md:h-24 shadow-sm hover:shadow-md cursor-pointer"
+                className={`group relative border rounded-lg p-1 md:p-2 transition-colors w-16 md:w-20 h-20 md:h-24 shadow-sm hover:shadow-md cursor-pointer ${
+                  isDark
+                    ? "bg-gray-700 border-gray-600 hover:bg-gray-600"
+                    : "bg-gray-400 border-gray-300 hover:bg-gray-300"
+                }`}
                 title={skill.skill_name}
                 onClick={(e) => {
                   e.stopPropagation();

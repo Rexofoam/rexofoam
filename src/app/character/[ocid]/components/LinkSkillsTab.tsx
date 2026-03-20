@@ -4,12 +4,14 @@ interface LinkSkillsTabProps {
   linkSkillsData: any;
   linkSkillsLoading: boolean;
   linkSkillsError: string;
+  isDark?: boolean;
 }
 
 export function LinkSkillsTab({
   linkSkillsData,
   linkSkillsLoading,
   linkSkillsError,
+  isDark = false,
 }: LinkSkillsTabProps) {
   const [activeTooltip, setActiveTooltip] = useState<number | null>(null);
 
@@ -30,27 +32,43 @@ export function LinkSkillsTab({
             alt="Loading..."
             className="w-16 h-16 mb-4"
           />
-          <p className="text-gray-600">Loading link skills...</p>
+          <p className={isDark ? "text-gray-300" : "text-gray-600"}>
+            Loading link skills...
+          </p>
         </div>
       )}
 
       {linkSkillsError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-          <p className="text-red-800">Error: {linkSkillsError}</p>
+        <div
+          className={`border rounded-lg p-4 mb-4 ${
+            isDark ? "bg-red-950/40 border-red-700" : "bg-red-50 border-red-200"
+          }`}
+        >
+          <p className={isDark ? "text-red-300" : "text-red-800"}>
+            Error: {linkSkillsError}
+          </p>
         </div>
       )}
 
       {!linkSkillsLoading &&
         !linkSkillsError &&
         linkSkillsData?.character_link_skill && (
-          <div className="bg-gray-50 p-4 rounded-lg">
+          <div
+            className={`p-4 rounded-lg ${
+              isDark ? "bg-gray-800" : "bg-gray-50"
+            }`}
+          >
             <div className="flex justify-center">
               <div className="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-3 justify-items-center">
                 {linkSkillsData.character_link_skill.map(
                   (skill: any, index: number) => (
                     <div
                       key={index}
-                      className="group relative bg-white border border-gray-200 rounded-lg p-1 md:p-2 hover:bg-gray-100 transition-colors w-16 md:w-20 h-16 md:h-20 shadow-sm hover:shadow-md cursor-pointer"
+                      className={`group relative border rounded-lg p-1 md:p-2 transition-colors w-16 md:w-20 h-16 md:h-20 shadow-sm hover:shadow-md cursor-pointer ${
+                        isDark
+                          ? "bg-gray-700 border-gray-600 hover:bg-gray-600"
+                          : "bg-white border-gray-200 hover:bg-gray-100"
+                      }`}
                       title={skill.skill_name}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -101,7 +119,7 @@ export function LinkSkillsTab({
                         <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-black"></div>
                       </div>
                     </div>
-                  )
+                  ),
                 )}
               </div>
             </div>
@@ -113,9 +131,15 @@ export function LinkSkillsTab({
         (!linkSkillsData?.character_link_skill ||
           linkSkillsData.character_link_skill.length === 0) && (
           <div className="text-center py-8">
-            <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <div
+              className={`rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 ${
+                isDark ? "bg-gray-700" : "bg-gray-100"
+              }`}
+            >
               <svg
-                className="w-8 h-8 text-gray-500"
+                className={`w-8 h-8 ${
+                  isDark ? "text-gray-300" : "text-gray-500"
+                }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -128,10 +152,14 @@ export function LinkSkillsTab({
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            <h3
+              className={`text-lg font-semibold mb-2 ${
+                isDark ? "text-gray-100" : "text-gray-800"
+              }`}
+            >
               No Link Skills Found
             </h3>
-            <p className="text-gray-600">
+            <p className={isDark ? "text-gray-300" : "text-gray-600"}>
               This character doesn't have any link skills configured yet.
             </p>
           </div>
