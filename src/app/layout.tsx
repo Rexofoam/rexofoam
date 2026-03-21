@@ -7,7 +7,18 @@ import ToastProvider from "@/components/ToastProvider";
 
 export const metadata: Metadata = {
   title: "MapleSEA Tracker",
-  description: "MapleStory SEA character lookup and stats viewer",
+  description:
+    "MapleStory SEA character lookup, character indexing system, and MapleStory maps explorer with stats and guild analytics.",
+  keywords: [
+    "MapleSEA Tracker",
+    "MapleStory SEA",
+    "character indexing system",
+    "character lookup",
+    "MapleStory maps",
+    "map explorer",
+    "guild analytics",
+    "character stats",
+  ],
   icons: {
     icon: "/tab-logo.ico",
   },
