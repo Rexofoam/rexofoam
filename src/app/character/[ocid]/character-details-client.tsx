@@ -12,6 +12,26 @@ import { SymbolsTab } from "./components/SymbolsTab";
 import { LinkSkillsTab } from "./components/LinkSkillsTab";
 import { GrowthTab } from "./components/GrowthTab";
 
+const getCharacterDetailVideoSrc = (characterClass?: string) => {
+  if (!characterClass) {
+    return null;
+  }
+
+  const specialFileNames: Record<string, string> = {
+    "Arch Mage (Fire/Poison)": "arch mage fire poison.mp4",
+    "Arch Mage (F/P)": "arch mage fire poison.mp4",
+    "Arch Mage (Ice/Lightning)": "arch mage ice lightning.mp4",
+    "Arch Mage (I/L)": "arch mage ice lightning.mp4",
+    Hoyoung: "hoyung.mp4",
+    Illium: "ilium.mp4",
+  };
+
+  const fileName =
+    specialFileNames[characterClass] ?? `${characterClass.toLowerCase()}.mp4`;
+
+  return `/images/characters/video/${encodeURIComponent(fileName)}`;
+};
+
 interface CharacterDetailsClientProps {
   ocid: string;
   characterName?: string;
@@ -871,19 +891,59 @@ export function CharacterDetailsClient({
                           isDark ? "bg-gray-800" : "bg-gray-50"
                         }`}
                       >
-                        <div className="grid grid-cols-3 gap-4 text-sm">
-                          {characterData.stat.final_stat
-                            ?.slice(0, 6)
-                            .map((stat, index) => (
-                              <p key={index}>
-                                <strong>{stat.stat_name}:</strong>{" "}
-                                {stat.stat_value}
-                              </p>
-                            ))}
+                        <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6">
+                          <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 xl:grid-cols-3">
+                            {characterData.stat.final_stat
+                              ?.slice(0, 6)
+                              .map((stat, index) => (
+                                <p
+                                  key={index}
+                                  className="break-words rounded-lg bg-white/40 p-2 sm:bg-transparent sm:p-0"
+                                >
+                                  <strong>{stat.stat_name}:</strong>{" "}
+                                  {stat.stat_value}
+                                </p>
+                              ))}
+                          </div>
+
+                          {getCharacterDetailVideoSrc(
+                            characterData.basic?.character_class,
+                          ) && (
+                            <div className="flex justify-center lg:justify-end">
+                              <div
+                                className={`w-full max-w-full overflow-hidden rounded-xl border sm:max-w-[420px] ${
+                                  isDark
+                                    ? "border-gray-700 bg-gray-900"
+                                    : "border-gray-200 bg-white"
+                                }`}
+                              >
+                                <video
+                                  key={characterData.basic?.character_class}
+                                  autoPlay
+                                  muted
+                                  loop
+                                  playsInline
+                                  controls
+                                  preload="none"
+                                  className="block h-auto w-full"
+                                  poster={characterData.basic?.character_image}
+                                >
+                                  <source
+                                    src={
+                                      getCharacterDetailVideoSrc(
+                                        characterData.basic?.character_class,
+                                      ) ?? undefined
+                                    }
+                                    type="video/mp4"
+                                  />
+                                </video>
+                              </div>
+                            </div>
+                          )}
                         </div>
                         <button
                           onClick={() => setActiveTab("stats")}
-                          className={`mt-2 text-sm ${
+                          className={`mt-3 inline-flex items-center text-sm ${
                             isDark
                               ? "text-blue-300 hover:text-blue-200"
                               : "text-blue-600 hover:text-blue-800"

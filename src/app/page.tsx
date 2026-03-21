@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { useNavigation } from "@/utils/navigation";
 import Header from "@/components/Header";
@@ -42,14 +44,14 @@ export default function BackgroundPage() {
         // Use real MapleStory SEA API for guild search
         const response = await fetch(
           `https://open.api.nexon.com/maplestorysea/v1/guild/id?guild_name=${encodeURIComponent(
-            inputValue
+            inputValue,
           )}&world_name=${encodeURIComponent(worldName)}`,
           {
             headers: {
               "x-nxopen-api-key":
                 "test_ea78af0bb88d495a94b6f66066c720e395fdf4f7b152747fba72a401626e4bfdefe8d04e6d233bd35cf2fabdeb93fb0d",
             },
-          }
+          },
         );
 
         if (response.ok) {
@@ -74,14 +76,14 @@ export default function BackgroundPage() {
         // Use real MapleStory SEA API for character search
         const response = await fetch(
           `https://open.api.nexon.com/maplestorysea/v1/id?character_name=${encodeURIComponent(
-            inputValue
+            inputValue,
           )}`,
           {
             headers: {
               "x-nxopen-api-key":
                 "live_ea78af0bb88d495a94b6f66066c720e33d4e8a3ef9dad5783bd0c610437d34f2efe8d04e6d233bd35cf2fabdeb93fb0d",
             },
-          }
+          },
         );
 
         if (response.ok) {
@@ -266,6 +268,63 @@ export default function BackgroundPage() {
                 >
                   {isGuildMode ? "Search Character" : "Search Guild"}
                 </button>
+              </div>
+
+              <div className="pt-2">
+                <div className="mb-3 text-center">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">
+                    Explore More
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <Link
+                    href="/maplemaps"
+                    className="group overflow-hidden rounded-2xl border border-orange-200 bg-gradient-to-br from-orange-50 via-white to-amber-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    <div className="relative h-28 overflow-hidden">
+                      <Image
+                        src="/images/maps-icon.png"
+                        alt="Maple Maps"
+                        fill
+                        className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, 180px"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-orange-900/15 to-transparent" />
+                    </div>
+                    <div className="px-4 pb-4 text-center">
+                      <p className="text-sm font-semibold text-gray-900">
+                        Maple Maps
+                      </p>
+                      <p className="mt-1 text-xs text-gray-600">
+                        Browse map-related content
+                      </p>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/maplecharacters"
+                    className="group overflow-hidden rounded-2xl border border-sky-200 bg-gradient-to-br from-sky-50 via-white to-cyan-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    <div className="relative h-28 overflow-hidden">
+                      <Image
+                        src="/images/character.png"
+                        alt="Maple Characters"
+                        fill
+                        className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, 180px"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-sky-900/10 to-transparent" />
+                    </div>
+                    <div className="px-4 pb-4 text-center">
+                      <p className="text-sm font-semibold text-gray-900">
+                        Maple Characters
+                      </p>
+                      <p className="mt-1 text-xs text-gray-600">
+                        Open the character hub
+                      </p>
+                    </div>
+                  </Link>
+                </div>
               </div>
             </div>
 
