@@ -6,31 +6,12 @@ import { characterDataService } from "@/services/character-data.service";
 import { CharacterData } from "@/types/maplestory-api";
 import Header from "@/components/Header";
 import { buildUrl } from "@/config/routes";
+import { getCharacterVideoSrc } from "@/utils/character-video";
 import { EquipmentTab } from "./components/EquipmentTab";
 import { HyperTab } from "./components/HyperTab";
 import { SymbolsTab } from "./components/SymbolsTab";
 import { LinkSkillsTab } from "./components/LinkSkillsTab";
 import { GrowthTab } from "./components/GrowthTab";
-
-const getCharacterDetailVideoSrc = (characterClass?: string) => {
-  if (!characterClass) {
-    return null;
-  }
-
-  const specialFileNames: Record<string, string> = {
-    "Arch Mage (Fire/Poison)": "arch mage fire poison.mp4",
-    "Arch Mage (F/P)": "arch mage fire poison.mp4",
-    "Arch Mage (Ice/Lightning)": "arch mage ice lightning.mp4",
-    "Arch Mage (I/L)": "arch mage ice lightning.mp4",
-    Hoyoung: "hoyung.mp4",
-    Illium: "ilium.mp4",
-  };
-
-  const fileName =
-    specialFileNames[characterClass] ?? `${characterClass.toLowerCase()}.mp4`;
-
-  return `/images/characters/video/${encodeURIComponent(fileName)}`;
-};
 
 interface CharacterDetailsClientProps {
   ocid: string;
@@ -906,7 +887,7 @@ export function CharacterDetailsClient({
                               ))}
                           </div>
 
-                          {getCharacterDetailVideoSrc(
+                          {getCharacterVideoSrc(
                             characterData.basic?.character_class,
                           ) && (
                             <div className="flex justify-center lg:justify-end">
@@ -930,7 +911,7 @@ export function CharacterDetailsClient({
                                 >
                                   <source
                                     src={
-                                      getCharacterDetailVideoSrc(
+                                      getCharacterVideoSrc(
                                         characterData.basic?.character_class,
                                       ) ?? undefined
                                     }
