@@ -132,7 +132,8 @@ export default function BackgroundPage() {
         <p>
           MapleSEA Tracker is the premier analytics platform for MapleStory SEA
           (Singapore) players. Our comprehensive tracking system provides
-          real-time character statistics, guild management tools, and detailed
+          real-time character statistics, a dedicated character indexing system,
+          MapleStory maps discovery, guild management tools, and detailed
           progression analytics across all MapleStory SEA servers including
           Aquila, Bootes, Cassiopeia, and Draco.
         </p>
@@ -143,6 +144,18 @@ export default function BackgroundPage() {
           distribution, symbol tracking, and job advancement history. Monitor
           your character's growth over time with historical data comparison and
           performance benchmarks.
+        </p>
+        <h2>Character Indexing System</h2>
+        <p>
+          Use our character indexing system to browse MapleStory classes,
+          compare role strengths, and quickly jump into class-specific previews
+          and guides.
+        </p>
+        <h2>MapleStory Maps Explorer</h2>
+        <p>
+          Explore MapleStory maps content in one place, with map-focused updates
+          and discovery tools designed for efficient route planning and
+          progression support.
         </p>
         <h2>Guild Management System</h2>
         <p>
@@ -435,13 +448,15 @@ export default function BackgroundPage() {
               <p className="text-sm leading-relaxed">
                 Leverage powerful analytics tools designed specifically for
                 MapleStory SEA players. Historical data comparison, performance
-                benchmarking, and detailed progression reports help you optimize
+                benchmarking, character indexing workflows, MapleStory maps
+                exploration, and detailed progression reports help you optimize
                 your gameplay and achieve your MapleStory goals faster.
               </p>
               <ul className="text-xs space-y-1 text-gray-300">
                 <li>• Historical data comparison</li>
                 <li>• Performance trend analysis</li>
-                <li>• Multi-character portfolio tracking</li>
+                <li>• Character indexing and class discovery</li>
+                <li>• MapleStory maps exploration support</li>
                 <li>• Export and sharing capabilities</li>
               </ul>
             </div>
