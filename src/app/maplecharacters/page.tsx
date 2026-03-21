@@ -9,6 +9,7 @@ import {
   type MapleCharacterEntry,
   type MapleCharacterCategory,
 } from "@/data/maple-characters";
+import { getCharacterVideoSrc } from "@/utils/character-video";
 
 const categoryStyles: Record<
   MapleCharacterCategory,
@@ -65,18 +66,6 @@ const getCharacterImageSrc = (name: string) => {
 
   const fileName = specialFileNames[name] ?? `${name.toLowerCase()}.png`;
   return `/images/characters/${encodeURIComponent(fileName)}`;
-};
-
-const getCharacterVideoSrc = (name: string) => {
-  const specialFileNames: Record<string, string> = {
-    "Arch Mage (Fire/Poison)": "arch mage fire poison.mp4",
-    "Arch Mage (Ice/Lightning)": "arch mage ice lightning.mp4",
-    Hoyoung: "hoyung.mp4",
-    Illium: "ilium.mp4",
-  };
-
-  const fileName = specialFileNames[name] ?? `${name.toLowerCase()}.mp4`;
-  return `/images/characters/video/${encodeURIComponent(fileName)}`;
 };
 
 const statTicks = [20, 40, 60, 80, 100] as const;
@@ -393,7 +382,7 @@ export default function MaplecharactersPage() {
                     poster={getCharacterImageSrc(selectedCharacter.name)}
                   >
                     <source
-                      src={getCharacterVideoSrc(selectedCharacter.name)}
+                      src={getCharacterVideoSrc(selectedCharacter.name) ?? undefined}
                       type="video/mp4"
                     />
                   </video>
