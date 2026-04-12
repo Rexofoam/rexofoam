@@ -1,4 +1,4 @@
-﻿export type MapleCharacterCategory =
+export type MapleCharacterCategory =
   | "Warrior"
   | "Magician"
   | "Bowman"
@@ -61,7 +61,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Anima",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A wanderer on a journey to uphold the wishes of a dear friend. They are a practitioner of the Plum Blossom Sword, Imugi Spirit Sword, and powerful Rising Azu...",
+    summary: "Ren is a Warrior class from the Anima branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Serene Breeze, Final Plum Blossom Sword: Thousand Blossom Flurry, and Rising Azure Dragon: Divided Heavens.",
     highlights: ["Serene Breeze", "Final Plum Blossom Sword: Thousand Blossom Flurry", "Rising Azure Dragon: Divided Heavens"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 60 },
   },  {
@@ -71,7 +71,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A warrior who stands at the very pinnacle of the blade, it's said that the Hero cuts the air itself each time they swing their sword. The Hero generates comb...",
+    summary: "Hero is a Warrior class from the Explorer branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Flash Blade, Sword Illusion, and Spirit Calibur.",
     highlights: ["Flash Blade", "Sword Illusion", "Spirit Calibur"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -81,7 +81,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A knight clad in heavy armor, the Paladin is a warrior who wields defensive armaments and divine power. The Paladin's holy skills and stalwart defenses rende...",
+    summary: "Paladin is a Warrior class from the Explorer branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Upward Charge, Divine Echo, and Sacred Bastion.",
     highlights: ["Upward Charge", "Divine Echo", "Sacred Bastion"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -91,7 +91,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A warrior who made a pact with darkness itself, the Dark Knight overwhelms their foes by combining dark powers with devastating spear skills. The Dark Knight...",
+    summary: "Dark Knight is a Warrior class from the Explorer branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like War Leap, Darkness Aura, and Dead Space.",
     highlights: ["War Leap", "Darkness Aura", "Dead Space"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -101,7 +101,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Cygnus Knight",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A member of the legendary Cygnus Knights, the Dawn Warrior is a warrior who channels the celestial power of the cosmos. By balancing their attacks between th...",
+    summary: "Dawn Warrior is a Warrior class from the Cygnus Knight branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Soul Leap, Cosmos, and Astral Blitz.",
     highlights: ["Soul Leap", "Cosmos", "Astral Blitz"],
     stats: { attack: 60, defense: 60, mobility: 80, difficulty: 60 },
   },  {
@@ -111,7 +111,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Cygnus Knight",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A member of the legendary Cygnus Knights, Mihile is a Chief Knight sworn to protect Empress Cygnus. Though Mihile grew up in ignorance of his destiny, he was...",
+    summary: "Mihile is a Warrior class from the Cygnus Knight branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Weightless Heart, Shield of Light, and Durendal.",
     highlights: ["Weightless Heart", "Shield of Light", "Durendal"],
     stats: { attack: 80, defense: 100, mobility: 20, difficulty: 100 },
   },  {
@@ -121,7 +121,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Resistance",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "If you're getting into a brawl, there's only one warrior you should call: Blaster, a master of launching unrelenting assaults with their Arm Cannon. Blaster ...",
+    summary: "Blaster is a Warrior class from the Resistance branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Double Jump, Rocket Punch, and Final Destroyer.",
     highlights: ["Double Jump", "Rocket Punch", "Final Destroyer"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 60 },
   },  {
@@ -131,7 +131,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Demon",
     mainStat: "STR (Strength)",
     movement: "Gliding",
-    summary: "Once a feared commander of the Black Mage's army, the Demon Slayer was betrayed by their former master. Now sworn to vengeance, the Demon Slayer is fueled by...",
+    summary: "Demon Slayer is a Warrior class from the Demon branch that builds around STR (Strength), uses Gliding for movement, and features signature skills like Dark Winds, Spirit of Rage, and Nightmare.",
     highlights: ["Dark Winds", "Spirit of Rage", "Nightmare"],
     stats: { attack: 60, defense: 80, mobility: 80, difficulty: 40 },
   },  {
@@ -141,7 +141,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Demon",
     mainStat: "HP (Health Points)",
     movement: "Gliding",
-    summary: "Once a feared commander of the Black Mage's army, the Demon Avenger was betrayed by their former master. Now sworn to vengeance, the Demon Avenger sacrifices...",
+    summary: "Demon Avenger is a Warrior class from the Demon branch that builds around HP (Health Points), uses Gliding for movement, and features signature skills like Dark Winds, Revenant, and Requiem.",
     highlights: ["Dark Winds", "Revenant", "Requiem"],
     stats: { attack: 60, defense: 80, mobility: 80, difficulty: 40 },
   },  {
@@ -151,7 +151,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Hero",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "The legendary Polearm Warrior who once faced the Black Mage's army alone, Aran is one of the five heroes who saved Maple World in the distant past. With her ...",
+    summary: "Aran is a Warrior class from the Hero branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Smash Swing, Blizzard Tempest, and Endgame.",
     highlights: ["Smash Swing", "Blizzard Tempest", "Endgame"],
     stats: { attack: 80, defense: 80, mobility: 80, difficulty: 60 },
   },  {
@@ -161,7 +161,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Nova",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "Guardian of the Nova... Warrior of the Red Flame... These titles are handed down from one generation to the next to honor an eternal warrior spirit wearing a...",
+    summary: "Kaiser is a Warrior class from the Nova branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Air Lift, Draco Surge, and Nova Triumphant.",
     highlights: ["Air Lift", "Draco Surge", "Nova Triumphant"],
     stats: { attack: 80, defense: 60, mobility: 80, difficulty: 40 },
   },  {
@@ -171,7 +171,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Flora",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A High Flora of Grandis and an honorable knight who was locked away in the Void for reasons unknown, Adele lost the lord she was sworn to protect. After bein...",
+    summary: "Adele is a Warrior class from the Flora branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Jaunt, Storm, and Maestro.",
     highlights: ["Jaunt", "Storm", "Maestro"],
     stats: { attack: 80, defense: 60, mobility: 100, difficulty: 60 },
   },  {
@@ -181,7 +181,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Transcendent",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "Before she was sealed away, the Goddess of Time created Zero, a child destined to become the Transcendent of Time. The twin aspects of Zero, Alpha and Beta, ...",
+    summary: "Zero is a Warrior class from the Transcendent branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Burst Step, Chrono Break, and End Time.",
     highlights: ["Burst Step", "Chrono Break", "End Time"],
     stats: { attack: 80, defense: 80, mobility: 80, difficulty: 80 },
   },  {
@@ -191,7 +191,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Sengoku",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A warrior of the Akatsuki Style and devout retainer of Princess Sakuno, Hayato strikes with swift swordsmanship and movement skills in combination with power...",
+    summary: "Hayato is a Warrior class from the Sengoku branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Battoujutsu Dash, Shogetsu Form, and Shin Quick Draw.",
     highlights: ["Battoujutsu Dash", "Shogetsu Form", "Shin Quick Draw"],
     stats: { attack: 100, defense: 60, mobility: 100, difficulty: 100 },
   },  {
@@ -201,7 +201,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "INT (Intelligence)",
     movement: "Teleportation",
-    summary: "A magician who wipes their enemies from the battlefield with powerful explosions and lethal poisons. The Arch Mage (Fire/Poison) excels at dealing damage in ...",
+    summary: "Arch Mage (Fire/Poison) is a Magician class from the Explorer branch that builds around INT (Intelligence), uses Teleportation for movement, and features signature skills like Mana Wave, Poison Nova, and Infernal Venom.",
     highlights: ["Mana Wave", "Poison Nova", "Infernal Venom"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -211,7 +211,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "INT (Intelligence)",
     movement: "Teleportation",
-    summary: "A magician who subdues their foes with bitter chills and shocking electricity. The Arch Mage (Ice/Lightning)'s magic is colder than glaciers and fiercer than...",
+    summary: "Arch Mage (Ice/Lightning) is a Magician class from the Explorer branch that builds around INT (Intelligence), uses Teleportation for movement, and features signature skills like Energy Bolt, Bolt Barrage, and Frozen Lightning.",
     highlights: ["Energy Bolt", "Bolt Barrage", "Frozen Lightning"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -221,7 +221,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "INT (Intelligence)",
     movement: "Teleportation",
-    summary: "The Bishop is a holy magician whose divine power can manifest as both an Angel of Benevolence and an Avenging Angel, according to what the battlefield requir...",
+    summary: "Bishop is a Magician class from the Explorer branch that builds around INT (Intelligence), uses Teleportation for movement, and features signature skills like Teleport, Angel of Balance, and Holy Advent.",
     highlights: ["Teleport", "Angel of Balance", "Holy Advent"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -231,7 +231,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Cygnus Knight",
     mainStat: "INT (Intelligence)",
     movement: "Jumping",
-    summary: "A member of the legendary Cygnus Knights, the Blaze Wizard is a magician who immolates their foes with the power of Ignis, the spirit of fire. The Blaze Wiza...",
+    summary: "Blaze Wizard is a Magician class from the Cygnus Knight branch that builds around INT (Intelligence), uses Jumping for movement, and features signature skills like Orbital Flame, Salamander Mischief, and Eternity.",
     highlights: ["Orbital Flame", "Salamander Mischief", "Eternity"],
     stats: { attack: 60, defense: 60, mobility: 80, difficulty: 60 },
   },  {
@@ -241,7 +241,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Resistance",
     mainStat: "INT (Intelligence)",
     movement: "Teleportation",
-    summary: "A melee magician who specializes in close-quarters combat. Unlike other magicians, the Battle Mage overpowers enemies with quick consecutive attacks. The Bat...",
+    summary: "Battle Mage is a Magician class from the Resistance branch that builds around INT (Intelligence), uses Teleportation for movement, and features signature skills like Combat Teleport, Altar of Annihilation, and Crimson Pact.",
     highlights: ["Combat Teleport", "Altar of Annihilation", "Crimson Pact"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 60 },
   },  {
@@ -251,7 +251,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Hero",
     mainStat: "INT (Intelligence)",
     movement: "Teleportation",
-    summary: "A farmhand made a contract with a dragon? An untrained magician and the last of the Onyx Dragons may not sound like a recipe for legendary heroics, but this ...",
+    summary: "Evan is a Magician class from the Hero branch that builds around INT (Intelligence), uses Teleportation for movement, and features signature skills like Teleport, Elemental Radiance, and Zodiac Burst.",
     highlights: ["Teleport", "Elemental Radiance", "Zodiac Burst"],
     stats: { attack: 80, defense: 60, mobility: 60, difficulty: 80 },
   },  {
@@ -261,7 +261,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Hero",
     mainStat: "INT (Intelligence)",
     movement: "Teleportation",
-    summary: "One of the five heroes who saved Maple World long ago, Luminous is a powerful magician now torn between Darkness and Light. Luminous struggles to control his...",
+    summary: "Luminous is a Magician class from the Hero branch that builds around INT (Intelligence), uses Teleportation for movement, and features signature skills like Flash Shower, Gate of Light, and Harmonic Paradox.",
     highlights: ["Flash Shower", "Gate of Light", "Harmonic Paradox"],
     stats: { attack: 80, defense: 80, mobility: 60, difficulty: 40 },
   },  {
@@ -271,7 +271,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Flora",
     mainStat: "INT (Intelligence)",
     movement: "Teleportation",
-    summary: "A Verdant Flora born without magic, Illium became an expert in building powerful machines. But after the Elder Crystal awoke the magic within him, Illium bec...",
+    summary: "Illium is a Magician class from the Flora branch that builds around INT (Intelligence), uses Teleportation for movement, and features signature skills like Radiant Javelin, Crystal Ignition, and Mytocrystal Expanse.",
     highlights: ["Radiant Javelin", "Crystal Ignition", "Mytocrystal Expanse"],
     stats: { attack: 80, defense: 40, mobility: 80, difficulty: 40 },
   },  {
@@ -281,7 +281,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Anima",
     mainStat: "INT (Intelligence)",
     movement: "Jumping",
-    summary: "An Anima of Grandis, Lara is an earthseer on a quest to make a mysterious bell ring. After awakening the power of the bell seemingly by accident, Lara bonds ...",
+    summary: "Lara is a Magician class from the Anima branch that builds around INT (Intelligence), uses Jumping for movement, and features signature skills like Jump for Joy!, Big Stretch, and Universe in Bloom.",
     highlights: ["Jump for Joy!", "Big Stretch", "Universe in Bloom"],
     stats: { attack: 80, defense: 60, mobility: 80, difficulty: 60 },
   },  {
@@ -291,7 +291,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Friends World",
     mainStat: "INT (Intelligence)",
     movement: "Jumping",
-    summary: "Kinesis is just a normal student from Friends World... except for the awesome telekinetic abilities that allow him to move objects around as he pleases! Kine...",
+    summary: "Kinesis is a Magician class from the Friends World branch that builds around INT (Intelligence), uses Jumping for movement, and features signature skills like Kinetic Step, Law of Gravity, and From Another Realm.",
     highlights: ["Kinetic Step", "Law of Gravity", "From Another Realm"],
     stats: { attack: 60, defense: 60, mobility: 80, difficulty: 80 },
   },  {
@@ -301,7 +301,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Sengoku",
     mainStat: "INT (Intelligence)",
     movement: "Teleportation",
-    summary: "A genius Spirit Walker, inseparable from their beloved companion Haku. Kanna summons and commands Shikigami-- such as Oni, Tengu, and Orochi--with skills tha...",
+    summary: "Kanna is a Magician class from the Sengoku branch that builds around INT (Intelligence), uses Teleportation for movement, and features signature skills like Leap Talisman, [Spirit] Hakumenkonmou Juubi, and [Divine Will] Advent of Crimson.",
     highlights: ["Leap Talisman", "[Spirit] Hakumenkonmou Juubi", "[Divine Will] Advent of Crimson"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -311,7 +311,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Jianghu",
     mainStat: "INT (Intelligence)",
     movement: "Jumping",
-    summary: "As the reborn Forest Child, Lynn is the inheritor of a sacred duty to protect the Eternal Forest. She is aided in her mission by her three Spirit Guides: Pan...",
+    summary: "Lynn is a Magician class from the Jianghu branch that builds around INT (Intelligence), uses Jumping for movement, and features signature skills like Light Steps, Beak Strike, and Source Flow.",
     highlights: ["Light Steps", "Beak Strike", "Source Flow"],
     stats: { attack: 80, defense: 60, mobility: 60, difficulty: 80 },
   },  {
@@ -321,7 +321,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Shine",
     mainStat: "INT (Intelligence)",
     movement: "Teleportation",
-    summary: "A Magician who protects the Order of the Stars on Oort. Sia calls upon the power of starlight, recording and fusing 5 Marking Skills in her Stellagram to sum...",
+    summary: "Sia Astelle is a Magician class from the Shine branch that builds around INT (Intelligence), uses Teleportation for movement, and features signature skills like Starry Flow, Shine, and SHINE Ray.",
     highlights: ["Starry Flow", "Shine", "SHINE Ray"],
     stats: { attack: 80, defense: 60, mobility: 60, difficulty: 80 },
   },  {
@@ -331,7 +331,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "A bowman who has become one with their weapon, the Bow Master drowns their foes in a merciless rain of arrows. With rapid-fire onslaughts of continuous arrow...",
+    summary: "Bow Master is a Bowman class from the Explorer branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Double Jump, Storm of Arrows, and Ascendant Shadow.",
     highlights: ["Double Jump", "Storm of Arrows", "Ascendant Shadow"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -341,7 +341,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "A sniper who can always find the perfect shot, the Marksman is a bowman who has mastered the art of pinning their enemies down with crossbow fire. Each of th...",
+    summary: "Marksman is a Bowman class from the Explorer branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Double Jump, Split Shot, and Final Aim.",
     highlights: ["Double Jump", "Split Shot", "Final Aim"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -351,7 +351,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "Captivated by the allure of ancient artifacts, the Pathfinder traveled far and wide in search of the treasure of bygone eras. But when the Pathfinder fell un...",
+    summary: "Pathfinder is a Bowman class from the Explorer branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Cardinal Deluge, Relic Unbound, and Forsaken Relic.",
     highlights: ["Cardinal Deluge", "Relic Unbound", "Forsaken Relic"],
     stats: { attack: 100, defense: 60, mobility: 80, difficulty: 60 },
   },  {
@@ -361,7 +361,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Cygnus Knight",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "A member of the legendary Cygnus Knights, the Wind Archer is a bowman who wields the wind itself by channeling the power of Ventus, the spirit of wind. Capab...",
+    summary: "Wind Archer is a Bowman class from the Cygnus Knight branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Gust Swift, Gale Barrier, and Mistral Spring.",
     highlights: ["Gust Swift", "Gale Barrier", "Mistral Spring"],
     stats: { attack: 60, defense: 60, mobility: 80, difficulty: 60 },
   },  {
@@ -371,7 +371,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Resistance",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "The Wild Hunter stalks the battlefield alongside Ashlii, their fierce jaguar companion. They augment Ashliiâs potent nature powers with their high-tech cro...",
+    summary: "Wild Hunter is a Bowman class from the Resistance branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Savage Bound, Command: Predator's Eye, and Synchronous Hunt.",
     highlights: ["Savage Bound", "Command: Predator's Eye", "Synchronous Hunt"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 60 },
   },  {
@@ -381,7 +381,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Hero",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "One of the five heroes who saved Maple World in the distant past, Mercedes is the queen of the elves. She was the first hero to break the Black Mage's front ...",
+    summary: "Mercedes is a Bowman class from the Hero branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Spirit Jump, Spirit of Elluel, and Unfading Glory.",
     highlights: ["Spirit Jump", "Spirit of Elluel", "Unfading Glory"],
     stats: { attack: 80, defense: 60, mobility: 80, difficulty: 60 },
   },  {
@@ -391,7 +391,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Nova",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "A hitman who belongs to a company that rules Toolen City, Grandis, from the bloodstained shadows. After seeing through the lies of his employers, Kain decide...",
+    summary: "Kain is a Bowman class from the Nova branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Shadow Swiftness, [Possess] Dragon Burst, and Total Annihilation.",
     highlights: ["Shadow Swiftness", "[Possess] Dragon Burst", "Total Annihilation"],
     stats: { attack: 80, defense: 60, mobility: 100, difficulty: 100 },
   },  {
@@ -401,7 +401,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "LUK (Luck)",
     movement: "Jumping",
-    summary: "A thief with countless throwing stars, no enemy who faces the Night Lord comes away unscathed. In addition to smothering enemies in a storm of stars, the Nig...",
+    summary: "Night Lord is a Thief class from the Explorer branch that builds around LUK (Luck), uses Jumping for movement, and features signature skills like Flash Jump, Throwing Star Barrage, and Life and Death.",
     highlights: ["Flash Jump", "Throwing Star Barrage", "Life and Death"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -411,7 +411,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "LUK (Luck)",
     movement: "Jumping",
-    summary: "Even among monsters, there are rumors of a shadow that haunts the dark corners of the world, dealing death in absolute silence. The Shadower is an assassin w...",
+    summary: "Shadower is a Thief class from the Explorer branch that builds around LUK (Luck), uses Jumping for movement, and features signature skills like Flash Jump, Shadow Assault, and Halve Cut.",
     highlights: ["Flash Jump", "Shadow Assault", "Halve Cut"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -421,7 +421,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "LUK (Luck)",
     movement: "Jumping",
-    summary: "These mysterious blademasters face an internal power struggle that threatens the future of their secretive organization, with a greater threat looming on the...",
+    summary: "Dual Blade is a Thief class from the Explorer branch that builds around LUK (Luck), uses Jumping for movement, and features signature skills like Flash Jump, Blade Tornado, and Karma Blade.",
     highlights: ["Flash Jump", "Blade Tornado", "Karma Blade"],
     stats: { attack: 80, defense: 40, mobility: 80, difficulty: 40 },
   },  {
@@ -431,7 +431,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Cygnus Knight",
     mainStat: "LUK (Luck)",
     movement: "Jumping",
-    summary: "A member of the legendary Cygnus Knights, the Night Walker is a thief who wields throwing stars imbued with the power of darkness. A master of shadows, the N...",
+    summary: "Night Walker is a Thief class from the Cygnus Knight branch that builds around LUK (Luck), uses Jumping for movement, and features signature skills like Shadow Jump, Shadow Bite, and Silence.",
     highlights: ["Shadow Jump", "Shadow Bite", "Silence"],
     stats: { attack: 60, defense: 60, mobility: 80, difficulty: 60 },
   },  {
@@ -441,7 +441,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Resistance",
     mainStat: "STR (Strength), DEX (Dexterity), LUK (Luck)",
     movement: "Jumping",
-    summary: "When the Black Wing's top scientist made the ultimate soldier, he didn't think they would escape. Now Xenon fights alongside the Resistance in hopes of findi...",
+    summary: "Xenon is a Thief class from the Resistance branch that builds around STR (Strength), DEX (Dexterity), LUK (Luck), uses Jumping for movement, and features signature skills like Propulsion Burst, Hypogram Field: Fusion, and Artificial Evolution.",
     highlights: ["Propulsion Burst", "Hypogram Field: Fusion", "Artificial Evolution"],
     stats: { attack: 60, defense: 40, mobility: 100, difficulty: 40 },
   },  {
@@ -451,7 +451,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Hero",
     mainStat: "LUK (Luck)",
     movement: "Jumping",
-    summary: "A master thief who can steal anything, Phantom is one of the five heroes who saved Maple World in the distant past. When the late Empress Aria fell to the Bl...",
+    summary: "Phantom is a Thief class from the Hero branch that builds around LUK (Luck), uses Jumping for movement, and features signature skills like Phantom Swiftness, Phantom's Mark, and Defying Fate.",
     highlights: ["Phantom Swiftness", "Phantom's Mark", "Defying Fate"],
     stats: { attack: 60, defense: 60, mobility: 100, difficulty: 60 },
   },  {
@@ -461,7 +461,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Nova",
     mainStat: "LUK (Luck)",
     movement: "Jumping",
-    summary: "Once a Nova princess, tragedy led Cadena to a new life as a Shadowdealer... And to a vow to never to find herself the victim of her own weakness again. Caden...",
+    summary: "Cadena is a Thief class from the Nova branch that builds around LUK (Luck), uses Jumping for movement, and features signature skills like Shadowstep, Muscle Memory Finale, and Chain Arts: Grand Arsenal.",
     highlights: ["Shadowstep", "Muscle Memory Finale", "Chain Arts: Grand Arsenal"],
     stats: { attack: 100, defense: 40, mobility: 100, difficulty: 80 },
   },  {
@@ -471,7 +471,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Flora",
     mainStat: "LUK (Luck)",
     movement: "Jumping",
-    summary: "Khali is a High Flora priestess from Grandis. Out of a deep reverence for her benevolent lord, Khali faced the Test of Faith with her twin sister to become h...",
+    summary: "Khali is a Thief class from the Flora branch that builds around LUK (Luck), uses Jumping for movement, and features signature skills like Void Rush, Hex: Pandemonium, and Hex: Sandstorm.",
     highlights: ["Void Rush", "Hex: Pandemonium", "Hex: Sandstorm"],
     stats: { attack: 80, defense: 40, mobility: 100, difficulty: 80 },
   },  {
@@ -481,7 +481,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Anima",
     mainStat: "LUK (Luck)",
     movement: "Jumping",
-    summary: "Hoyoung is an Anima of Grandis, an apprentice learning the art of magic in the land of the sages. After releasing the seal of Taotie, a fearsome fiend who vi...",
+    summary: "Hoyoung is a Thief class from the Anima branch that builds around LUK (Luck), uses Jumping for movement, and features signature skills like Graceful Flight, Sage: Clone Rampage, and Sage: Apotheosis.",
     highlights: ["Graceful Flight", "Sage: Clone Rampage", "Sage: Apotheosis"],
     stats: { attack: 80, defense: 60, mobility: 100, difficulty: 80 },
   },  {
@@ -491,7 +491,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A master of combat who smashes enemies between the powerful Sea Serpent and their crushing Knuckle attacks, fighting the Buccaneer is akin to challenging a s...",
+    summary: "Buccaneer is a Pirate class from the Explorer branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Vortex Jump, Serpent Vortex, and Unleash Neptunus.",
     highlights: ["Vortex Jump", "Serpent Vortex", "Unleash Neptunus"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -501,7 +501,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "With the aid of their trusty shipmates and cutting charisma, the Corsair obliterates their foes with the kind of marksmanship that can only be learned on the...",
+    summary: "Corsair is a Pirate class from the Explorer branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Double Shot, Death Trigger, and The Dreadnought.",
     highlights: ["Double Shot", "Death Trigger", "The Dreadnought"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 40 },
   },  {
@@ -511,7 +511,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Explorer",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "The Cannoneer boarded a boat for adventure, but woke up shipwrecked on a deserted island with only a cheeky monkey and a desperate pirate for company. The Ca...",
+    summary: "Cannoneer is a Pirate class from the Explorer branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Cannon Leap, Cannon of Mass Destruction, and Super Cannon Explosion.",
     highlights: ["Cannon Leap", "Cannon of Mass Destruction", "Super Cannon Explosion"],
     stats: { attack: 60, defense: 60, mobility: 80, difficulty: 20 },
   },  {
@@ -521,7 +521,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Cygnus Knight",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "A member of the legendary Cygnus Knights, the Thunder Breaker is a pirate who has mastered attacks that combine the power of thunder and the sea thanks to Fu...",
+    summary: "Thunder Breaker is a Pirate class from the Cygnus Knight branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Lightning Punch, Shark Torpedo, and Thunder Wall Sea Wave.",
     highlights: ["Lightning Punch", "Shark Torpedo", "Thunder Wall Sea Wave"],
     stats: { attack: 60, defense: 60, mobility: 80, difficulty: 60 },
   },  {
@@ -531,7 +531,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Resistance",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "A tech genius armed with cutting-edge machines and missiles, the Mechanic rides their trusty robot into battle. The Mechanic's skills can be used only when r...",
+    summary: "Mechanic is a Pirate class from the Resistance branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Jet Booster, Doomsday Device, and Ground Zero.",
     highlights: ["Jet Booster", "Doomsday Device", "Ground Zero"],
     stats: { attack: 60, defense: 60, mobility: 60, difficulty: 60 },
   },  {
@@ -541,7 +541,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Resistance",
     mainStat: "STR (Strength), DEX (Dexterity), LUK (Luck)",
     movement: "Jumping",
-    summary: "When the Black Wing's top scientist made the ultimate soldier, he didn't think they would escape. Now Xenon fights alongside the Resistance in hopes of findi...",
+    summary: "Xenon is a Pirate class from the Resistance branch that builds around STR (Strength), DEX (Dexterity), LUK (Luck), uses Jumping for movement, and features signature skills like Propulsion Burst, Hypogram Field: Fusion, and Artificial Evolution.",
     highlights: ["Propulsion Burst", "Hypogram Field: Fusion", "Artificial Evolution"],
     stats: { attack: 60, defense: 40, mobility: 100, difficulty: 40 },
   },  {
@@ -551,7 +551,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Hero",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "The forgotten sixth hero who once saved Maple World in the distant past, Shade made the ultimate sacrifice to seal away the Black Mage. And while there's no ...",
+    summary: "Shade is a Pirate class from the Hero branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Vulpes Leap, True Spirit Claw, and Advent of the Fox.",
     highlights: ["Vulpes Leap", "True Spirit Claw", "Advent of the Fox"],
     stats: { attack: 60, defense: 60, mobility: 80, difficulty: 40 },
   },  {
@@ -561,7 +561,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Nova",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "Tear was just an ordinary Nova girl with no talent for magicâthat is, until she got fused with a holy stone that gave her incredible powers! Transformed in...",
+    summary: "Angelic Buster is a Pirate class from the Nova branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Star Bubble, Mighty Mascot, and Grand Finale.",
     highlights: ["Star Bubble", "Mighty Mascot", "Grand Finale"],
     stats: { attack: 80, defense: 60, mobility: 100, difficulty: 40 },
   },  {
@@ -571,7 +571,7 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Flora",
     mainStat: "STR (Strength)",
     movement: "Jumping",
-    summary: "As a disenchanted member of the High Flora of Grandis, Ark became a victim of his own side when he dared to question his leaders, who sentenced him to the Ab...",
+    summary: "Ark is a Pirate class from the Flora branch that builds around STR (Strength), uses Jumping for movement, and features signature skills like Specter State, Abyssal Recall, and Awakened Abyss.",
     highlights: ["Specter State", "Abyssal Recall", "Awakened Abyss"],
     stats: { attack: 80, defense: 40, mobility: 100, difficulty: 60 },
   },  {
@@ -581,8 +581,10 @@ export const mapleCharacterEntries: MapleCharacterEntry[] = [  {
     branch: "Jianghu",
     mainStat: "DEX (Dexterity)",
     movement: "Jumping",
-    summary: "Mo Xuan is the reincarnation of Wu Shen, the legendary Divine Fist. When tragedy strikes their home, Mo Xuan must rebuild their school, discover the truth be...",
+    summary: "Mo Xuan is a Pirate class from the Jianghu branch that builds around DEX (Dexterity), uses Jumping for movement, and features signature skills like Secret Art: Air Weaving, Soul Art: The Conquered Self, and Soul Art: Jianghu Dragon.",
     highlights: ["Secret Art: Air Weaving", "Soul Art: The Conquered Self", "Soul Art: Jianghu Dragon"],
     stats: { attack: 60, defense: 60, mobility: 80, difficulty: 60 },
   },];
+
+
 

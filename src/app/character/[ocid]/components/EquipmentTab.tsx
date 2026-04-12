@@ -57,13 +57,14 @@ export function EquipmentTab({
             // Cape: slot 24
             // Shoes: slot 27
             // Mechanical Heart: slot 29
-            // Always empty: slots 1, 3, 8, 25, 26
+            // Always empty: slots 1, 3, 8, 25, 26, 28
             if (
               index === 1 ||
               index === 3 ||
               index === 8 ||
               index === 25 ||
-              index === 26
+              index === 26 ||
+              index === 28
             ) {
               // Always empty slots
               item = null;
